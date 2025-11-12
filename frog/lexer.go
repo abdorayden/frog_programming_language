@@ -66,33 +66,33 @@ const (
 
 // map of keywords and thier tokens
 var keywords = map[string]TokenType{
-	"FRG_Begin":   TokenFRGBegin,
-	"FRG_End":     TokenFRGEnd,
-	"FRG_Int":     TokenFRGInt,
-	"FRG_Real":    TokenFRGReal,
-	"FRG_Strg":    TokenFRGStrg,
-	"FRG_Print":   TokenFRGPrint,
-	"If":          TokenIf,
-	"Else":        TokenElse,
-	"Begin":       TokenBegin,
-	"End":         TokenEnd,
-	"Repeat":      TokenRepeat,
-	"Until":       TokenUntil,
-	"break":       TokenBreak,
-	"continue":    TokenContinue,
-	"True":        TokenTrue,
-	"False":       TokenFalse,
+	"FRG_Begin": TokenFRGBegin,
+	"FRG_End":   TokenFRGEnd,
+	"FRG_Int":   TokenFRGInt,
+	"FRG_Real":  TokenFRGReal,
+	"FRG_Strg":  TokenFRGStrg,
+	"FRG_Print": TokenFRGPrint,
+	"If":        TokenIf,
+	"Else":      TokenElse,
+	"Begin":     TokenBegin,
+	"End":       TokenEnd,
+	"Repeat":    TokenRepeat,
+	"Until":     TokenUntil,
+	"break":     TokenBreak,
+	"continue":  TokenContinue,
+	"True":      TokenTrue,
+	"False":     TokenFalse,
 }
 
 type Token struct {
 	// Type export field of export Token structure that spesified the token type
-	Type    TokenType
+	Type TokenType
 	// Literal the value of this kind of token
 	Literal string
-	// Line of the token 
-	Line    int
+	// Line of the token
+	Line int
 	// Column of the token
-	Column  int
+	Column int
 }
 
 func (t Token) String() string {
@@ -105,13 +105,13 @@ type Lexer struct {
 	position     int // current position
 	readPosition int // next position
 
-	// rune in Go is a data type that stores codes that represent Unicode characters. 
-	// Unicode is actually the collection of all possible characters present in the whole world. 
-	// In Unicode, each of these characters is assigned a unique number called the Unicode code point. 
+	// rune in Go is a data type that stores codes that represent Unicode characters.
+	// Unicode is actually the collection of all possible characters present in the whole world.
+	// In Unicode, each of these characters is assigned a unique number called the Unicode code point.
 	// This code point is what we store in a rune data type.
-	ch           rune
-	line         int
-	column       int
+	ch     rune
+	line   int
+	column int
 }
 
 // constructor
@@ -301,7 +301,7 @@ func (l *Lexer) readIdentifier() string {
 
 func (l *Lexer) readNumber() string {
 	position := l.position
-	
+
 	for isDigit(l.ch) {
 		l.readChar()
 	}

@@ -8,9 +8,11 @@ import (
 	"frog_programming_language/frog"
 )
 
+// BUG: execute if condition even it false
+
 func main() {
 	parse := flag.Bool("parse", false, "set to true to parse the file")
-
+	interpret := flag.Bool("interpret", false, "set to true to interpret the file")
 	flag.Parse()
 
 	if flag.NArg() == 0 {
@@ -29,7 +31,24 @@ func main() {
 
 	lexer := frog.NewLexer(string(code))
 
-	if *parse {
+	if *interpret {
+		parser := frog.NewParser(lexer)
+		program := parser.ParseProgram()
+
+		if parser.IsThereAnyErrors() {
+			fmt.Println("Parser has errors:")
+			for _, msg := range parser.Errors() {
+				fmt.Println("\t" + msg)
+			}
+			return
+		}
+
+		env := frog.NewEnvironment()
+		evaluated := frog.Eval(program, env)
+		if evaluated != nil {
+			fmt.Println(evaluated.Inspect())
+		}
+	} else if *parse {
 		fmt.Println("Parsing the file...")
 		parser := frog.NewParser(lexer)
 		program := parser.ParseProgram()

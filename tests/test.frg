@@ -4,22 +4,36 @@ FRG_Begin
     FRG_Real x3 #
     FRG_Strg name #
 
-    name := "FROG" #
-    i := 30 #
+    name := "rayden" #
+    ##FRG_Print "Hello, ", name, "!" #
 
-    If [ i <= 20 ]
+    i := 30 + 5 #
+    ## i := 5 #
+
+    If [ i >= 20 ]
+    Begin
         x1 := 10 #
+    End
     Else
     Begin
         x1 := 30 #
         x3 := x1 * 4 #
-        FRG_Print x1, x3 #
     End
+
+    FRG_Print x1 , "\n", x3 #
 
     FRG_Print "Hello, ", name, "!" #
 
+    If [False]
+    Begin
+        FRG_Print "Hello inside false condition"#
+    End
+
+
     ## instruction de boucle Repeat
-    Repeat
-        i := i - 5 #
-    Until [ i <= 15 ]
+    ## Repeat
+    ##     i := i - 5 #
+    ##     FRG_Print i #
+    ## Until [ i <= 15 ]
+
 FRG_End
