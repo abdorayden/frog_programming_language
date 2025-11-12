@@ -1,0 +1,161 @@
+<!DOCTYPE html><html>
+<head>
+<title></title>
+<style type="text/css">
+<!--
+.xflip {
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: fliph;
+}
+.yflip {
+    -moz-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: flipv;
+}
+.xyflip {
+    -moz-transform: scaleX(-1) scaleY(-1);
+    -webkit-transform: scaleX(-1) scaleY(-1);
+    -o-transform: scaleX(-1) scaleY(-1);
+    transform: scaleX(-1) scaleY(-1);
+    filter: fliph + flipv;
+}
+-->
+</style>
+</head>
+<body>
+<a name=1></a><img src="MINI PROJET 2025-2026-1_1.png"/><br/>
+<b>USTO-Département&#160;d’informatique &#160; &#160; &#160; &#160; &#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160; &#160;&#160; &#160;&#160;&#160;&#160; &#160; &#160; &#160;&#160;&#160; &#160;&#160;Licence&#160;3&#160;SI+&#160;ING&#160;3&#160;<br/>COMPILATION&#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160;&#160;&#160; &#160; &#160;&#160;&#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;2025-2026&#160;<br/></b>&#160;<br/><b>&#160;</b><br/>
+<b>&#160;</b><br/>
+<b>MINI&#160;PROJET&#160;</b><br/>
+<b>Conception&#160;d’un mini&#160;compilateur&#160;pour&#160;le&#160;langage «&#160;FROG&#160;»&#160;</b><br/>
+<b>&#160;</b><br/>
+&#160;<br/>
+Le&#160;&#160;but&#160;&#160;du&#160;&#160;mini&#160;&#160;projet&#160;&#160;est&#160;&#160;de&#160;&#160;développer&#160;&#160;un&#160;&#160;compilateur&#160;&#160;capable&#160;&#160;d’analyser&#160;&#160;(<b>lexicalement,&#160;<br/>syntaxiquement</b>&#160;et&#160;<b>sémantiquement</b>)&#160;un&#160;fichier&#160;source&#160;<b>(.FRG)</b>&#160;écrit&#160;sous&#160;un&#160;langage&#160;nommé&#160;<br/><b>«&#160;FROG».&#160;&#160;</b><br/>
+Dans&#160;l’analyse&#160;lexicale&#160;toutes&#160;les&#160;unités&#160;lexicales&#160;(tokens)&#160;doivent&#160;être&#160;reconnues.&#160;<br/>
+Dans&#160;l’analyse&#160;syntaxique,&#160;les&#160;erreurs&#160;syntaxiques&#160;doivent&#160;être&#160;signalées&#160;dans&#160;le&#160;cas&#160;ou&#160;une&#160;<br/>ou&#160;plusieurs&#160;instructions&#160;sont&#160;mal&#160;écrites.&#160;<br/>
+Dans&#160;&#160;l’analyse&#160;&#160;sémantique,&#160;&#160;les&#160;&#160;erreurs&#160;&#160;sémantiques&#160;&#160;doivent&#160;&#160;être&#160;&#160;affichées&#160;&#160;telles&#160;&#160;que&#160;<br/>l’incompatibilité&#160;entre&#160;les&#160;types,&#160;l’utilisation&#160;de&#160;variables&#160;non&#160;déclarées,&#160;etc.…&#160;&#160;<br/>
+<b>Spécification&#160;du&#160;langage&#160;«&#160;FROG&#160;»&#160;:&#160;&#160;</b><br/>
+Le&#160;code&#160;source&#160;doit&#160;être&#160;écrit&#160;de&#160;la&#160;manière&#160;suivante&#160;:&#160;<br/>
+&#160;&#160;Le&#160;programme&#160;commence&#160;toujours&#160;par&#160;<b>«&#160;FRG_Begin&#160;»</b>&#160;et&#160;se&#160;termine&#160;par&#160;<b>«&#160;FRG_End&#160;»</b>&#160;<br/>&#160;&#160;Une&#160;et&#160;une&#160;seule&#160;instruction&#160;par&#160;ligne.&#160;<br/>&#160;&#160;Une&#160;instruction se&#160;termine&#160;toujours&#160;par&#160;<b>«&#160;#&#160;»</b>&#160;<br/>&#160;&#160;Un&#160;commentaire&#160;prend&#160;une&#160;ligne&#160;entière&#160;et&#160;doit&#160;commencer&#160;par&#160;<b>«&#160;##»</b>&#160;<br/>&#160;&#160;Un&#160;identificateur&#160;doit&#160;commencer&#160;obligatoirement&#160;par&#160;une&#160;lettre&#160;et&#160;peut&#160;être&#160;suivi&#160;par&#160;<br/>
+un&#160;caractère&#160;alphanumérique.&#160;<br/>
+&#160;&#160;Un&#160;&#160;nombre&#160;&#160;entier&#160;&#160;est&#160;&#160;composé&#160;&#160;au&#160;&#160;minimum&#160;&#160;par&#160;&#160;un&#160;&#160;chiffre&#160;&#160;(exemple&#160;:&#160;&#160;40,&#160;&#160;190,&#160;&#160;7)&#160;&#160;et&#160;<br/>
+déclaré&#160;par&#160;le&#160;mot&#160;clé&#160;<b>«&#160;FRG_Int&#160;».</b>&#160;<br/>
+&#160;&#160;Un&#160;&#160;nombre&#160;&#160;réel&#160;&#160;&#160;&#160;est&#160;&#160;composé&#160;&#160;de&#160;&#160;deux&#160;&#160;entiers&#160;&#160;séparés&#160;&#160;par&#160;&#160;un&#160;&#160;point&#160;&#160;exemple&#160;:&#160;&#160;(30.9,&#160;<br/>
+19.01,&#160;88.55)&#160;et&#160;déclaré&#160;par&#160;le&#160;mot&#160;clé&#160;<b>«&#160;FRG_Real&#160;».</b>&#160;<br/>
+&#160;&#160;Une&#160;chaîne&#160;de&#160;caractère&#160;est&#160;mise&#160;entre&#160;deux&#160;quottes&#160;doubles&#160;et&#160;déclarée&#160;avec&#160;le&#160;mot&#160;clé&#160;<br/>
+<b>«&#160;FRG_Strg&#160;».</b>&#160;<br/>&#160;<br/>
+&#160;<br/>&#160;<br/>
+1&#160;<br/>
+&#160;<br/>
+<hr/>
+<a name=2></a><b>USTO-Département&#160;d’informatique &#160; &#160; &#160; &#160; &#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160; &#160;&#160; &#160;&#160;&#160;&#160; &#160; &#160; &#160;&#160;&#160; &#160;&#160;Licence&#160;3&#160;SI+&#160;ING&#160;3&#160;<br/>COMPILATION&#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160;&#160;&#160; &#160; &#160;&#160;&#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;2025-2026&#160;<br/></b>&#160;<br/>&#160;<br/>
+Les&#160;instructions&#160;à&#160;considérer&#160;dans&#160;ce&#160;langage&#160;sont&#160;illustrées&#160;dans&#160;l’exemple&#160;suivant&#160;:&#160;<br/>
+<b>exemple d’un&#160;fichier&#160;source&#160;</b><br/>
+<b>signification&#160;</b><br/>
+<b>FRG_Begin&#160;</b><br/>
+<b>début&#160;du&#160;programme&#160;</b><br/>
+<b>FRG_Int&#160;&#160;i,</b>&#160;<b>j,</b>&#160;<b>x1,&#160;x2&#160;#&#160;</b><br/>
+<b>déclaration&#160;de&#160;4&#160;variables&#160;entières&#160;</b><br/>
+<b>FRG_Real&#160;x3&#160;#&#160;</b><br/>
+<b>déclaration d’une&#160;variable&#160;réelle&#160;</b><br/>
+<b>i:=30&#160;#&#160;</b><br/>
+<b>affectation&#160;d’une&#160;valeur&#160;entière&#160;à&#160;i&#160;</b><br/>
+<b>If&#160;[&#160;i&lt;=20]&#160;&#160;</b><br/>
+<b>conditionnel&#160;</b><br/>
+<b>x1:=10&#160;#&#160;</b><br/>
+<b>affectation&#160;de&#160;valeur&#160;entière&#160;à&#160;x1&#160;</b><br/>
+<b>Else&#160;</b><br/>
+<b>sinon&#160;</b><br/>
+<b>Begin&#160;</b><br/>
+<b>début&#160;de&#160;bloc&#160;&#160;</b><br/>
+<b>x1:=30&#160;#&#160;</b><br/>
+<b>affectation&#160;d’une&#160;valeur&#160;entière&#160;à&#160;x1&#160;</b><br/>
+<b>x3:=x1*4&#160;#&#160;</b><br/>
+<b>affectation&#160;d’une&#160;expression&#160;à&#160;x3&#160;&#160;</b><br/>
+<b>FRG_Print&#160;x1,&#160;x3&#160;#&#160;</b><br/>
+<b>Affichage&#160;de&#160;la&#160;valeur&#160;de&#160;x1&#160;et&#160;x3&#160;&#160;</b><br/>
+<b>&#160; &#160; &#160;&#160;End&#160;</b><br/>
+<b>fin de&#160;bloc&#160;</b><br/>
+<b>FRG_Print&#160;&#34;&#160;Hello&#160;:)&#160;&#34;&#160;#&#160;</b><br/>
+<b>Affichage&#160;d'un&#160;message&#160;&#160;</b><br/>
+<b>##&#160;instruction de&#160;boucle&#160;Repeat&#160;</b><br/>
+<b>commentaire&#160;</b><br/>
+<b>Repeat&#160;</b><br/>
+<b>boucle&#160;repeat&#160;</b><br/>
+<b>&#160; &#160;i:=i-5&#160;#&#160;</b><br/>
+<b>affectation&#160;d’une&#160;expression&#160;</b><br/>
+<b>&#160; &#160;FRG_Print&#160;I&#160;#&#160;</b><br/>
+<b>affichage&#160;de&#160;la&#160;valeur&#160;de&#160;i&#160;</b><br/>
+<b>until&#160;[&#160;i&#160;&lt;=&#160;&#160;15]&#160;</b><br/>
+<b>condition de&#160;fin&#160;de&#160;la&#160;&#160;boucle&#160;</b><br/>
+<b>FRG_End&#160;</b><br/>
+<b>fin du programme&#160;</b><br/>
+&#160;<br/>
+&#160;<br/>
+&#160;<br/>
+&#160;<br/>
+&#160;<br/>
+&#160;<br/>
+&#160;<br/>
+2&#160;<br/>
+&#160;<br/>
+<hr/>
+<a name=3></a><b>USTO-Département&#160;d’informatique &#160; &#160; &#160; &#160; &#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160; &#160;&#160; &#160;&#160;&#160;&#160; &#160; &#160; &#160;&#160;&#160; &#160;&#160;Licence&#160;3&#160;SI+&#160;ING&#160;3&#160;<br/>COMPILATION&#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160; &#160; &#160;&#160;&#160; &#160; &#160;&#160;&#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;2025-2026&#160;<br/></b>&#160;<br/>Le&#160;travail&#160;doit&#160;être&#160;présenté&#160;avec&#160;une&#160;interface&#160;graphique&#160;(comme&#160;illustrée&#160;ci-dessous)&#160;avec&#160;<br/>au&#160;moins&#160;un&#160;bouton&#160;pour&#160;charger&#160;un&#160;fichier&#160;source&#160;et&#160;trois&#160;autres&#160;boutons&#160;pour&#160;chaque&#160;type&#160;<br/>d’analyse.&#160;Ajouter&#160;un&#160;bouton&#160;pour&#160;afficher&#160;les&#160;résultats&#160;d’exécution&#160;du&#160;fichier&#160;source.&#160;<br/>
+Le&#160;&#160;mini&#160;projet&#160;doit&#160;&#160;être&#160;donc&#160;développé&#160;&#160;avec&#160;&#160;le&#160;langage&#160;de&#160;&#160;programmation&#160;&#160;de&#160;&#160;votre&#160;&#160;choix&#160;<br/>(exemple&#160;:&#160;C,&#160;Java,&#160;python….)&#160;<br/>
+<b>MINI COMPILATEUR FROG&#160;</b><br/>
+<b>Charger&#160;le&#160;fichier&#160;source&#160;</b><br/>
+<b>D:\MesProgrammes\fichiersource.FRG&#160;</b><br/>
+<b>ANALYSE&#160;LEXICALE&#160;</b><br/>
+<b>ANALYSE&#160;SYNTAXIQUE&#160;</b><br/>
+<b>ANALYSE&#160;SEMANTIQUE&#160;</b><br/>
+<b>FRG_Begin&#160;</b><br/>
+<b>FRG_Begin:&#160;mot&#160;clé&#160;de&#160;début&#160;de&#160;programme&#160;</b><br/>
+<b>FRG_Int&#160;&#160;i,&#160;j,&#160;x1,&#160;x2&#160;#&#160;</b><br/>
+<b>FRG_Int:&#160;mot&#160;clé&#160;de&#160;déclaration&#160;du&#160;type&#160;entier&#160;</b><br/>
+<b>FRG_Real&#160;x3 #&#160;</b><br/>
+<b>i:&#160;identificateur&#160;</b><br/>
+<b>i:=30&#160;#&#160;</b><br/>
+<b>,&#160;:&#160;séparateur&#160;</b><br/>
+<b>If&#160;[&#160;i&lt;=20]&#160;&#160;</b><br/>
+<b>j:&#160;identificateur&#160;</b><br/>
+<b>x1:=10 #&#160;</b><br/>
+<b>,&#160;:&#160;séparateur&#160;</b><br/>
+<b>Else&#160;</b><br/>
+<b>x1:&#160;identificateur&#160;</b><br/>
+<b>Begin&#160;</b><br/>
+<b>,&#160;:&#160;séparateur&#160;</b><br/>
+<b>x1:=30 #&#160;</b><br/>
+<b>x2:&#160;identificateur&#160;</b><br/>
+<b>x3:=x1*4&#160;#&#160;</b><br/>
+<b>#:&#160;fin&#160;d’instruction&#160;</b><br/>
+<b>FRG_Print&#160;x1,&#160;x3&#160;#&#160;</b><br/>
+<b>FRG_Real&#160;:&#160;mot&#160;clé&#160;de&#160;déclaration&#160;du&#160;type&#160;réel&#160;</b><br/>
+<b>&#160; &#160; &#160;&#160;End&#160;</b><br/>
+<b>x3: identificateur&#160;</b><br/>
+<b>FRG_Print&#160;&#34;&#160;Hello&#160;:)&#160;&#34;&#160;#&#160;</b><br/>
+<b>#:&#160;fin&#160;d’instruction&#160;</b><br/>
+<b>##&#160;instruction&#160;de&#160;boucle&#160;Repeat&#160;</b><br/>
+<b>i:&#160;identificateur&#160;</b><br/>
+<b>Repeat&#160;</b><br/>
+<b>:=:&#160;symbole&#160;d’affectation&#160;</b><br/>
+<b>&#160; &#160;i:=i-5 #&#160;</b><br/>
+<b>30:&#160;nombre&#160;entier&#160;</b><br/>
+<b>&#160; &#160;FRG_Print&#160;i&#160;#&#160;</b><br/>
+<b>#:&#160;fin&#160;d’instruction&#160;</b><br/>
+<b>until&#160;[&#160;i &lt;=&#160;&#160;15]&#160;</b><br/>
+<b>If&#160;:&#160;mot&#160;clé&#160;du&#160;conditionnel&#160;</b><br/>
+<b>FRG_End&#160;</b><br/>
+<b>[&#160;:&#160;début&#160;de&#160;condition&#160;<br/>i:&#160;identificateur&#160;<br/>&lt;=:&#160;opérateur&#160;de&#160;comparaison&#160;<br/>45:&#160;nombre&#160;entier&#160;<br/>]:&#160;fin&#160;de&#160;condition&#160;&#160;<br/>……..&#160;<br/></b>&#160;<br/>
+<b>Résultats&#160;</b><br/>
+<b>30,&#160;120&#160;<br/>Hello&#160;:)&#160;&#160;<br/>25&#160;<br/>20&#160;<br/>15&#160;</b><br/>
+&#160;<br/>
+3&#160;<br/>
+&#160;<br/>
+<hr/>
+</body>
+</html>

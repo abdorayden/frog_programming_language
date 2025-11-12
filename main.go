@@ -1,14 +1,14 @@
 package main
 
 import (
-	"fmt"
-	// "log"
 	"flag"
+	"fmt"
 	"os"
+
+	"frog_programming_language/frog"
 )
 
 func main() {
-	lex := flag.Bool("lex", false, "set to true to tokenize the file")
 	parse := flag.Bool("parse", false, "set to true to parse the file")
 
 	flag.Parse()
@@ -21,19 +21,34 @@ func main() {
 
 	filepath := flag.Arg(0)
 
-
-	data, err := os.ReadFile(filepath)
+	code, err := os.ReadFile(filepath)
 	if err != nil {
 		fmt.Println("Error reading file:", err)
 		return
 	}
-	fmt.Println(string(data))
 
-	if *lex {
-		fmt.Println("Lexing the file...")
-	}
+	lexer := frog.NewLexer(string(code))
 
 	if *parse {
 		fmt.Println("Parsing the file...")
+		parser := frog.NewParser(lexer)
+		program := parser.ParseProgram()
+
+		if parser.IsThereAnyErrors() {
+			fmt.Println("Parser has errors:")
+			for _, msg := range parser.Errors() {
+				fmt.Println("\t" + msg)
+			}
+			return
+		}
+
+		fmt.Println("Generated AST:")
+		fmt.Println(program.String())
+
+	} else {
+		tokens := lexer.GetAllTokens()
+		for _, token := range tokens {
+			fmt.Printf("%s: %q\n", frog.TokenToString(token.Type), token.Literal)
+		}
 	}
 }
