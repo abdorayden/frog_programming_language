@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+
+<html  dir="ltr" lang="fr" xml:lang="fr">
+<head>
+    <title>COMP | دروس على الخط</title>
+    <link rel="shortcut icon" href="https://elearning.univ-usto.dz/theme/image.php/adaptable/theme/1761644400/favicon" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="moodle, COMP | دروس على الخط" />
+<link rel="stylesheet" type="text/css" href="https://elearning.univ-usto.dz/theme/yui_combo.php?rollup/3.18.1/yui-moodlesimple-min.css" /><script id="firstthemesheet" type="text/css">/** Required in order to fix style inclusion problems in IE with YUI **/</script><link rel="stylesheet" type="text/css" href="https://elearning.univ-usto.dz/theme/styles.php/adaptable/1761644400_1/all" />
+<script>
+//<![CDATA[
+var M = {}; M.yui = {};
+M.pageloadstarttime = new Date();
+M.cfg = {"wwwroot":"https:\/\/elearning.univ-usto.dz","apibase":"https:\/\/elearning.univ-usto.dz\/r.php\/api","homeurl":{},"sesskey":"cMU530AQ6T","sessiontimeout":"7200","sessiontimeoutwarning":1200,"themerev":"1761644400","slasharguments":1,"theme":"adaptable","iconsystemmodule":"core\/icon_system_fontawesome","jsrev":"1761644422","admin":"admin","svgicons":true,"usertimezone":"Afrique\/Alger","language":"fr","courseId":1343,"courseContextId":136817,"contextid":140977,"contextInstanceId":463,"langrev":1761644422,"templaterev":"1761644422","siteId":1,"userId":1};var yui1ConfigFn = function(me) {if(/-skin|reset|fonts|grids|base/.test(me.name)){me.type='css';me.path=me.path.replace(/\.js/,'.css');me.path=me.path.replace(/\/yui2-skin/,'/assets/skins/sam/yui2-skin')}};
+var yui2ConfigFn = function(me) {var parts=me.name.replace(/^moodle-/,'').split('-'),component=parts.shift(),module=parts[0],min='-min';if(/-(skin|core)$/.test(me.name)){parts.pop();me.type='css';min=''}
+if(module){var filename=parts.join('-');me.path=component+'/'+module+'/'+filename+min+'.'+me.type}else{me.path=component+'/'+component+'.'+me.type}};
+YUI_config = {"debug":false,"base":"https:\/\/elearning.univ-usto.dz\/lib\/yuilib\/3.18.1\/","comboBase":"https:\/\/elearning.univ-usto.dz\/theme\/yui_combo.php?","combine":true,"filter":null,"insertBefore":"firstthemesheet","groups":{"yui2":{"base":"https:\/\/elearning.univ-usto.dz\/lib\/yuilib\/2in3\/2.9.0\/build\/","comboBase":"https:\/\/elearning.univ-usto.dz\/theme\/yui_combo.php?","combine":true,"ext":false,"root":"2in3\/2.9.0\/build\/","patterns":{"yui2-":{"group":"yui2","configFn":yui1ConfigFn}}},"moodle":{"name":"moodle","base":"https:\/\/elearning.univ-usto.dz\/theme\/yui_combo.php?m\/1761644422\/","combine":true,"comboBase":"https:\/\/elearning.univ-usto.dz\/theme\/yui_combo.php?","ext":false,"root":"m\/1761644422\/","patterns":{"moodle-":{"group":"moodle","configFn":yui2ConfigFn}},"filter":null,"modules":{"moodle-core-lockscroll":{"requires":["plugin","base-build"]},"moodle-core-maintenancemodetimer":{"requires":["base","node"]},"moodle-core-handlebars":{"condition":{"trigger":"handlebars","when":"after"}},"moodle-core-dragdrop":{"requires":["base","node","io","dom","dd","event-key","event-focus","moodle-core-notification"]},"moodle-core-event":{"requires":["event-custom"]},"moodle-core-blocks":{"requires":["base","node","io","dom","dd","dd-scroll","moodle-core-dragdrop","moodle-core-notification"]},"moodle-core-actionmenu":{"requires":["base","event","node-event-simulate"]},"moodle-core-chooserdialogue":{"requires":["base","panel","moodle-core-notification"]},"moodle-core-notification":{"requires":["moodle-core-notification-dialogue","moodle-core-notification-alert","moodle-core-notification-confirm","moodle-core-notification-exception","moodle-core-notification-ajaxexception"]},"moodle-core-notification-dialogue":{"requires":["base","node","panel","escape","event-key","dd-plugin","moodle-core-widget-focusafterclose","moodle-core-lockscroll"]},"moodle-core-notification-alert":{"requires":["moodle-core-notification-dialogue"]},"moodle-core-notification-confirm":{"requires":["moodle-core-notification-dialogue"]},"moodle-core-notification-exception":{"requires":["moodle-core-notification-dialogue"]},"moodle-core-notification-ajaxexception":{"requires":["moodle-core-notification-dialogue"]},"moodle-core_availability-form":{"requires":["base","node","event","event-delegate","panel","moodle-core-notification-dialogue","json"]},"moodle-course-categoryexpander":{"requires":["node","event-key"]},"moodle-course-util":{"requires":["node"],"use":["moodle-course-util-base"],"submodules":{"moodle-course-util-base":{},"moodle-course-util-section":{"requires":["node","moodle-course-util-base"]},"moodle-course-util-cm":{"requires":["node","moodle-course-util-base"]}}},"moodle-course-dragdrop":{"requires":["base","node","io","dom","dd","dd-scroll","moodle-core-dragdrop","moodle-core-notification","moodle-course-coursebase","moodle-course-util"]},"moodle-course-management":{"requires":["base","node","io-base","moodle-core-notification-exception","json-parse","dd-constrain","dd-proxy","dd-drop","dd-delegate","node-event-delegate"]},"moodle-form-dateselector":{"requires":["base","node","overlay","calendar"]},"moodle-form-shortforms":{"requires":["node","base","selector-css3","moodle-core-event"]},"moodle-question-searchform":{"requires":["base","node"]},"moodle-question-chooser":{"requires":["moodle-core-chooserdialogue"]},"moodle-availability_completion-form":{"requires":["base","node","event","moodle-core_availability-form"]},"moodle-availability_date-form":{"requires":["base","node","event","io","moodle-core_availability-form"]},"moodle-availability_grade-form":{"requires":["base","node","event","moodle-core_availability-form"]},"moodle-availability_group-form":{"requires":["base","node","event","moodle-core_availability-form"]},"moodle-availability_grouping-form":{"requires":["base","node","event","moodle-core_availability-form"]},"moodle-availability_language-form":{"requires":["base","node","event","node-event-simulate","moodle-core_availability-form"]},"moodle-availability_profile-form":{"requires":["base","node","event","moodle-core_availability-form"]},"moodle-mod_assign-history":{"requires":["node","transition"]},"moodle-mod_quiz-util":{"requires":["node","moodle-core-actionmenu"],"use":["moodle-mod_quiz-util-base"],"submodules":{"moodle-mod_quiz-util-base":{},"moodle-mod_quiz-util-slot":{"requires":["node","moodle-mod_quiz-util-base"]},"moodle-mod_quiz-util-page":{"requires":["node","moodle-mod_quiz-util-base"]}}},"moodle-mod_quiz-toolboxes":{"requires":["base","node","event","event-key","io","moodle-mod_quiz-quizbase","moodle-mod_quiz-util-slot","moodle-core-notification-ajaxexception"]},"moodle-mod_quiz-dragdrop":{"requires":["base","node","io","dom","dd","dd-scroll","moodle-core-dragdrop","moodle-core-notification","moodle-mod_quiz-quizbase","moodle-mod_quiz-util-base","moodle-mod_quiz-util-page","moodle-mod_quiz-util-slot","moodle-course-util"]},"moodle-mod_quiz-questionchooser":{"requires":["moodle-core-chooserdialogue","moodle-mod_quiz-util","querystring-parse"]},"moodle-mod_quiz-autosave":{"requires":["base","node","event","event-valuechange","node-event-delegate","io-form","datatype-date-format"]},"moodle-mod_quiz-modform":{"requires":["base","node","event"]},"moodle-mod_quiz-quizbase":{"requires":["base","node"]},"moodle-message_airnotifier-toolboxes":{"requires":["base","node","io"]},"moodle-editor_atto-editor":{"requires":["node","transition","io","overlay","escape","event","event-simulate","event-custom","node-event-html5","node-event-simulate","yui-throttle","moodle-core-notification-dialogue","moodle-editor_atto-rangy","handlebars","timers","querystring-stringify"]},"moodle-editor_atto-plugin":{"requires":["node","base","escape","event","event-outside","handlebars","event-custom","timers","moodle-editor_atto-menu"]},"moodle-editor_atto-menu":{"requires":["moodle-core-notification-dialogue","node","event","event-custom"]},"moodle-editor_atto-rangy":{"requires":[]},"moodle-report_eventlist-eventfilter":{"requires":["base","event","node","node-event-delegate","datatable","autocomplete","autocomplete-filters"]},"moodle-report_loglive-fetchlogs":{"requires":["base","event","node","io","node-event-delegate"]},"moodle-gradereport_history-userselector":{"requires":["escape","event-delegate","event-key","handlebars","io-base","json-parse","moodle-core-notification-dialogue"]},"moodle-qbank_editquestion-chooser":{"requires":["moodle-core-chooserdialogue"]},"moodle-tool_lp-dragdrop-reorder":{"requires":["moodle-core-dragdrop"]},"moodle-assignfeedback_editpdf-editor":{"requires":["base","event","node","io","graphics","json","event-move","event-resize","transition","querystring-stringify-simple","moodle-core-notification-dialog","moodle-core-notification-alert","moodle-core-notification-warning","moodle-core-notification-exception","moodle-core-notification-ajaxexception"]},"moodle-atto_accessibilitychecker-button":{"requires":["color-base","moodle-editor_atto-plugin"]},"moodle-atto_accessibilityhelper-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_align-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_bold-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_charmap-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_clear-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_collapse-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_emojipicker-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_emoticon-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_equation-button":{"requires":["moodle-editor_atto-plugin","moodle-core-event","io","event-valuechange","tabview","array-extras"]},"moodle-atto_h5p-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_html-button":{"requires":["promise","moodle-editor_atto-plugin","moodle-atto_html-beautify","moodle-atto_html-codemirror","event-valuechange"]},"moodle-atto_html-codemirror":{"requires":["moodle-atto_html-codemirror-skin"]},"moodle-atto_html-beautify":{},"moodle-atto_image-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_indent-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_italic-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_link-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_managefiles-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_managefiles-usedfiles":{"requires":["node","escape"]},"moodle-atto_media-button":{"requires":["moodle-editor_atto-plugin","moodle-form-shortforms"]},"moodle-atto_noautolink-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_orderedlist-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_recordrtc-button":{"requires":["moodle-editor_atto-plugin","moodle-atto_recordrtc-recording"]},"moodle-atto_recordrtc-recording":{"requires":["moodle-atto_recordrtc-button"]},"moodle-atto_rtl-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_strike-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_subscript-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_superscript-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_table-button":{"requires":["moodle-editor_atto-plugin","moodle-editor_atto-menu","event","event-valuechange"]},"moodle-atto_title-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_underline-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_undo-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_unorderedlist-button":{"requires":["moodle-editor_atto-plugin"]}}},"gallery":{"name":"gallery","base":"https:\/\/elearning.univ-usto.dz\/lib\/yuilib\/gallery\/","combine":true,"comboBase":"https:\/\/elearning.univ-usto.dz\/theme\/yui_combo.php?","ext":false,"root":"gallery\/1761644422\/","patterns":{"gallery-":{"group":"gallery"}}}},"modules":{"core_filepicker":{"name":"core_filepicker","fullpath":"https:\/\/elearning.univ-usto.dz\/lib\/javascript.php\/1761644422\/repository\/filepicker.js","requires":["base","node","node-event-simulate","json","async-queue","io-base","io-upload-iframe","io-form","yui2-treeview","panel","cookie","datatable","datatable-sort","resize-plugin","dd-plugin","escape","moodle-core_filepicker","moodle-core-notification-dialogue"]},"core_comment":{"name":"core_comment","fullpath":"https:\/\/elearning.univ-usto.dz\/lib\/javascript.php\/1761644422\/comment\/comment.js","requires":["base","io-base","node","json","yui2-animation","overlay","escape"]}},"logInclude":[],"logExclude":[],"logLevel":null};
+M.yui.loader = {modules: {}};
+
+//]]>
+</script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" value="summary">
+    <meta name="twitter:site" value="منصة التعليم عن بعد لجامعة وهران للعلوم و التكنولوجيا">
+    <meta name="twitter:title" value="COMP | دروس على الخط">
+
+    <!-- Open Graph data -->
+    <meta property="og:title" content="COMP | دروس على الخط">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="">
+    <meta name="og:site_name" value="منصة التعليم عن بعد لجامعة وهران للعلوم و التكنولوجيا">
+
+    <!-- Chrome, Firefox OS and Opera on Android topbar color -->
+    <meta name="theme-color" content="#3A454b">
+
+    <!-- Windows Phone topbar color -->
+    <meta name="msapplication-navbutton-color" content="#3A454b">
+
+    <!-- iOS Safari topbar color -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="#3A454b">
+
+</head><body  id="page-enrol-index" class="format-weeks limitedwidth  path-enrol dir-ltr lang-fr yui-skin-sam yui3-skin-sam elearning-univ-usto-dz pagelayout-incourse course-1343 context-140977 category-463 theme theme_adaptable two-column  fullin header-style1 showblockicons standard uses-drawers responsivesectionnav"><div>
+    <a class="sr-only sr-only-focusable" href="#maincontent">Passer au contenu principal</a>
+</div><script src="https://elearning.univ-usto.dz/lib/javascript.php/1761644422/lib/polyfills/polyfill.js"></script>
+<script src="https://elearning.univ-usto.dz/theme/yui_combo.php?rollup/3.18.1/yui-moodlesimple-min.js"></script><script src="https://elearning.univ-usto.dz/lib/javascript.php/1761644422/lib/javascript-static.js"></script>
+<script>
+//<![CDATA[
+document.body.className += ' jsenabled';
+//]]>
+</script>
+
+<div id="page-wrapper"><div  class="drawer drawer-right show d-none d-print-none not-initialized" data-region="fixed-drawer" id="theme_adaptable-drawers-sidepost" data-preference="drawer-open-block" data-state="show-drawer-right" data-forceopen="" data-close-on-resize="1">
+    <div class="drawerheader">
+        <button
+            class="btn drawertoggle icon-no-margin hidden"
+            data-toggler="drawers"
+            data-action="closedrawer"
+            data-target="theme_adaptable-drawers-sidepost"
+            data-toggle="tooltip"
+            data-placement="left"
+            title="Fermer le tiroir des blocs"
+        >
+            <i class="icon fa fa fa-xmark fa-fw" aria-hidden="true"  ></i>
+        </button>
+        <a
+            href="https://elearning.univ-usto.dz/my/"
+            title=""
+            data-region="site-home-link"
+            class="aabtn text-reset d-flex align-items-center py-1 h-100 d-md-none"
+        >
+            
+        </a>
+        <div class="drawerheadercontent hidden">
+            
+        </div>
+    </div>
+    <div class="drawercontent drag-container" data-usertour="scroller">
+                    <section class="d-print-none" aria-label="Blocs">
+                <aside id="block-region-side-post" class="block-region" data-blockregion="side-post" data-droptarget="1"><h2 class="sr-only">Blocs</h2><a class="skip skip-block" id="fsb-1" href="#sb-1">Passer Navigation</a><section id="inst4" class="block_navigation block mb-3" role="navigation" data-block="navigation" data-instance-id="4" aria-labelledby="instance-4-header"><div class="header"><div id="instance-4-action" class="block-action block-collapsible" data-instance-id="4" title="Afficher / masquer le bloc"></div><div class="title"><div class="block_action"></div><h2 class="d-inline" id="instance-4-header">Navigation</h2></div><div class="block-controls"></div></div><div class="content"><ul class="block_tree list" role="tree" data-ajax-loader="block_navigation/nav_loader"><li class="type_unknown depth_1 contains_branch" role="treeitem" aria-expanded="true" aria-owns="random69144eca1fd693_group" data-collapsible="false" aria-labelledby="random69144eca1fd692_label_1_1"><p class="tree_item branch navigation_node"><a tabindex="-1" id="random69144eca1fd692_label_1_1" href="https://elearning.univ-usto.dz/my/">Tableau de bord</a></p><ul id="random69144eca1fd693_group" role="group"><li class="type_setting depth_2 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd694_label_2_2"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd694_label_2_2" href="https://elearning.univ-usto.dz/?redirect=0"><i class="icon fa fa fa-house fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">Accueil du site</span></a></p></li><li class="type_course depth_2 contains_branch" role="treeitem" aria-expanded="false" aria-owns="random69144eca1fd696_group" aria-labelledby="random69144eca1fd694_label_2_3"><p class="tree_item branch"><span tabindex="-1" id="random69144eca1fd694_label_2_3" title="منصة التعليم عن بعد لجامعة وهران للعلوم و التكنولوجيا">Pages du site</span></p><ul id="random69144eca1fd696_group" role="group" aria-hidden="true"><li class="type_custom depth_3 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd697_label_3_5"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd697_label_3_5" href="https://elearning.univ-usto.dz/my/courses.php"><i class="icon fa fa fa-compass fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">Mes cours</span></a></p></li><li class="type_setting depth_3 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd697_label_3_6"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd697_label_3_6" href="https://elearning.univ-usto.dz/tag/search.php"><i class="icon fa fa fa-compass fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">Tags</span></a></p></li><li class="type_activity depth_3 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd697_label_3_7"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd697_label_3_7" title="Forum" href="https://elearning.univ-usto.dz/mod/forum/view.php?id=1"><img class="icon navicon" alt="Forum" title="Forum" src="https://elearning.univ-usto.dz/theme/image.php/adaptable/forum/1761644400/monologo" /><span class="item-content-wrap">Informations importantes</span></a></p></li><li class="type_activity depth_3 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd697_label_3_9"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd697_label_3_9" title="URL" href="https://elearning.univ-usto.dz/mod/url/view.php?id=10058"><img class="icon navicon" alt="URL" title="URL" src="https://elearning.univ-usto.dz/theme/image.php/adaptable/url/1761644400/monologo" /><span class="item-content-wrap">La plateforme e-learning en vidéo</span></a></p></li><li class="type_activity depth_3 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd697_label_3_10"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd697_label_3_10" title="URL" href="https://elearning.univ-usto.dz/mod/url/view.php?id=10059"><img class="icon navicon" alt="URL" title="URL" src="https://elearning.univ-usto.dz/theme/image.php/adaptable/url/1761644400/monologo" /><span class="item-content-wrap">Guide de la plateforme eLearning</span></a></p></li><li class="type_activity depth_3 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd697_label_3_11"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd697_label_3_11" title="URL" href="https://elearning.univ-usto.dz/mod/url/view.php?id=10060"><img class="icon navicon" alt="URL" title="URL" src="https://elearning.univ-usto.dz/theme/image.php/adaptable/url/1761644400/monologo" /><span class="item-content-wrap">Apprenez Moodle		 		</span></a></p></li></ul></li><li class="type_system depth_2 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd694_label_2_12"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd694_label_2_12" href="https://elearning.univ-usto.dz/my/courses.php"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">Mes cours</span></a></p></li><li class="type_system depth_2 contains_branch" role="treeitem" aria-expanded="false" aria-owns="random69144eca1fd6915_group" aria-labelledby="random69144eca1fd694_label_2_13"><p class="tree_item branch canexpand"><a tabindex="-1" id="random69144eca1fd694_label_2_13" href="https://elearning.univ-usto.dz/course/index.php">Cours</a></p><ul id="random69144eca1fd6915_group" role="group" aria-hidden="true"><li class="type_category depth_3 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_574" data-node-key="574" data-node-type="10" aria-labelledby="random69144eca1fd6916_label_3_14"><p class="tree_item branch" id="expandable_branch_10_574"><span tabindex="-1" id="random69144eca1fd6916_label_3_14"> Centre d’Enseignement Intensif des Langues CEIL</span></p></li><li class="type_category depth_3 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_1142" data-node-key="1142" data-node-type="10" aria-labelledby="random69144eca1fd6916_label_3_15"><p class="tree_item branch" id="expandable_branch_10_1142"><span tabindex="-1" id="random69144eca1fd6916_label_3_15">Académie Huawei ICT </span></p></li><li class="type_category depth_3 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_1531" data-node-key="1531" data-node-type="10" aria-labelledby="random69144eca1fd6916_label_3_16"><p class="tree_item branch" id="expandable_branch_10_1531"><span tabindex="-1" id="random69144eca1fd6916_label_3_16">STARTUPS/BREVETS</span></p></li><li class="type_category depth_3 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_1245" data-node-key="1245" data-node-type="10" aria-labelledby="random69144eca1fd6916_label_3_17"><p class="tree_item branch" id="expandable_branch_10_1245"><span tabindex="-1" id="random69144eca1fd6916_label_3_17">Programme AFEQ</span></p></li><li class="type_category depth_3 contains_branch" role="treeitem" aria-expanded="false" aria-owns="random69144eca1fd6917_group" aria-labelledby="random69144eca1fd6916_label_3_18"><p class="tree_item branch canexpand"><span tabindex="-1" id="random69144eca1fd6916_label_3_18">Faculté de Mathématiques et Informatiques</span></p><ul id="random69144eca1fd6917_group" role="group" aria-hidden="true"><li class="type_category depth_4 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_1650" data-node-key="1650" data-node-type="10" aria-labelledby="random69144eca1fd6918_label_4_19"><p class="tree_item branch" id="expandable_branch_10_1650"><span tabindex="-1" id="random69144eca1fd6918_label_4_19"> Doctorat	</span></p></li><li class="type_category depth_4 contains_branch" role="treeitem" aria-expanded="false" aria-owns="random69144eca1fd6919_group" aria-labelledby="random69144eca1fd6918_label_4_20"><p class="tree_item branch canexpand"><span tabindex="-1" id="random69144eca1fd6918_label_4_20">Département d'informatique		 		</span></p><ul id="random69144eca1fd6919_group" role="group" aria-hidden="true"><li class="type_category depth_5 contains_branch" role="treeitem" aria-expanded="false" aria-owns="random69144eca1fd6921_group" aria-labelledby="random69144eca1fd6920_label_5_21"><p class="tree_item branch canexpand"><span tabindex="-1" id="random69144eca1fd6920_label_5_21">Licence</span></p><ul id="random69144eca1fd6921_group" role="group" aria-hidden="true"><li class="type_category depth_6 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_114" data-node-key="114" data-node-type="10" aria-labelledby="random69144eca1fd6922_label_6_22"><p class="tree_item branch" id="expandable_branch_10_114"><span tabindex="-1" id="random69144eca1fd6922_label_6_22">L1</span></p></li><li class="type_category depth_6 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_115" data-node-key="115" data-node-type="10" aria-labelledby="random69144eca1fd6922_label_6_23"><p class="tree_item branch" id="expandable_branch_10_115"><span tabindex="-1" id="random69144eca1fd6922_label_6_23">L2</span></p></li><li class="type_category depth_6 contains_branch" role="treeitem" aria-expanded="false" aria-owns="random69144eca1fd6923_group" aria-labelledby="random69144eca1fd6922_label_6_24"><p class="tree_item branch canexpand"><span tabindex="-1" id="random69144eca1fd6922_label_6_24">L3</span></p><ul id="random69144eca1fd6923_group" role="group" aria-hidden="true"><li class="type_category depth_7 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_705" data-node-key="705" data-node-type="10" aria-labelledby="random69144eca1fd6924_label_7_25"><p class="tree_item branch" id="expandable_branch_10_705"><span tabindex="-1" id="random69144eca1fd6924_label_7_25">Ingénierie  des  Systèmes  d’information et du log...</span></p></li><li class="type_category depth_7 contains_branch" role="treeitem" aria-expanded="false" aria-owns="random69144eca1fd6925_group" aria-labelledby="random69144eca1fd6924_label_7_26"><p class="tree_item branch canexpand"><span tabindex="-1" id="random69144eca1fd6924_label_7_26">Systèmes Informatiques *SI*</span></p><ul id="random69144eca1fd6925_group" role="group" aria-hidden="true"><li class="type_category depth_8 contains_branch" role="treeitem" aria-expanded="false" aria-owns="random69144eca1fd6927_group" aria-labelledby="random69144eca1fd6926_label_8_27"><p class="tree_item branch canexpand"><span tabindex="-1" id="random69144eca1fd6926_label_8_27">L3 semestre5</span></p><ul id="random69144eca1fd6927_group" role="group" aria-hidden="true"><li class="type_course depth_9 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6928_label_9_28"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6928_label_9_28" title="Economie numérique et veille stratégique copie 1" href="https://elearning.univ-usto.dz/course/view.php?id=4032"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">ENVS/SI_1</span></a></p></li><li class="type_course depth_9 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6928_label_9_29"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6928_label_9_29" title="COMPILATION" href="https://elearning.univ-usto.dz/course/view.php?id=1343"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">COMP</span></a></p></li><li class="type_course depth_9 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6928_label_9_30"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6928_label_9_30" title="Economie numérique et veille stratégique نسخ 2" href="https://elearning.univ-usto.dz/course/view.php?id=3633"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">ENVS 2024_2</span></a></p></li><li class="type_course depth_9 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6928_label_9_31"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6928_label_9_31" title="Génie Logiciel - SI" href="https://elearning.univ-usto.dz/course/view.php?id=1738"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">GL</span></a></p></li><li class="type_course depth_9 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6928_label_9_32"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6928_label_9_32" title="Interface Homme Machine" href="https://elearning.univ-usto.dz/course/view.php?id=1461"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">IHM</span></a></p></li><li class="type_course depth_9 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_20_1965" data-node-key="1965" data-node-type="20" aria-labelledby="random69144eca1fd6928_label_9_33"><p class="tree_item branch" id="expandable_branch_20_1965"><a tabindex="-1" id="random69144eca1fd6928_label_9_33" title="Probabilités et Statistiques copie 2" href="https://elearning.univ-usto.dz/course/view.php?id=1965">PST_2</a></p></li><li class="type_course depth_9 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6928_label_9_34"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6928_label_9_34" title="Probabilités et Statistiques copie 2 نسخ 1" href="https://elearning.univ-usto.dz/course/view.php?id=3379"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">PST</span></a></p></li><li class="type_course depth_9 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6928_label_9_35"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6928_label_9_35" title="Programmation linéaire" href="https://elearning.univ-usto.dz/course/view.php?id=1711"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">P.L.</span></a></p></li><li class="type_course depth_9 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6928_label_9_36"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6928_label_9_36" title="Systèmes d&#039;Exploitation II" href="https://elearning.univ-usto.dz/course/view.php?id=1392"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">SE II</span></a></p></li></ul></li><li class="type_category depth_8 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_464" data-node-key="464" data-node-type="10" aria-labelledby="random69144eca1fd6926_label_8_37"><p class="tree_item branch" id="expandable_branch_10_464"><span tabindex="-1" id="random69144eca1fd6926_label_8_37">L3 semestre6</span></p></li></ul></li><li class="type_course depth_7 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6924_label_7_38"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6924_label_7_38" title="Human Machine Interface" href="https://elearning.univ-usto.dz/course/view.php?id=4021"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">H.M.I</span></a></p></li><li class="type_course depth_7 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6924_label_7_39"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6924_label_7_39" title="Anglais L3" href="https://elearning.univ-usto.dz/course/view.php?id=2578"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">ANGL3</span></a></p></li><li class="type_course depth_7 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6924_label_7_40"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6924_label_7_40" title="Données Semi Structurées" href="https://elearning.univ-usto.dz/course/view.php?id=3538"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">DoSS L3</span></a></p></li><li class="type_course depth_7 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6924_label_7_41"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6924_label_7_41" title="Économie Numérique et veille stratégique(ENVS). L3 Semestre 5 par cours ISIL et SI." href="https://elearning.univ-usto.dz/course/view.php?id=3425"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">économie</span></a></p></li><li class="type_course depth_7 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6924_label_7_42"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6924_label_7_42" title="Intelligence Artificielle" href="https://elearning.univ-usto.dz/course/view.php?id=2778"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">IA L3 2021/2022</span></a></p></li><li class="type_course depth_7 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6924_label_7_43"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6924_label_7_43" title="Rédaction Scientifique copie 1" href="https://elearning.univ-usto.dz/course/view.php?id=3531"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">RS_1</span></a></p></li></ul></li></ul></li><li class="type_category depth_5 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_52" data-node-key="52" data-node-type="10" aria-labelledby="random69144eca1fd6920_label_5_44"><p class="tree_item branch" id="expandable_branch_10_52"><span tabindex="-1" id="random69144eca1fd6920_label_5_44">Master</span></p></li><li class="type_category depth_5 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_1455" data-node-key="1455" data-node-type="10" aria-labelledby="random69144eca1fd6920_label_5_45"><p class="tree_item branch" id="expandable_branch_10_1455"><span tabindex="-1" id="random69144eca1fd6920_label_5_45">Ingénieur	</span></p></li><li class="type_course depth_5 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6920_label_5_46"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6920_label_5_46" title="Fondement logique pour l&#039;informatique" href="https://elearning.univ-usto.dz/course/view.php?id=4036"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">FLI</span></a></p></li><li class="type_course depth_5 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6920_label_5_47"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6920_label_5_47" title="Algorithmique et Structures de Données Ingénieurs1" href="https://elearning.univ-usto.dz/course/view.php?id=4008"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">ASD1 ING1</span></a></p></li><li class="type_course depth_5 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6920_label_5_48"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6920_label_5_48" title="Algorithmique et structures de données statiques" href="https://elearning.univ-usto.dz/course/view.php?id=2850"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">ASDS Ingénieur 2022-2023</span></a></p></li><li class="type_course depth_5 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6920_label_5_49"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6920_label_5_49" title="THéorie des langages " href="https://elearning.univ-usto.dz/course/view.php?id=3506"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">THL-ING2-S4</span></a></p></li></ul></li><li class="type_category depth_4 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_24" data-node-key="24" data-node-type="10" aria-labelledby="random69144eca1fd6918_label_4_50"><p class="tree_item branch" id="expandable_branch_10_24"><span tabindex="-1" id="random69144eca1fd6918_label_4_50">Département des Mathématiques		 		</span></p></li><li class="type_course depth_4 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6918_label_4_51"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6918_label_4_51" title="Computer Systems Security" href="https://elearning.univ-usto.dz/course/view.php?id=4026"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">CSS</span></a></p></li><li class="type_course depth_4 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6918_label_4_52"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6918_label_4_52" title="Logiciels Libres OPEN" href="https://elearning.univ-usto.dz/course/view.php?id=4022"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">LLopen</span></a></p></li><li class="type_course depth_4 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6918_label_4_53"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6918_label_4_53" title="STRUCTURE MACHINE 2 copie 1" href="https://elearning.univ-usto.dz/course/view.php?id=3930"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">SM2_1</span></a></p></li><li class="type_course depth_4 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6918_label_4_54"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6918_label_4_54" title="Technologies de l&#039;Information et de la Communication copie 1" href="https://elearning.univ-usto.dz/course/view.php?id=3929"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">TIC L1 _1</span></a></p></li><li class="type_course depth_4 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6918_label_4_55"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6918_label_4_55" title="Algèbre 1 et 2" href="https://elearning.univ-usto.dz/course/view.php?id=2854"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">ALG 1 et 2 (22-23)</span></a></p></li><li class="type_course depth_4 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6918_label_4_56"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6918_label_4_56" title="Analysis 3" href="https://elearning.univ-usto.dz/course/view.php?id=3611"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">Analysis 3</span></a></p></li><li class="type_course depth_4 item_with_icon" role="treeitem" aria-labelledby="random69144eca1fd6918_label_4_57"><p class="tree_item hasicon"><a tabindex="-1" id="random69144eca1fd6918_label_4_57" title="news" href="https://elearning.univ-usto.dz/course/view.php?id=2641"><i class="icon fa fa fa-graduation-cap fa-fw navicon" aria-hidden="true"  ></i><span class="item-content-wrap">news</span></a></p></li></ul></li><li class="type_category depth_3 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_8" data-node-key="8" data-node-type="10" aria-labelledby="random69144eca1fd6916_label_3_58"><p class="tree_item branch" id="expandable_branch_10_8"><span tabindex="-1" id="random69144eca1fd6916_label_3_58">Faculté de physique</span></p></li><li class="type_category depth_3 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_6" data-node-key="6" data-node-type="10" aria-labelledby="random69144eca1fd6916_label_3_59"><p class="tree_item branch" id="expandable_branch_10_6"><span tabindex="-1" id="random69144eca1fd6916_label_3_59">Faculté de chimie</span></p></li><li class="type_category depth_3 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_4" data-node-key="4" data-node-type="10" aria-labelledby="random69144eca1fd6916_label_3_60"><p class="tree_item branch" id="expandable_branch_10_4"><span tabindex="-1" id="random69144eca1fd6916_label_3_60">Faculté de génie électrique</span></p></li><li class="type_category depth_3 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_2" data-node-key="2" data-node-type="10" aria-labelledby="random69144eca1fd6916_label_3_61"><p class="tree_item branch" id="expandable_branch_10_2"><span tabindex="-1" id="random69144eca1fd6916_label_3_61">Faculté d'architecture et de génie civil		</span></p></li><li class="type_category depth_3 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_3" data-node-key="3" data-node-type="10" aria-labelledby="random69144eca1fd6916_label_3_62"><p class="tree_item branch" id="expandable_branch_10_3"><span tabindex="-1" id="random69144eca1fd6916_label_3_62">Faculté de Génie mécanique</span></p></li><li class="type_category depth_3 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_9" data-node-key="9" data-node-type="10" aria-labelledby="random69144eca1fd6916_label_3_63"><p class="tree_item branch" id="expandable_branch_10_9"><span tabindex="-1" id="random69144eca1fd6916_label_3_63">Faculté des sciences de la nature et de la vie</span></p></li><li class="type_category depth_3 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_11" data-node-key="11" data-node-type="10" aria-labelledby="random69144eca1fd6916_label_3_64"><p class="tree_item branch" id="expandable_branch_10_11"><span tabindex="-1" id="random69144eca1fd6916_label_3_64">Laboratoires</span></p></li><li class="type_category depth_3 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_10" data-node-key="10" data-node-type="10" aria-labelledby="random69144eca1fd6916_label_3_65"><p class="tree_item branch" id="expandable_branch_10_10"><span tabindex="-1" id="random69144eca1fd6916_label_3_65">Institut d'éducation physique et de sport</span></p></li><li class="type_category depth_3 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_38" data-node-key="38" data-node-type="10" aria-labelledby="random69144eca1fd6916_label_3_66"><p class="tree_item branch" id="expandable_branch_10_38"><span tabindex="-1" id="random69144eca1fd6916_label_3_66">Institut des Sciences et Techniques Appliquées</span></p></li><li class="type_category depth_3 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_1545" data-node-key="1545" data-node-type="10" aria-labelledby="random69144eca1fd6916_label_3_68"><p class="tree_item branch" id="expandable_branch_10_1545"><span tabindex="-1" id="random69144eca1fd6916_label_3_68">Formation InSIDE</span></p></li><li class="type_category depth_3 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_1693" data-node-key="1693" data-node-type="10" aria-labelledby="random69144eca1fd6916_label_3_71"><p class="tree_item branch" id="expandable_branch_10_1693"><span tabindex="-1" id="random69144eca1fd6916_label_3_71">Formation doctorale 2025</span></p></li><li class="type_category depth_3 contains_branch" role="treeitem" aria-expanded="false" data-requires-ajax="true" data-loaded="false" data-node-id="expandable_branch_10_1714" data-node-key="1714" data-node-type="10" aria-labelledby="random69144eca1fd6916_label_3_72"><p class="tree_item branch" id="expandable_branch_10_1714"><span tabindex="-1" id="random69144eca1fd6916_label_3_72">Accompagnement pédagogique des enseignants nouvell...</span></p></li></ul></li></ul></li></ul></div></section><span class="skip-block-to" id="sb-1"></span></aside>
+            </section>
+
+    </div>
+</div><header id="adaptable-page-header-wrapper">
+    <div id="header1" class="above-header">
+        <div class="container">
+            <nav class="navbar navbar-expand btco-hover-menu">
+
+                <div class="collapse navbar-collapse">
+                <div class="my-auto m-1"></div>
+                    <ul class="navbar-nav ml-auto my-auto">
+
+                        <li class="nav-item navbarsearchsocial mx-md-1 my-auto d-md-block d-lg-none my-auto">
+                            <div id="searchinput-navbar-69144eca2e64169144eca1fd6955" class="simplesearchform">
+    <div class="collapse" id="searchform-navbar">
+        <form autocomplete="off" action="https://elearning.univ-usto.dz/course/search.php" method="get" accept-charset="utf-8" class="mform d-flex flex-wrap align-items-center searchform-navbar">
+                <input type="hidden" name="context" value="140977">
+            <div class="input-group">
+                <label for="searchinput-69144eca2e64169144eca1fd6955">
+                    <span class="sr-only">Recherche de cours</span>
+                </label>
+                    <input type="text"
+                       id="searchinput-69144eca2e64169144eca1fd6955"
+                       class="form-control withclear"
+                       placeholder="Recherche de cours"
+                       aria-label="Recherche de cours"
+                       name="q"
+                       data-region="input"
+                       autocomplete="off"
+                    >
+                    <a class="btn btn-close"
+                        data-action="closesearch"
+                        data-toggle="collapse"
+                        href="#searchform-navbar"
+                        role="button"
+                    >
+                        <i class="icon fa fa fa-xmark fa-fw" aria-hidden="true"  ></i>
+                        <span class="sr-only">Fermer</span>
+                    </a>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-submit" data-action="submit">
+                        <i class="icon fa fa fa-magnifying-glass fa-fw" aria-hidden="true"  ></i>
+                        <span class="sr-only">Recherche de cours</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <a
+        class="btn btn-open rounded-0 nav-link"
+        data-toggle="collapse"
+        data-action="opensearch"
+        href="#searchform-navbar"
+        role="button"
+        aria-expanded="false"
+        aria-controls="searchform-navbar"
+        title="Activer/désactiver la saisie de recherche"
+    >
+        <i class="icon fa fa fa-magnifying-glass fa-fw" aria-hidden="true"  ></i>
+        <span class="sr-only">Activer/désactiver la saisie de recherche</span>
+    </a>
+</div>
+                        </li>
+
+
+                        <li class="nav-item dropdown ml-2 my-auto"><li class="nav-item dropdown my-auto"><a href="https://elearning.univ-usto.dz/enrol/index.php?id=1343" class="nav-link dropdown-toggle my-auto" role="button" id="langmenu1" aria-haspopup="true" aria-expanded="false" aria-controls="dropdownlangmenu1" data-target="https://elearning.univ-usto.dz/enrol/index.php?id=1343" data-toggle="dropdown" title="Langue"><i class="icon fa fa-globe fa-lg"></i><span class="langdesc">Français ‎(fr)‎</span></a><ul role="menu" class="dropdown-menu" id="dropdownlangmenu1" aria-labelledby="langmenu1"><li><a title="English ‎(en)‎" class="dropdown-item" href="https://elearning.univ-usto.dz/enrol/index.php?id=1343&amp;lang=en">English ‎(en)‎</a></li><li><a title="Français ‎(fr)‎" class="dropdown-item" href="https://elearning.univ-usto.dz/enrol/index.php?id=1343&amp;lang=fr">Français ‎(fr)‎</a></li><li><a title="العربية ‎(ar)‎" class="dropdown-item" href="https://elearning.univ-usto.dz/enrol/index.php?id=1343&amp;lang=ar">العربية ‎(ar)‎</a></li></ul></li></li>
+
+                        
+
+                        <li class="nav-item"><form id="pre-login-form" class="form-inline my-2 my-lg-0" action="https://elearning.univ-usto.dz/login/index.php" method="post">
+    <input type="hidden" name="logintoken" value="CNntwSP9mZf9v9jtKBrhmfIhHZCBClnB">
+    <input type="text" name="username" placeholder="Nom de l’utilisateur" size="11">
+    <input type="password" name="password" placeholder="Mot de passe" size="11">
+    <button class="btn-login" type="submit">Connexion</button>
+</form></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div id="page-header" class="container d-none d-sm-block">
+        <div class="row d-flex justify-content-start align-items-center h-100">
+            <div class="col-lg-8 p-0">
+                <div class="bd-highlight d-flex">
+                    <div class="pb-2 pr-3 pt-2 bd-highlight d-none d-lg-inline-block"><a href=https://elearning.univ-usto.dz aria-label="Accueil" title="منصة التعليم عن بعد لجامعة وهران للعلوم و التكنولوجيا"><img src=//elearning.univ-usto.dz/pluginfile.php/1/theme_adaptable/logo/1761644400/fav.png id="logo" alt=""></a></div>
+                    <div id="headertitle" class="bd-highlight pt-2 d-inline-block"><h1><span id="coursetitle">COMPILATION</span></h1></div>
+                </div>
+                <div id="course-header">
+                    
+                </div>
+            </div>
+            <div class="col-lg-4 d-flex justify-content-end">
+                    <div class="headersearch pagelayoutoriginal d-none d-lg-inline-block">
+    <div id="searchinput-navbar-69144eca2e80369144eca1fd6956" class="simplesearchform">
+    <div class="collapse" id="searchform-navbar">
+        <form autocomplete="off" action="https://elearning.univ-usto.dz/course/search.php" method="get" accept-charset="utf-8" class="mform d-flex flex-wrap align-items-center searchform-navbar">
+                <input type="hidden" name="context" value="140977">
+            <div class="input-group">
+                <label for="searchinput-69144eca2e80369144eca1fd6956">
+                    <span class="sr-only">Recherche de cours</span>
+                </label>
+                    <input type="text"
+                       id="searchinput-69144eca2e80369144eca1fd6956"
+                       class="form-control withclear"
+                       placeholder="Recherche de cours"
+                       aria-label="Recherche de cours"
+                       name="q"
+                       data-region="input"
+                       autocomplete="off"
+                    >
+                    <a class="btn btn-close"
+                        data-action="closesearch"
+                        data-toggle="collapse"
+                        href="#searchform-navbar"
+                        role="button"
+                    >
+                        <i class="icon fa fa fa-xmark fa-fw" aria-hidden="true"  ></i>
+                        <span class="sr-only">Fermer</span>
+                    </a>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-submit" data-action="submit">
+                        <i class="icon fa fa fa-magnifying-glass fa-fw" aria-hidden="true"  ></i>
+                        <span class="sr-only">Recherche de cours</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <a
+        class="btn btn-open rounded-0 nav-link"
+        data-toggle="collapse"
+        data-action="opensearch"
+        href="#searchform-navbar"
+        role="button"
+        aria-expanded="false"
+        aria-controls="searchform-navbar"
+        title="Activer/désactiver la saisie de recherche"
+    >
+        <i class="icon fa fa fa-magnifying-glass fa-fw" aria-hidden="true"  ></i>
+        <span class="sr-only">Activer/désactiver la saisie de recherche</span>
+    </a>
+</div>
+</div>
+            </div>
+
+        </div>
+    </div>
+
+
+</header><div id="page" class="drawers"><div class="drawer-toggles d-flex">
+    <div class="drawer-toggler drawer-right-toggle ml-auto d-print-none">
+        <button
+            class="btn icon-no-margin"
+            data-toggler="drawers"
+            data-action="toggle"
+            data-target="theme_adaptable-drawers-sidepost"
+            data-toggle="tooltip"
+            data-placement="right"
+            title="Ouvrir le tiroir des blocs"
+        >
+            <span class="sr-only">Ouvrir le tiroir des blocs</span>
+            <span class="dir-rtl-hide"><i class="icon fa fa fa-chevron-left fa-fw" aria-hidden="true"  ></i></span>
+            <span class="dir-ltr-hide"><i class="icon fa fa fa-chevron-right fa-fw" aria-hidden="true"  ></i></span>
+        </button>
+    </div>
+</div><div id="maincontainer" class="container outercont"><div class="row"><div id="page-second-header" class="col-12 pt-3 pb-3 d-none d-md-flex">
+    <div class="d-flex flex-fill flex-wrap align-items-center">
+        <div id="page-navbar" class="mr-auto">
+            <nav role="navigation" aria-label="Fil d’ariane"><ol class="breadcrumb align-items-center d-none d-md-flex"><li><a href="https://elearning.univ-usto.dz/"><span aria-hidden="true" class="fa-lg fa fa-home" title="Accueil"><span class="sr-only">Accueil</span></span></a></li><li><span aria-hidden="true" class="separator fa fa-angle-right"></span><span tabindex="0"><i class="icon fa fa fa-compass fa-fw navicon" aria-hidden="true"  ></i>Options d’inscription</span></li></ol></nav>
+        </div>
+    </div>
+</div></div><div id="page-content" class="row"><div id="region-main-box" class="col-12"><section id="region-main"><span class="notifications" id="user-notifications"></span><div role="main"><span id="maincontent"></span><h2>Options d’inscription</h2><div class="box generalbox info"><div class="coursebox clearfix" data-courseid="1343" data-type="1"><div class="info"><h3 class="coursename"><a class="aalink" href="https://elearning.univ-usto.dz/course/view.php?id=1343">COMPILATION</a></h3><div class="moreinfo"></div></div><div class="content"><div class="d-flex"><div class="flex-grow-1"><div class="summary"><div class="no-overflow"><p><strong>ce cours est destiné aux étudiants de LICENCE 3 SI et ING3 (IAA+SEC+SD)</strong></p></div></div><ul class="teachers"><li><span class="font-weight-bold">Enseignant: </span><a href="https://elearning.univ-usto.dz/user/profile.php?id=19709">BAGDADI Leila</a></li><li><span class="font-weight-bold">Enseignant: </span><a href="https://elearning.univ-usto.dz/user/profile.php?id=5355">Hafida Raaf</a></li><li><span class="font-weight-bold">Enseignant: </span><a href="https://elearning.univ-usto.dz/user/profile.php?id=1748">sarra senhadji</a></li><li><span class="font-weight-bold">Enseignant: </span><a href="https://elearning.univ-usto.dz/user/profile.php?id=893">Redouane TLEMSANI</a></li></ul></div></div></div></div></div><div class="box generalbox">
+<form autocomplete="off" action="https://elearning.univ-usto.dz/login/index.php" method="post" accept-charset="utf-8" id="mform1_yKt5ZZo3Mg1mKwB" class="mform">
+	<div style="display: none;"><input name="sesskey" type="hidden" value="cMU530AQ6T" />
+<input name="_qf__enrol_self_empty_form" type="hidden" value="1" />
+<input name="mform_isexpanded_id_selfheader" type="hidden" value="1" />
+</div>
+
+
+	<fieldset class="clearfix collapsible"  id="id_selfheader"><legend class="sr-only">Auto-inscription (Étudiant)</legend>
+<div class="d-flex align-items-center mb-2">
+    <div class="position-relative d-flex ftoggler align-items-center position-relative me-1">
+            <a data-toggle="collapse"
+               href="#id_selfheadercontainer"
+               role="button"
+               aria-expanded="true"
+               aria-controls="id_selfheadercontainer"
+               class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader "
+            >
+                <span class="expanded-icon icon-no-margin p-2" title="Replier">
+                    <i class="icon fa fa fa-chevron-down fa-fw" aria-hidden="true"  ></i>
+                </span>
+                <span class="collapsed-icon icon-no-margin p-2" title="Déplier">
+                    <span class="dir-rtl-hide"><i class="icon fa fa fa-chevron-right fa-fw" aria-hidden="true"  ></i></span>
+                    <span class="dir-ltr-hide"><i class="icon fa fa fa-chevron-left fa-fw" aria-hidden="true"  ></i></span>
+                </span>
+                <span class="sr-only">Auto-inscription (Étudiant)</span>
+            </a>
+        <h3 class="d-flex align-self-stretch align-items-center mb-0" aria-hidden="true">
+            Auto-inscription (Étudiant)
+        </h3>
+    </div>
+    
+</div>
+<div id="id_selfheadercontainer" class="fcontainer collapseable collapse  show"><div id="fitem_id_info" class="mb-3 row  fitem femptylabel   " >
+    <div class="col-md-3 col-form-label d-flex pb-0 pe-md-0">
+        
+        <div class="form-label-addon d-flex align-items-center align-self-start">
+            
+        </div>
+    </div>
+    <div class="col-md-9 d-flex flex-wrap align-items-start felement" data-fieldtype="static">
+        <div class="form-control-static " data-name="info">
+        Les visiteurs anonymes ne peuvent pas accéder à ce cours. Veuillez vous connecter.<div class="continuebutton">
+    <form method="get" action="https://elearning.univ-usto.dz/login/index.php" >
+        <button type="submit" class="btn btn-primary"
+            id="single_button69144eca1fd691"
+            
+            
+            >Continuer</button>
+    </form>
+</div>
+        </div>
+        <div class="form-control-feedback invalid-feedback" id="id_error_info" >
+            
+        </div>
+    </div>
+</div>
+		</div></fieldset>
+</form></div></div></section></div></div></div><footer id="page-footer" class="d-block">
+    <div id="course-footer"></div>
+    <div class="container blockplace1"><div class="row"><div class="left-col col-4"><h3>إتصل بنا </h3><p>منصة التعليم عن بعد لجامعة وهران للعلوم و التكنولوجيا</p>
+<p>المنور ص ب 1505، بير الجير 31000 وهران الجزائر</p></div><div class="left-col col-8"><h3>روابط مهمة</h3><p><a href="http://www.optioncarriere.dz/">فرص عمل</a></p>
+<p><a href="http://www.joradp.dz/HAR/Index.htm">الجريدة الرسمية</a></p>
+<p><a href="http://cruo.univ-oran1.dz/">موقع الندوة الجهوية للغرب</a></p>
+<p><a href="http://www.mesrs.dz">موقع وزارة التعليم العالي و البحث العلمي</a></p></div></div></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 pagination-centered socialicons">
+            <a target="_blank" title="Search Moodle" href="https://elearning.univ-usto.dz/course/search.php"><span aria-hidden="true" class="fa fa-search"></span></a><a target="_blank" title="Facebook" href="https://www.facebook.com/usto.mb.page.officiel/"><span aria-hidden="true" class="fa fa-facebook-square"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="info container2 clearfix">
+        <div class="container">
+            <div class="row">
+                <div class="tool_usertours-resettourcontainer"></div>
+                <div class="col-md-4 my-md-0 my-2"><div class="text_to_html"><p>Université des Sciences et de la Technologie d'Oran</p></div></div>
+                <div class="col-md-4 my-md-0 my-2 helplink"></div>
+                <div class="col-md-4 my-md-0 my-2"><div class="tool_dataprivacy"><a href="https://elearning.univ-usto.dz/admin/tool/dataprivacy/summary.php">Résumé de conservation de données</a></div><div><a class="mobilelink" href="https://download.moodle.org/mobile?version=2024100703.07&amp;lang=fr&amp;iosappid=633359593&amp;androidappid=com.moodle.moodlemobile&amp;siteurl=https%3A%2F%2Felearning.univ-usto.dz">Obtenir l’app mobile</a></div></div>
+            </div>
+            <div class="row">
+                <div class="col-12 my-md-0 my-2">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<div id="back-to-top"><i class="fa fa-angle-up "></i></div>
+
+
+</div>
+</div>
+
+<script>
+//<![CDATA[
+var require = {
+    baseUrl : 'https://elearning.univ-usto.dz/lib/requirejs.php/1761644422/',
+    // We only support AMD modules with an explicit define() statement.
+    enforceDefine: true,
+    skipDataMain: true,
+    waitSeconds : 0,
+
+    paths: {
+        jquery: 'https://elearning.univ-usto.dz/lib/javascript.php/1761644422/lib/jquery/jquery-3.7.1.min',
+        jqueryui: 'https://elearning.univ-usto.dz/lib/javascript.php/1761644422/lib/jquery/ui-1.13.2/jquery-ui.min',
+        jqueryprivate: 'https://elearning.univ-usto.dz/lib/javascript.php/1761644422/lib/requirejs/jquery-private'
+    },
+
+    // Custom jquery config map.
+    map: {
+      // '*' means all modules will get 'jqueryprivate'
+      // for their 'jquery' dependency.
+      '*': { jquery: 'jqueryprivate' },
+
+      // 'jquery-private' wants the real jQuery module
+      // though. If this line was not here, there would
+      // be an unresolvable cyclic dependency.
+      jqueryprivate: { jquery: 'jquery' }
+    }
+};
+
+//]]>
+</script>
+<script src="https://elearning.univ-usto.dz/lib/javascript.php/1761644422/lib/requirejs/require.min.js"></script>
+<script>
+//<![CDATA[
+M.util.js_pending("core/first");
+require(['core/first'], function() {
+require(['core/prefetch'])
+;
+M.util.js_pending('filter_mathjaxloader/loader'); require(['filter_mathjaxloader/loader'], function(amd) {amd.configure({"mathjaxconfig":"\nMathJax.Hub.Config({\n    config: [\"Accessible.js\", \"Safe.js\"],\n    errorSettings: { message: [\"!\"] },\n    skipStartupTypeset: true,\n    messageStyle: \"none\"\n});\n","lang":"fr"}); M.util.js_complete('filter_mathjaxloader/loader');});;
+require(["media_videojs/loader"], function(loader) {
+    loader.setUp('fr');
+});;
+M.util.js_pending('core_form/changechecker'); require(['core_form/changechecker'], function(amd) {amd.watchFormById("mform1_yKt5ZZo3Mg1mKwB"); M.util.js_complete('core_form/changechecker');});;
+
+require(['theme_boost/form-display-errors'], function(module) {
+    module.enhance("id_info");
+});
+;
+M.util.js_pending('theme_adaptable/adaptable'); require(['theme_adaptable/adaptable'], function(amd) {amd.init({"stickynavbar":true}); M.util.js_complete('theme_adaptable/adaptable');});;
+M.util.js_pending('block_navigation/navblock'); require(['block_navigation/navblock'], function(amd) {amd.init("4"); M.util.js_complete('block_navigation/navblock');});;
+M.util.js_pending('block_settings/settingsblock'); require(['block_settings/settingsblock'], function(amd) {amd.init("5", null); M.util.js_complete('block_settings/settingsblock');});;
+M.util.js_pending('theme_adaptable/collapseblock'); require(['theme_adaptable/collapseblock'], function(amd) {amd.collapseBlockInit(); M.util.js_complete('theme_adaptable/collapseblock');});;
+
+M.util.js_pending('theme_boost/drawers:load');
+require(['theme_boost/drawers'], function() {
+    M.util.js_complete('theme_boost/drawers:load');
+});
+;
+
+require(
+[
+    'jquery',
+],
+function(
+    $
+) {
+    var uniqid = "69144eca2e64169144eca1fd6955";
+    var container = $('#searchinput-navbar-' + uniqid);
+    var opensearch = container.find('[data-action="opensearch"]');
+    var input = container.find('[data-region="input"]');
+    var submit = container.find('[data-action="submit"]');
+
+    submit.on('click', function(e) {
+        if (input.val() === '') {
+            e.preventDefault();
+        }
+    });
+    container.on('hidden.bs.collapse', function() {
+        opensearch.removeClass('d-none');
+        input.val('');
+    });
+    container.on('show.bs.collapse', function() {
+        opensearch.addClass('d-none');
+    });
+    container.on('shown.bs.collapse', function() {
+        input.focus();
+    });
+});
+;
+
+require(
+[
+    'jquery',
+],
+function(
+    $
+) {
+    var uniqid = "69144eca2e80369144eca1fd6956";
+    var container = $('#searchinput-navbar-' + uniqid);
+    var opensearch = container.find('[data-action="opensearch"]');
+    var input = container.find('[data-region="input"]');
+    var submit = container.find('[data-action="submit"]');
+
+    submit.on('click', function(e) {
+        if (input.val() === '') {
+            e.preventDefault();
+        }
+    });
+    container.on('hidden.bs.collapse', function() {
+        opensearch.removeClass('d-none');
+        input.val('');
+    });
+    container.on('show.bs.collapse', function() {
+        opensearch.addClass('d-none');
+    });
+    container.on('shown.bs.collapse', function() {
+        input.focus();
+    });
+});
+;
+
+    M.util.js_pending('theme_boost/loader');
+    require(['theme_boost/loader', 'theme_boost/drawer'], function(Loader, Drawer) {
+        Drawer.init();
+        M.util.js_complete('theme_boost/loader');
+    });
+;
+M.util.js_pending('core/notification'); require(['core/notification'], function(amd) {amd.init(140977, []); M.util.js_complete('core/notification');});;
+M.util.js_pending('core/log'); require(['core/log'], function(amd) {amd.setConfig({"level":"warn"}); M.util.js_complete('core/log');});;
+M.util.js_pending('core/page_global'); require(['core/page_global'], function(amd) {amd.init(); M.util.js_complete('core/page_global');});;
+M.util.js_pending('core/utility'); require(['core/utility'], function(amd) {M.util.js_complete('core/utility');});;
+M.util.js_pending('core/storage_validation'); require(['core/storage_validation'], function(amd) {amd.init(null); M.util.js_complete('core/storage_validation');});
+    M.util.js_complete("core/first");
+});
+//]]>
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?delayStartupUntil=configured"></script>
+<script>
+//<![CDATA[
+M.str = {"moodle":{"lastmodified":"Modifi\u00e9 le","name":"Nom","error":"Erreur","info":"Information","yes":"Oui","no":"Non","viewallcourses":"Afficher tous les cours","cancel":"Annuler","confirm":"Confirmer","areyousure":"Voulez-vous vraiment continuer\u00a0?","closebuttontitle":"Fermer","unknownerror":"Erreur inconnue","file":"Fichier","url":"URL","collapseall":"Tout replier","expandall":"Tout d\u00e9plier"},"repository":{"type":"Type","size":"Taille","invalidjson":"Cha\u00eene JSON non valide","nofilesattached":"Aucun fichier joint","filepicker":"S\u00e9lecteur de fichiers","logout":"D\u00e9connexion","nofilesavailable":"Aucun fichier disponible","norepositoriesavailable":"D\u00e9sol\u00e9, aucun de vos d\u00e9p\u00f4ts actuels ne peut retourner de fichiers dans le format requis.","fileexistsdialogheader":"Le fichier existe","fileexistsdialog_editor":"Un fichier de ce nom a d\u00e9j\u00e0 \u00e9t\u00e9 joint au texte que vous modifiez.","fileexistsdialog_filemanager":"Un fichier de ce nom a d\u00e9j\u00e0 \u00e9t\u00e9 joint","renameto":"Renommer \u00e0 \u00ab\u00a0{$a}\u00a0\u00bb","referencesexist":"Il y a {$a} liens qui pointent vers ce fichier","select":"S\u00e9lectionnez"},"admin":{"confirmdeletecomments":"Voulez-vous vraiment supprimer les commentaires s\u00e9lectionn\u00e9s\u00a0?","confirmation":"Confirmation"},"debug":{"debuginfo":"Info de d\u00e9bogage","line":"Ligne","stacktrace":"Trace de la pile"},"langconfig":{"labelsep":"&nbsp;"}};
+//]]>
+</script>
+<script>
+//<![CDATA[
+(function() {Y.use("moodle-form-shortforms",function() {M.form.shortforms({"formid":"mform1_yKt5ZZo3Mg1mKwB"});
+});
+M.util.help_popups.setup(Y);
+ M.util.js_pending('random69144eca1fd6957'); Y.on('domready', function() { M.util.js_complete("init");  M.util.js_complete('random69144eca1fd6957'); });
+})();
+//]]>
+</script>
+
+
+
+
+
+
+</body></html>
