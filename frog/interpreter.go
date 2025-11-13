@@ -4,12 +4,6 @@ import (
 	"fmt"
 )
 
-var (
-	NULL  = &Null{}
-	TRUE  = &Boolean{Value: true}
-	FALSE = &Boolean{Value: false}
-)
-
 func NewEnvironment() *Environment {
 	s := make(map[string]Object)
 	return &Environment{store: s}
@@ -63,7 +57,11 @@ func Eval(node Node, env *Environment) Object {
 	case *PrintStatement:
 		return evalPrintStatement(node, env)
 	case *Boolean:
-		return node
+		if node.Value {
+			return TRUE
+		} else {
+			return FALSE
+		}
 	}
 	return nil
 }
@@ -84,7 +82,7 @@ func evalRepeatStatement(rs *RepeatStatement, env *Environment) Object {
 			break
 		}
 	}
-	return NULL
+	return nil
 }
 
 func evalIfStatement(is *IfStatement, env *Environment) Object {
@@ -184,10 +182,10 @@ func evalIntegerInfixExpression(node *InfixExpression, left, right Object) Objec
 		return &Int{Value: leftVal * rightVal}
 	case "/":
 		if rightVal == 0 {
-			newError(node.Token.Line, node.Token.Column, "ERRORDIV0: fuck you u can't divis per zero")
-			return nil
+			return newError(node.Token.Line, node.Token.Column, "ERROR: u can't divis per zero")
+		} else {
+			return &Int{Value: leftVal / rightVal}
 		}
-		return &Int{Value: leftVal / rightVal}
 	case "<":
 		return nativeBoolToBooleanObject(leftVal < rightVal)
 	case ">":
@@ -216,7 +214,11 @@ func evalRealInfixExpression(node *InfixExpression, left, right Object) Object {
 	case "*":
 		return &Real{Value: leftVal * rightVal}
 	case "/":
-		return &Real{Value: leftVal / rightVal}
+		if rightVal == 0 {
+			return newError(node.Token.Line, node.Token.Column, "ERROR: u can't divis per zero")
+		} else {
+			return &Real{Value: leftVal / rightVal}
+		}
 	case "<":
 		return nativeBoolToBooleanObject(leftVal < rightVal)
 	case ">":

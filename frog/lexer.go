@@ -7,6 +7,23 @@ import (
 	"unicode/utf8"
 )
 
+// TODO: add tables
+// FRG_Int[] a#
+//	a := {1,2,3}
+// FRG_Real[] a#
+//	a := {1.1,2.2,3,3}
+// FRG_Strg[] a#
+//	a := {"a","b","c"}
+// TODO: add functions
+//	FRG_Fn foo(FRG_Int a) : FRG_Int
+//	Begin
+//		foo := a ## return value
+//	End
+// TODO: add system modules
+//	FRG_Use "core.ifrg"
+
+// BUG: use undeclared ID not generated error
+
 type TokenType int
 
 const (

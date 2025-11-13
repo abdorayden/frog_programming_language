@@ -42,7 +42,6 @@ func (p *Program) String() string {
 	return out.String()
 }
 
-// DeclarationStatement represents a variable declaration, e.g., FRG_Int i, j, k #
 type DeclarationStatement struct {
 	Token       Token // The type token (FRG_Int, FRG_Real, FRG_Strg)
 	Identifiers []*Identifier
@@ -175,7 +174,6 @@ func (es *ExpressionStatement) String() string {
 	return ""
 }
 
-// Identifier represents an identifier.
 type Identifier struct {
 	Token Token // the IDENT token
 	Value string
@@ -481,18 +479,22 @@ func (p *Parser) parseIfStatement() *IfStatement {
 		return nil
 	}
 	p.nextToken()
+
 	stmt.Condition = p.parseExpression(LOWEST)
+
 	if !p.expectPeek(TokenRBracket) {
 		return nil
 	}
 
 	p.nextToken()
+
 	stmt.Consequence = p.parseStatement()
 
 	if p.peekTokenIs(TokenElse) {
-		p.nextToken()
+		p.nextToken() // kill else
 		p.nextToken()
 		stmt.Alternative = p.parseStatement()
+
 	}
 
 	return stmt
