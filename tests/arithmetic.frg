@@ -25,6 +25,6 @@ FRG_Begin
     Repeat
         FRG_Print i #
         i := i + 1 #
-    Until [ i > 15 ]
+    Until [ False ]
 
 FRG_End
