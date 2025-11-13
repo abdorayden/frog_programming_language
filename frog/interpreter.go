@@ -97,7 +97,7 @@ func evalIfStatement(is *IfStatement, env *Environment) Object {
 	} else if is.Alternative != nil {
 		return Eval(is.Alternative, env)
 	} else {
-		return NULL
+		return nil
 	}
 }
 
@@ -182,6 +182,12 @@ func evalIntegerInfixExpression(node *InfixExpression, left, right Object) Objec
 		return &Int{Value: leftVal - rightVal}
 	case "*":
 		return &Int{Value: leftVal * rightVal}
+	case "/":
+		if rightVal == 0 {
+			newError(node.Token.Line, node.Token.Column, "ERRORDIV0: fuck you u can't divis per zero")
+			return nil
+		}
+		return &Int{Value: leftVal / rightVal}
 	case "<":
 		return nativeBoolToBooleanObject(leftVal < rightVal)
 	case ">":

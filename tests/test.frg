@@ -4,13 +4,18 @@ FRG_Begin
     FRG_Real x3 #
     FRG_Strg name #
 
+    ## move them to a standerd library
+    FRG_Int true , false#
+    true := 1==1 #
+    false := 1==2#
+
     name := "rayden" #
     ##FRG_Print "Hello, ", name, "!" #
 
     i := 30 + 5 #
     ## i := 5 #
 
-    If [ i >= 20 ]
+    If [ i <= 20 ]
     Begin
         x1 := 10 #
     End
@@ -24,10 +29,12 @@ FRG_Begin
 
     FRG_Print "Hello, ", name, "!" #
 
-    If [False]
+    If [true]
     Begin
         FRG_Print "Hello inside false condition"#
     End
+    ## Else
+    ##     FRG_Print "second else"#
 
 
     ## instruction de boucle Repeat

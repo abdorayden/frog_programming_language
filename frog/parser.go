@@ -63,9 +63,8 @@ func (ds *DeclarationStatement) String() string {
 	return out.String()
 }
 
-// AssignmentStatement represents an assignment, e.g., i := 10 #
 type AssignmentStatement struct {
-	Token      Token // The := token
+	Token      Token
 	Identifier *Identifier
 	Value      Expression
 }
@@ -83,9 +82,8 @@ func (as *AssignmentStatement) String() string {
 	return out.String()
 }
 
-// PrintStatement represents a print statement, e.g., FRG_Print i, "hello" #
 type PrintStatement struct {
-	Token       Token // The FRG_Print token
+	Token       Token
 	Expressions []Expression
 }
 
@@ -104,12 +102,11 @@ func (ps *PrintStatement) String() string {
 	return out.String()
 }
 
-// IfStatement represents an if-else statement.
 type IfStatement struct {
-	Token       Token // The 'If' token
+	Token       Token
 	Condition   Expression
 	Consequence Statement
-	Alternative Statement // Can be nil
+	Alternative Statement
 }
 
 func (is *IfStatement) statementNode()       {}
@@ -127,9 +124,8 @@ func (is *IfStatement) String() string {
 	return out.String()
 }
 
-// RepeatStatement represents a repeat-until loop.
 type RepeatStatement struct {
-	Token     Token // The 'Repeat' token
+	Token     Token
 	Body      []Statement
 	Condition Expression
 }
@@ -147,9 +143,8 @@ func (rs *RepeatStatement) String() string {
 	return out.String()
 }
 
-// BlockStatement represents a block of statements, e.g., Begin ... End
 type BlockStatement struct {
-	Token      Token // The 'Begin' token
+	Token      Token
 	Statements []Statement
 }
 
@@ -262,7 +257,6 @@ func (ie *InfixExpression) String() string {
 // Parser
 // =============================================================================
 
-// Precedence levels for operators
 const (
 	_ int = iota
 	LOWEST
@@ -302,7 +296,6 @@ type Parser struct {
 	infixParseFns  map[TokenType]infixParseFn
 }
 
-// NewParser creates a new Parser.
 func NewParser(l *Lexer) *Parser {
 	p := &Parser{
 		lexer:  l,
@@ -329,7 +322,6 @@ func NewParser(l *Lexer) *Parser {
 	p.registerInfix(TokenLessEqual, p.parseInfixExpression)
 	p.registerInfix(TokenGreaterEqual, p.parseInfixExpression)
 
-	// Read 2 tokens to set currentToken and peekToken
 	p.nextToken()
 	p.nextToken()
 
@@ -364,7 +356,6 @@ func (p *Parser) registerInfix(tokenType TokenType, fn infixParseFn) {
 	p.infixParseFns[tokenType] = fn
 }
 
-// ParseProgram is the main entry point for parsing.
 func (p *Parser) ParseProgram() *Program {
 	program := &Program{}
 	program.Statements = []Statement{}
@@ -397,7 +388,6 @@ func (p *Parser) ParseProgram() *Program {
 	return program
 }
 
-// parseStatement is the dispatcher for different statement types.
 func (p *Parser) parseStatement() Statement {
 	switch p.currentToken.Type {
 	case TokenFRGInt, TokenFRGReal, TokenFRGStrg:
@@ -415,10 +405,9 @@ func (p *Parser) parseStatement() Statement {
 			return p.parseAssignmentStatement()
 		}
 	}
-	return nil // Or an error
+	return nil
 }
 
-// parseDeclarationStatement parses `FRG_Int i, j #`
 func (p *Parser) parseDeclarationStatement() *DeclarationStatement {
 	stmt := &DeclarationStatement{Token: p.currentToken}
 	stmt.Identifiers = []*Identifier{}
@@ -430,7 +419,7 @@ func (p *Parser) parseDeclarationStatement() *DeclarationStatement {
 	stmt.Identifiers = append(stmt.Identifiers, &Identifier{Token: p.currentToken, Value: p.currentToken.Literal})
 
 	for p.peekTokenIs(TokenComma) {
-		p.nextToken() // consume the comma
+		p.nextToken()
 		if !p.expectPeek(TokenIdentifier) {
 			return nil
 		}
@@ -444,16 +433,15 @@ func (p *Parser) parseDeclarationStatement() *DeclarationStatement {
 	return stmt
 }
 
-// parseAssignmentStatement parses `i := 10 #`
 func (p *Parser) parseAssignmentStatement() *AssignmentStatement {
 	stmt := &AssignmentStatement{
 		Identifier: &Identifier{Token: p.currentToken, Value: p.currentToken.Literal},
 	}
 
-	p.nextToken()               // consume identifier
-	stmt.Token = p.currentToken // this is :=
+	p.nextToken()
+	stmt.Token = p.currentToken
 
-	p.nextToken() // consume :=
+	p.nextToken()
 	stmt.Value = p.parseExpression(LOWEST)
 
 	if !p.expectPeek(TokenHash) {
@@ -463,19 +451,18 @@ func (p *Parser) parseAssignmentStatement() *AssignmentStatement {
 	return stmt
 }
 
-// parsePrintStatement parses `FRG_Print expr1, expr2 #`
 func (p *Parser) parsePrintStatement() *PrintStatement {
 	stmt := &PrintStatement{Token: p.currentToken}
 	stmt.Expressions = []Expression{}
 
-	p.nextToken() // consume FRG_Print
+	p.nextToken()
 
 	expr := p.parseExpression(LOWEST)
 	stmt.Expressions = append(stmt.Expressions, expr)
 
 	for p.peekTokenIs(TokenComma) {
-		p.nextToken() // consume comma
-		p.nextToken() // move to the start of the next expression
+		p.nextToken()
+		p.nextToken()
 		expr := p.parseExpression(LOWEST)
 		stmt.Expressions = append(stmt.Expressions, expr)
 	}
@@ -487,7 +474,6 @@ func (p *Parser) parsePrintStatement() *PrintStatement {
 	return stmt
 }
 
-// parseIfStatement parses `If [condition] ... Else ...`
 func (p *Parser) parseIfStatement() *IfStatement {
 	stmt := &IfStatement{Token: p.currentToken}
 
