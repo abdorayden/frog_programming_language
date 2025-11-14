@@ -267,6 +267,9 @@ func evalDeclarationStatement(node *DeclarationStatement, env *Environment) Obje
 }
 
 func evalAssignmentStatement(node *AssignmentStatement, env *Environment) Object {
+	if _, ok := env.Get(node.Identifier.Value); !ok {
+		return newError(node.Identifier.Token.Line, node.Identifier.Token.Column, "cannot assign to undeclared identifier: %s", node.Identifier.Value)
+	}
 	val := Eval(node.Value, env)
 	if isError(val) {
 		return val
