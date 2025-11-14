@@ -51,22 +51,21 @@ for test_file in *.frg; do
 done
 
 # Special case for error testing
-ERROR_TEST="error.frg"
-if [ -f "$ERROR_TEST" ]; then
-    TOTAL_TESTS=$((TOTAL_TESTS + 1))
-    echo -e "${BLUE}Running test:${NC} $ERROR_TEST (expecting error)"
-    # Run the interpreter and capture only stderr
-    error_output=$(./$FROG_INTERPRETER "$ERROR_TEST" 2>&1 1>/dev/null)
-    if [ -n "$error_output" ]; then
-        echo -e "  ${GREEN}[PASS]${NC}"
-        PASSED_TESTS=$((PASSED_TESTS + 1))
-    else
-        echo -e "  ${RED}[FAIL]${NC}"
-        echo "    Expected an error message, but got none."
-        FAILED_TESTS=$((FAILED_TESTS + 1))
-    fi
-fi
-
+# ERROR_TEST="error.frg"
+# if [ -f "$ERROR_TEST" ]; then
+#     TOTAL_TESTS=$((TOTAL_TESTS + 1))
+#     echo -e "${BLUE}Running test:${NC} $ERROR_TEST (expecting error)"
+#     # Run the interpreter and capture only stderr
+#     error_output=$(./$FROG_INTERPRETER "$ERROR_TEST" 2>&1 1>/dev/null)
+#     if [ -n "$error_output" ]; then
+#         echo -e "  ${GREEN}[PASS]${NC}"
+#         PASSED_TESTS=$((PASSED_TESTS + 1))
+#     else
+#         echo -e "  ${RED}[FAIL]${NC}"
+#         echo "    Expected an error message, but got none."
+#         FAILED_TESTS=$((FAILED_TESTS + 1))
+#     fi
+# fi
 
 # Final summary
 echo

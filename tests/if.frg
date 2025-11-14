@@ -12,17 +12,24 @@ FRG_Begin
     If [x == y]
     Begin
         FRG_Print "if"#
+        FRG_Print "\n" #
         FRG_Print "if"#
+        FRG_Print "\n" #
         FRG_Print "if"#
+        FRG_Print "\n" #
     End
     Else
     Begin
         FRG_Print "else"#
+        FRG_Print "\n" #
         FRG_Print "else"#
+        FRG_Print "\n" #
         FRG_Print "else"#
+        FRG_Print "\n" #
     End
 
     FRG_Print "out"#
+    FRG_Print "\n" #
 
 
 FRG_End

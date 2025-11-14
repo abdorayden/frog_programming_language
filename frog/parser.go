@@ -296,6 +296,21 @@ func (al *ArrayLiteral) String() string {
 	return out.String()
 }
 
+type ArraySizeLiteral struct {
+	Token Token // the '[' token
+	Size  Expression
+}
+
+func (asl *ArraySizeLiteral) expressionNode()      {} // Mark as Expression node
+func (asl *ArraySizeLiteral) TokenLiteral() string { return asl.Token.Literal }
+func (asl *ArraySizeLiteral) String() string {
+	var out bytes.Buffer
+	out.WriteString("[")
+	out.WriteString(asl.Size.String())
+	out.WriteString("]")
+	return out.String()
+}
+
 type IndexExpression struct {
 	Token Token // The [ token
 	Left  Expression
@@ -374,6 +389,7 @@ func NewParser(l *Lexer) *Parser {
 	p.registerPrefix(TokenFalse, p.parseBooleanLiteral)
 	p.registerPrefix(TokenMinus, p.parsePrefixExpression)
 	p.registerPrefix(TokenLBrace, p.parseArrayLiteral)
+	p.registerPrefix(TokenLBracket, p.parseArraySizeLiteral)
 
 	p.infixParseFns = make(map[TokenType]infixParseFn)
 	p.registerInfix(TokenPlus, p.parseInfixExpression)
@@ -515,7 +531,6 @@ func (p *Parser) parseStatement() Statement {
 			return &ExpressionStatement{Expression: expr}
 		}
 	}
-	// If we are here, we have a token that we don't know how to parse as a statement.
 	msg := fmt.Sprintf("ERROR: Unexpected token '%s' at line %d, column %d. Cannot parse it as a statement.", p.currentToken.Literal, p.currentToken.Line, p.currentToken.Column)
 	p.errors = append(p.errors, msg)
 	return nil
@@ -525,9 +540,8 @@ func (p *Parser) parseDeclarationStatement() *DeclarationStatement {
 	stmt := &DeclarationStatement{Token: p.currentToken}
 	stmt.Identifiers = []*Identifier{}
 
-	// Check for array syntax []
 	if p.peekTokenIs(TokenLBracket) {
-		p.nextToken() // consume [
+		p.nextToken()
 		if !p.expectPeek(TokenRBracket) {
 			return nil
 		}
@@ -830,6 +844,19 @@ func (p *Parser) parseArrayLiteral() Expression {
 	}
 
 	if !p.expectPeek(TokenRBrace) {
+		return nil
+	}
+
+	return array
+}
+
+func (p *Parser) parseArraySizeLiteral() Expression {
+	array := &ArraySizeLiteral{Token: p.currentToken}
+
+	p.nextToken()
+	array.Size = p.parseExpression(LOWEST)
+
+	if !p.expectPeek(TokenRBracket) {
 		return nil
 	}
 

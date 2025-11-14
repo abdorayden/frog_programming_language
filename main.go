@@ -4,16 +4,15 @@ import (
 	"flag"
 	"fmt"
 	"os"
-
 	// for signals
 	"os/signal"
 	"syscall"
-
+	// frog code
 	"frog_programming_language/frog"
 )
 
 func main() {
-	c := make(chan os.Signal, 1)
+	var c chan os.Signal = make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
@@ -21,8 +20,8 @@ func main() {
 		os.Exit(0)
 	}()
 
-	parse := flag.Bool("parse", false, "set to true to parse the file")
-	lex := flag.Bool("lex", false, "set to true to lex the file")
+	var parse *bool = flag.Bool("parse", false, "set to true to parse the file")
+	var lex *bool = flag.Bool("lex", false, "set to true to lex the file")
 	flag.Parse()
 
 	if flag.NArg() == 0 {

@@ -26,12 +26,15 @@ FRG_Begin
     End
 
     FRG_Print x1 , "\n", x3 #
+    FRG_Print "\n" #
 
     FRG_Print "Hello, ", name, "!" #
+    FRG_Print "\n" #
 
     If [true]
     Begin
         FRG_Print "Hello inside false condition"#
+        FRG_Print "\n" #
     End
     ## Else
     ##     FRG_Print "second else"#

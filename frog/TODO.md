@@ -1,7 +1,8 @@
 # TO DO:
-- [X] add tables
 - [ ] add functions
 - [ ] add system modules
+- [ ] make strings iterable
+- [X] add tables
 - [X] add FRG_Input
 - [X] handle modulo
 

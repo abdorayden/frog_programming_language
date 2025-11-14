@@ -49,6 +49,8 @@ func Eval(node Node, env *Environment) Object {
 		return evalInfixExpression(node, left, right)
 	case *ArrayLiteral:
 		return evalArrayLiteral(node, env)
+	case *ArraySizeLiteral:
+		return evalArraySizeLiteral(node, env)
 	case *IndexExpression:
 		return evalIndexExpression(node, env)
 	case *DeclarationStatement:
@@ -330,7 +332,6 @@ func evalPrintStatement(node *PrintStatement, env *Environment) Object {
 			fmt.Print(val.Inspect())
 		}
 	}
-	fmt.Println()
 	return nil
 }
 
@@ -374,6 +375,25 @@ func evalArrayLiteral(node *ArrayLiteral, env *Environment) Object {
 			return evaluated
 		}
 		elements = append(elements, evaluated)
+	}
+	return &Array{Elements: elements}
+}
+
+func evalArraySizeLiteral(node *ArraySizeLiteral, env *Environment) Object {
+	sizeObj := Eval(node.Size, env)
+	if isError(sizeObj) {
+		return sizeObj
+	}
+	if sizeObj.Type() != INTEGER_OBJ {
+		return newError(node.Token.Line, node.Token.Column, "array size must be integer")
+	}
+	size := sizeObj.(*Int).Value
+	if size < 0 {
+		return newError(node.Token.Line, node.Token.Column, "array size cannot be negative")
+	}
+	elements := make([]Object, size)
+	for i := int64(0); i < size; i++ {
+		elements[i] = &Int{Value: 0}
 	}
 	return &Array{Elements: elements}
 }
