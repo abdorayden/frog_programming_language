@@ -1,0 +1,12 @@
+FRG_Begin
+
+    FRG_Fn add(FRG_Int a , FRG_Int b) : FRG_Int 
+    Begin
+        add := a + b*2 #
+    End
+
+    FRG_Int res#
+    res := add(1,5) #
+    FRG_Print res#
+
+FRG_End

@@ -48,6 +48,19 @@ type DeclarationStatement struct {
 	Identifiers []*Identifier
 }
 
+type FunctionDeclarationStatement struct {
+	Token      Token
+	Name       *Identifier
+	ReturnType Token // FRG_Int, FRG_Real, FRG_Strg
+	Parameters []*Parameter
+	Body       *BlockStatement
+}
+
+type Parameter struct {
+	Type Token // FRG_Int, FRG_Real, FRG_Strg
+	Name *Identifier
+}
+
 func (ds *DeclarationStatement) statementNode()       {}
 func (ds *DeclarationStatement) TokenLiteral() string { return ds.Token.Literal }
 func (ds *DeclarationStatement) String() string {
@@ -64,6 +77,29 @@ func (ds *DeclarationStatement) String() string {
 		}
 	}
 	out.WriteString(" #")
+	return out.String()
+}
+
+func (fds *FunctionDeclarationStatement) statementNode()       {}
+func (fds *FunctionDeclarationStatement) TokenLiteral() string { return fds.Token.Literal }
+func (fds *FunctionDeclarationStatement) String() string {
+	var out bytes.Buffer
+	out.WriteString(fds.TokenLiteral())
+	out.WriteString(" ")
+	out.WriteString(fds.Name.String())
+	out.WriteString("(")
+	for i, param := range fds.Parameters {
+		out.WriteString(param.Type.Literal)
+		out.WriteString(" ")
+		out.WriteString(param.Name.String())
+		if i < len(fds.Parameters)-1 {
+			out.WriteString(", ")
+		}
+	}
+	out.WriteString(") : ")
+	out.WriteString(fds.ReturnType.Literal)
+	out.WriteString("\n")
+	out.WriteString(fds.Body.String())
 	return out.String()
 }
 
@@ -333,6 +369,12 @@ type IndexExpression struct {
 	Index Expression
 }
 
+type CallExpression struct {
+	Token     Token // The ( token
+	Function  Expression
+	Arguments []Expression
+}
+
 func (ie *IndexExpression) expressionNode()      {} // Mark as Expression node
 func (ie *IndexExpression) TokenLiteral() string { return ie.Token.Literal }
 func (ie *IndexExpression) String() string {
@@ -342,6 +384,22 @@ func (ie *IndexExpression) String() string {
 	out.WriteString("[")
 	out.WriteString(ie.Index.String())
 	out.WriteString("])")
+	return out.String()
+}
+
+func (ce *CallExpression) expressionNode()      {} // Mark as Expression node
+func (ce *CallExpression) TokenLiteral() string { return ce.Token.Literal }
+func (ce *CallExpression) String() string {
+	var out bytes.Buffer
+	out.WriteString(ce.Function.String())
+	out.WriteString("(")
+	for i, arg := range ce.Arguments {
+		out.WriteString(arg.String())
+		if i < len(ce.Arguments)-1 {
+			out.WriteString(", ")
+		}
+	}
+	out.WriteString(")")
 	return out.String()
 }
 
@@ -357,6 +415,7 @@ const (
 	SUM         // +
 	PRODUCT     // *
 	INDEX       // []
+	CALL        // function()
 	PREFIX      // -X
 )
 
@@ -373,6 +432,7 @@ var precedences = map[TokenType]int{
 	TokenSlash:        PRODUCT,
 	TokenModulo:       PRODUCT,
 	TokenLBracket:     INDEX,
+	TokenLParen:       CALL,
 }
 
 type (
@@ -420,6 +480,7 @@ func NewParser(l *Lexer) *Parser {
 	p.registerInfix(TokenLessEqual, p.parseInfixExpression)
 	p.registerInfix(TokenGreaterEqual, p.parseInfixExpression)
 	p.registerInfix(TokenLBracket, p.parseIndexExpression)
+	p.registerInfix(TokenLParen, p.parseCallExpression)
 
 	p.nextToken()
 	p.nextToken()
@@ -491,6 +552,8 @@ func (p *Parser) parseStatement() Statement {
 	switch p.currentToken.Type {
 	case TokenFRGInt, TokenFRGReal, TokenFRGStrg:
 		return p.parseDeclarationStatement()
+	case TokenFRGFn:
+		return p.parseFunctionDeclarationStatement()
 	case TokenFRGPrint:
 		return p.parsePrintStatement()
 	case TokenFRGInput:
@@ -585,6 +648,68 @@ func (p *Parser) parseDeclarationStatement() *DeclarationStatement {
 	if !p.expectPeek(TokenHash) {
 		return nil
 	}
+
+	return stmt
+}
+
+func (p *Parser) parseFunctionDeclarationStatement() *FunctionDeclarationStatement {
+	stmt := &FunctionDeclarationStatement{Token: p.currentToken}
+
+	if !p.expectPeek(TokenIdentifier) {
+		return nil
+	}
+	stmt.Name = &Identifier{Token: p.currentToken, Value: p.currentToken.Literal}
+
+	if !p.expectPeek(TokenLParen) {
+		return nil
+	}
+
+	// Parse parameters
+	stmt.Parameters = []*Parameter{}
+	if !p.peekTokenIs(TokenRParen) {
+		p.nextToken()
+		for {
+			param := &Parameter{}
+			if !p.currentTokenIs(TokenFRGInt) && !p.currentTokenIs(TokenFRGReal) && !p.currentTokenIs(TokenFRGStrg) {
+				p.errors = append(p.errors, fmt.Sprintf("expected parameter type, got %s", p.currentToken.Literal))
+				return nil
+			}
+			param.Type = p.currentToken
+
+			if !p.expectPeek(TokenIdentifier) {
+				return nil
+			}
+			param.Name = &Identifier{Token: p.currentToken, Value: p.currentToken.Literal}
+
+			stmt.Parameters = append(stmt.Parameters, param)
+
+			if p.peekTokenIs(TokenRParen) {
+				break
+			}
+			if !p.expectPeek(TokenComma) {
+				return nil
+			}
+			p.nextToken()
+		}
+	}
+
+	if !p.expectPeek(TokenRParen) {
+		return nil
+	}
+
+	if !p.expectPeek(TokenColon) {
+		return nil
+	}
+
+	p.nextToken()
+	if !p.currentTokenIs(TokenFRGInt) && !p.currentTokenIs(TokenFRGReal) && !p.currentTokenIs(TokenFRGStrg) {
+		p.errors = append(p.errors, fmt.Sprintf("expected return type, got %s", p.currentToken.Literal))
+		return nil
+	}
+	stmt.ReturnType = p.currentToken
+
+	p.nextToken()
+	stmt.Body = p.parseBlockStatement()
 
 	return stmt
 }
@@ -910,6 +1035,31 @@ func (p *Parser) parseIndexExpression(left Expression) Expression {
 	}
 
 	return exp
+}
+
+func (p *Parser) parseCallExpression(function Expression) Expression {
+	exp := &CallExpression{Token: p.currentToken, Function: function}
+	exp.Arguments = p.parseExpressionList(TokenRParen)
+	return exp
+}
+
+func (p *Parser) parseExpressionList(end TokenType) []Expression {
+	list := []Expression{}
+	if p.peekTokenIs(end) {
+		p.nextToken()
+		return list
+	}
+	p.nextToken()
+	list = append(list, p.parseExpression(LOWEST))
+	for p.peekTokenIs(TokenComma) {
+		p.nextToken()
+		p.nextToken()
+		list = append(list, p.parseExpression(LOWEST))
+	}
+	if !p.expectPeek(end) {
+		return nil
+	}
+	return list
 }
 
 func (p *Parser) noPrefixParseFnError(t TokenType) {

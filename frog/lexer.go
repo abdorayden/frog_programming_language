@@ -7,18 +7,6 @@ import (
 	"unicode/utf8"
 )
 
-// TODO: add tables
-// FRG_Int[] a#
-//	a := {1,2,3}
-// FRG_Real[] a#
-//	a := {1.1,2.2,3,3}
-// FRG_Strg[] a#
-//	a := {"a","b","c"}
-// TODO: add functions
-//	FRG_Fn foo(FRG_Int a) : FRG_Int
-//	Begin
-//		foo := a ## return value
-//	End
 // TODO: add system modules
 //	FRG_Use "core.ifrg"
 
@@ -68,6 +56,7 @@ const (
 	TokenFRGInt
 	TokenFRGReal
 	TokenFRGStrg
+	TokenFRGFn
 	TokenFRGPrint
 	TokenFRGInput
 	TokenIf
@@ -89,6 +78,7 @@ var keywords = map[string]TokenType{
 	"FRG_Int":   TokenFRGInt,
 	"FRG_Real":  TokenFRGReal,
 	"FRG_Strg":  TokenFRGStrg,
+	"FRG_Fn":    TokenFRGFn,
 	"FRG_Print": TokenFRGPrint,
 	"FRG_Input": TokenFRGInput,
 	"If":        TokenIf,
@@ -434,6 +424,8 @@ func TokenToString(tokenType TokenType) string {
 		return "FRG_REAL"
 	case TokenFRGStrg:
 		return "FRG_STRG"
+	case TokenFRGFn:
+		return "FRG_FN"
 	case TokenFRGPrint:
 		return "FRG_PRINT"
 	case TokenFRGInput:

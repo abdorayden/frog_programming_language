@@ -79,6 +79,10 @@ func Eval(node Node, env *Environment) Object {
 		return BREAK
 	case *ContinueStatement:
 		return CONTINUE
+	case *FunctionDeclarationStatement:
+		return evalFunctionDeclarationStatement(node, env)
+	case *CallExpression:
+		return evalCallExpression(node, env)
 	}
 	return nil
 }
@@ -454,6 +458,54 @@ type Error struct {
 	Message string
 	Line    int
 	Col     int
+}
+
+func evalFunctionDeclarationStatement(node *FunctionDeclarationStatement, env *Environment) Object {
+	fn := &Function{
+		Name:       node.Name.Value,
+		Parameters: node.Parameters,
+		ReturnType: node.ReturnType,
+		Body:       node.Body,
+		Env:        env,
+	}
+	env.Set(node.Name.Value, fn)
+	return nil
+}
+
+func evalCallExpression(node *CallExpression, env *Environment) Object {
+	fn := Eval(node.Function, env)
+	if isError(fn) {
+		return fn
+	}
+	if fn.Type() != FUNCTION_OBJ {
+		return newError(node.Token.Line, node.Token.Column, "not a function: %s", fn.Type())
+	}
+	function := fn.(*Function)
+	if len(node.Arguments) != len(function.Parameters) {
+		return newError(node.Token.Line, node.Token.Column, "wrong number of arguments: expected %d, got %d", len(function.Parameters), len(node.Arguments))
+	}
+	// Create new environment for function call
+	callEnv := NewEnvironment()
+	callEnv.store = make(map[string]Object)
+	// Copy outer environment
+	for k, v := range function.Env.store {
+		callEnv.store[k] = v
+	}
+	// Set parameters
+	for i, param := range function.Parameters {
+		val := Eval(node.Arguments[i], env)
+		if isError(val) {
+			return val
+		}
+		callEnv.Set(param.Name.Value, val)
+	}
+	// Execute function body
+	result := Eval(function.Body, callEnv)
+	// Handle return value - check if function name is set in the environment
+	if retVal, ok := callEnv.Get(function.Name); ok && retVal != nil {
+		return retVal
+	}
+	return result
 }
 
 func (e *Error) Type() ObjectType { return "ERROR" }

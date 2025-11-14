@@ -54,6 +54,9 @@ func PrintAST(node Node, prefix string, isLast bool) {
 		for i, stmt := range n.Statements {
 			PrintAST(stmt, childPrefix, i == len(n.Statements)-1)
 		}
+	case *FunctionDeclarationStatement:
+		fmt.Printf("FunctionDeclarationStatement: %s\n", n.Name.Value)
+		PrintAST(n.Body, childPrefix, true)
 	case *ExpressionStatement:
 		fmt.Println("ExpressionStatement:")
 		PrintAST(n.Expression, childPrefix, true)
@@ -81,6 +84,12 @@ func PrintAST(node Node, prefix string, isLast bool) {
 		fmt.Println("IndexExpression:")
 		PrintAST(n.Left, childPrefix, false)
 		PrintAST(n.Index, childPrefix, true)
+	case *CallExpression:
+		fmt.Println("CallExpression:")
+		PrintAST(n.Function, childPrefix, false)
+		for i, arg := range n.Arguments {
+			PrintAST(arg, childPrefix, i == len(n.Arguments)-1)
+		}
 	case *Boolean:
 		fmt.Printf("Boolean: %t\n", n.Value)
 	default:

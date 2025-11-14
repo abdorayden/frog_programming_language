@@ -13,6 +13,7 @@ const (
 	STRING_OBJ   = "STRING"
 	BOOLEAN_OBJ  = "BOOLEAN"
 	ARRAY_OBJ    = "ARRAY"
+	FUNCTION_OBJ = "FUNCTION"
 	NULL_OBJ     = "NULL"
 	BREAK_OBJ    = "BREAK"
 	CONTINUE_OBJ = "CONTINUE"
@@ -68,6 +69,19 @@ func (a *Array) Inspect() string {
 		out = append(out, e.Inspect())
 	}
 	return "[" + strings.Join(out, ", ") + "]"
+}
+
+type Function struct {
+	Name       string
+	Parameters []*Parameter
+	ReturnType Token
+	Body       *BlockStatement
+	Env        *Environment
+}
+
+func (f *Function) Type() ObjectType { return FUNCTION_OBJ }
+func (f *Function) Inspect() string {
+	return fmt.Sprintf("fn(%s)", f.Name)
 }
 
 type Null struct{}
