@@ -8,11 +8,9 @@ import (
 	"frog_programming_language/frog"
 )
 
-// BUG: execute if condition even it false
-
 func main() {
 	parse := flag.Bool("parse", false, "set to true to parse the file")
-	interpret := flag.Bool("interpret", false, "set to true to interpret the file")
+	lex := flag.Bool("lex", false, "set to true to lex the file")
 	flag.Parse()
 
 	if flag.NArg() == 0 {
@@ -31,22 +29,10 @@ func main() {
 
 	lexer := frog.NewLexer(string(code))
 
-	if *interpret {
-		parser := frog.NewParser(lexer)
-		program := parser.ParseProgram()
-
-		if parser.IsThereAnyErrors() {
-			fmt.Println("Parser has errors:")
-			for _, msg := range parser.Errors() {
-				fmt.Println("\t" + msg)
-			}
-			return
-		}
-
-		env := frog.NewEnvironment()
-		evaluated := frog.Eval(program, env)
-		if evaluated != nil {
-			fmt.Println(evaluated.Inspect())
+	if *lex {
+		tokens := lexer.GetAllTokens()
+		for _, token := range tokens {
+			fmt.Printf("%s: %q\n", frog.TokenToString(token.Type), token.Literal)
 		}
 	} else if *parse {
 		fmt.Println("Parsing the file...")
@@ -65,9 +51,21 @@ func main() {
 		fmt.Println(program.String())
 
 	} else {
-		tokens := lexer.GetAllTokens()
-		for _, token := range tokens {
-			fmt.Printf("%s: %q\n", frog.TokenToString(token.Type), token.Literal)
+		parser := frog.NewParser(lexer)
+		program := parser.ParseProgram()
+
+		if parser.IsThereAnyErrors() {
+			fmt.Println("Parser has errors:")
+			for _, msg := range parser.Errors() {
+				fmt.Println("\t" + msg)
+			}
+			return
+		}
+
+		env := frog.NewEnvironment()
+		evaluated := frog.Eval(program, env)
+		if evaluated != nil {
+			fmt.Println(evaluated.Inspect())
 		}
 	}
 }
