@@ -69,6 +69,7 @@ const (
 	TokenFRGReal
 	TokenFRGStrg
 	TokenFRGPrint
+	TokenFRGInput
 	TokenIf
 	TokenElse
 	TokenBegin
@@ -89,6 +90,7 @@ var keywords = map[string]TokenType{
 	"FRG_Real":  TokenFRGReal,
 	"FRG_Strg":  TokenFRGStrg,
 	"FRG_Print": TokenFRGPrint,
+	"FRG_Input": TokenFRGInput,
 	"If":        TokenIf,
 	"Else":      TokenElse,
 	"Begin":     TokenBegin,
@@ -434,6 +436,8 @@ func TokenToString(tokenType TokenType) string {
 		return "FRG_STRG"
 	case TokenFRGPrint:
 		return "FRG_PRINT"
+	case TokenFRGInput:
+		return "FRG_INPUT"
 	case TokenIf:
 		return "IF"
 	case TokenElse:

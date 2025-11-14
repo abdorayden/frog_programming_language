@@ -2,7 +2,7 @@
 - [ ] add tables
 - [ ] add functions
 - [ ] add system modules
-- [ ] add FRG_Input
+- [X] add FRG_Input
 - [X] handle modulo
 
 # BUG:

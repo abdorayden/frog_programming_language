@@ -1,8 +1,11 @@
 package frog
 
 import (
+	"bufio"
 	"fmt"
 	"math"
+	"os"
+	"strconv"
 )
 
 type Environment struct {
@@ -58,6 +61,8 @@ func Eval(node Node, env *Environment) Object {
 		return evalBlockStatement(node, env)
 	case *PrintStatement:
 		return evalPrintStatement(node, env)
+	case *InputStatement:
+		return evalInputStatement(node, env)
 	case *Boolean:
 		if node.Value {
 			return TRUE
@@ -279,7 +284,38 @@ func evalPrintStatement(node *PrintStatement, env *Environment) Object {
 			fmt.Print(val.Inspect())
 		}
 	}
-	fmt.Println()
+	return nil
+}
+
+func evalInputStatement(node *InputStatement, env *Environment) Object {
+	reader := bufio.NewReader(os.Stdin)
+
+	for _, expr := range node.Expressions {
+		ident, ok := expr.(*Identifier)
+		if !ok {
+			return newError(node.Token.Line, node.Token.Column, "input statement expects identifiers")
+		}
+
+		if _, exists := env.Get(ident.Value); !exists {
+			return newError(ident.Token.Line, ident.Token.Column, "cannot input to undeclared identifier: %s", ident.Value)
+		}
+
+		input, err := reader.ReadString('\n')
+		if err != nil {
+			return newError(ident.Token.Line, ident.Token.Column, "error reading input: %v", err)
+		}
+
+		input = input[:len(input)-1]
+
+		if intVal, err := strconv.ParseInt(input, 10, 64); err == nil {
+			env.Set(ident.Value, &Int{Value: intVal})
+		} else if realVal, err := strconv.ParseFloat(input, 64); err == nil {
+			env.Set(ident.Value, &Real{Value: realVal})
+		} else {
+			env.Set(ident.Value, &String{Value: input})
+		}
+	}
+
 	return nil
 }
 

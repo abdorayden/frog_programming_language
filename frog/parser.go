@@ -101,6 +101,26 @@ func (ps *PrintStatement) String() string {
 	return out.String()
 }
 
+type InputStatement struct {
+	Token       Token
+	Expressions []Expression
+}
+
+func (ps *InputStatement) statementNode()       {}
+func (ps *InputStatement) TokenLiteral() string { return ps.Token.Literal }
+func (ps *InputStatement) String() string {
+	var out bytes.Buffer
+	out.WriteString(ps.TokenLiteral() + " ")
+	for i, expr := range ps.Expressions {
+		out.WriteString(expr.String())
+		if i < len(ps.Expressions)-1 {
+			out.WriteString(", ")
+		}
+	}
+	out.WriteString(" #")
+	return out.String()
+}
+
 type IfStatement struct {
 	Token       Token
 	Condition   Expression
@@ -394,6 +414,8 @@ func (p *Parser) parseStatement() Statement {
 		return p.parseDeclarationStatement()
 	case TokenFRGPrint:
 		return p.parsePrintStatement()
+	case TokenFRGInput:
+		return p.parseInputStatement()
 	case TokenIf:
 		return p.parseIfStatement()
 	case TokenRepeat:
@@ -476,6 +498,25 @@ func (p *Parser) parseAssignmentStatement() *AssignmentStatement {
 		return nil
 	}
 
+	return stmt
+}
+
+func (p *Parser) parseInputStatement() *InputStatement {
+	stmt := &InputStatement{Token: p.currentToken}
+	stmt.Expressions = []Expression{}
+
+	p.nextToken()
+	expr := p.parseIdentifier()
+	stmt.Expressions = append(stmt.Expressions, expr)
+	for p.peekTokenIs(TokenComma) {
+		p.nextToken()
+		p.nextToken()
+		expr := p.parseIdentifier()
+		stmt.Expressions = append(stmt.Expressions, expr)
+	}
+	if !p.expectPeek(TokenHash) {
+		return nil
+	}
 	return stmt
 }
 
