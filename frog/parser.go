@@ -402,7 +402,35 @@ func (p *Parser) parseStatement() Statement {
 		if p.peekTokenIs(TokenAssign) {
 			return p.parseAssignmentStatement()
 		}
+		if p.currentToken.Literal == "if" {
+			msg := fmt.Sprintf("ERROR: syntax error, did you mean 'If'? (line %d, col %d)", p.currentToken.Line, p.currentToken.Column)
+			p.errors = append(p.errors, msg)
+			return nil
+		} else if p.currentToken.Literal == "else" {
+			msg := fmt.Sprintf("ERROR: syntax error, did you mean 'Else'? (line %d, col %d)", p.currentToken.Line, p.currentToken.Column)
+			p.errors = append(p.errors, msg)
+			return nil
+		} else if p.currentToken.Literal == "repeat" {
+			msg := fmt.Sprintf("ERROR: syntax error, did you mean 'Repeat'? (line %d, col %d)", p.currentToken.Line, p.currentToken.Column)
+			p.errors = append(p.errors, msg)
+			return nil
+		} else if p.currentToken.Literal == "until" {
+			msg := fmt.Sprintf("ERROR: syntax error, did you mean 'Until'? (line %d, col %d)", p.currentToken.Line, p.currentToken.Column)
+			p.errors = append(p.errors, msg)
+			return nil
+		} else if p.currentToken.Literal == "begin" {
+			msg := fmt.Sprintf("ERROR: syntax error, did you mean 'Begin'? (line %d, col %d)", p.currentToken.Line, p.currentToken.Column)
+			p.errors = append(p.errors, msg)
+			return nil
+		} else if p.currentToken.Literal == "end" {
+			msg := fmt.Sprintf("ERROR: syntax error, did you mean 'End'? (line %d, col %d)", p.currentToken.Line, p.currentToken.Column)
+			p.errors = append(p.errors, msg)
+			return nil
+		}
 	}
+	// If we are here, we have a token that we don't know how to parse as a statement.
+	msg := fmt.Sprintf("ERROR: Unexpected token '%s' at line %d, column %d. Cannot parse it as a statement.", p.currentToken.Literal, p.currentToken.Line, p.currentToken.Column)
+	p.errors = append(p.errors, msg)
 	return nil
 }
 
