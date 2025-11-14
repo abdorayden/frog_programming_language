@@ -3,4 +3,9 @@ FRG_Begin
     s1 := "Hello" #
     s2 := "World" #
     FRG_Print s1, " ", s2, "!" #
+
+    If [True]
+    Begin
+        FRG_Strg "Hello World" #
+    End
 FRG_End

@@ -5,4 +5,4 @@
 
 # BUG:
 - [X] Use undeclared ID not generated error
-- [ ] handle CTROLE-C "signal: interrupt" message
+- [X] handle CTROLE-C "signal: interrupt" message

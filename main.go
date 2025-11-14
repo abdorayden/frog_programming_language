@@ -5,10 +5,22 @@ import (
 	"fmt"
 	"os"
 
+	// for signals
+	"os/signal"
+	"syscall"
+
 	"frog_programming_language/frog"
 )
 
 func main() {
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		fmt.Println("\nCtrl+C pressed. Exiting.")
+		os.Exit(0)
+	}()
+
 	parse := flag.Bool("parse", false, "set to true to parse the file")
 	lex := flag.Bool("lex", false, "set to true to lex the file")
 	flag.Parse()
