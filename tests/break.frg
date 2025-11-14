@@ -6,7 +6,7 @@ FRG_Begin
         FRG_Print i, " " #
         If [i == 3]
         Begin
-            break #
+            Break #
         End
     Until [i == 10]
     FRG_Print "done" #

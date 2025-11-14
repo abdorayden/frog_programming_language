@@ -5,7 +5,7 @@ FRG_Begin
         i := i + 1 #
         If [i % 2 == 0]
         Begin
-            continue #
+            Continue #
         End
         FRG_Print i, " " #
     Until [i == 5]
