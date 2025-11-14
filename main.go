@@ -48,7 +48,7 @@ func main() {
 		}
 
 		fmt.Println("Generated AST:")
-		fmt.Println(program.String())
+		frog.PrintAST(program, "", true)
 
 	} else {
 		parser := frog.NewParser(lexer)
