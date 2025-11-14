@@ -2,7 +2,7 @@
 - [ ] add functions
 - [ ] add break and continue
 - [ ] add system modules
-- [ ] make strings indexable
+- [X] make strings indexable
 - [X] add tables
 - [X] add FRG_Input
 - [X] handle modulo

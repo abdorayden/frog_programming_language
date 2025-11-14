@@ -420,6 +420,13 @@ func evalIndexExpressionWithObjects(node *IndexExpression, left, index Object) O
 			return newError(node.Token.Line, node.Token.Column, "index out of bounds: %d", idx)
 		}
 		return array.Elements[idx]
+	case left.Type() == STRING_OBJ && index.Type() == INTEGER_OBJ:
+		str := left.(*String).Value
+		idx := index.(*Int).Value
+		if idx < 0 || idx >= int64(len(str)) {
+			return newError(node.Token.Line, node.Token.Column, "index out of bounds: %d", idx)
+		}
+		return &String{Value: string(str[idx])}
 	default:
 		return newError(node.Token.Line, node.Token.Column, "index operator not supported: %s[%s]", left.Type(), index.Type())
 	}
