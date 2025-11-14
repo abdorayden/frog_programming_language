@@ -2,6 +2,8 @@
 - [ ] add tables
 - [ ] add functions
 - [ ] add system modules
+- [ ] add FRG_Input
+- [X] handle modulo
 
 # BUG:
 - [X] Use undeclared ID not generated error

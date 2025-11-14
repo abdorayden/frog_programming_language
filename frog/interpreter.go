@@ -2,15 +2,17 @@ package frog
 
 import (
 	"fmt"
+	"math"
 )
-
-func NewEnvironment() *Environment {
-	s := make(map[string]Object)
-	return &Environment{store: s}
-}
 
 type Environment struct {
 	store map[string]Object
+}
+
+// constructor
+func NewEnvironment() *Environment {
+	s := make(map[string]Object)
+	return &Environment{store: s}
 }
 
 func (e *Environment) Get(name string) (Object, bool) {
@@ -113,19 +115,6 @@ func evalBlockStatement(block *BlockStatement, env *Environment) Object {
 	return result
 }
 
-func isTruthy(obj Object) bool {
-	switch obj {
-	case NULL:
-		return false
-	case TRUE:
-		return true
-	case FALSE:
-		return false
-	default:
-		return true
-	}
-}
-
 func evalProgram(program *Program, env *Environment) Object {
 	var result Object
 	for _, statement := range program.Statements {
@@ -184,7 +173,13 @@ func evalIntegerInfixExpression(node *InfixExpression, left, right Object) Objec
 		if rightVal == 0 {
 			return newError(node.Token.Line, node.Token.Column, "ERROR: u can't divis per zero")
 		} else {
-			return &Int{Value: leftVal / rightVal}
+			return &Real{Value: float64(leftVal) / float64(rightVal)}
+		}
+	case "%":
+		if rightVal == 0 {
+			return newError(node.Token.Line, node.Token.Column, "ERROR: u can't divis per zero")
+		} else {
+			return &Int{Value: leftVal % rightVal}
 		}
 	case "<":
 		return nativeBoolToBooleanObject(leftVal < rightVal)
@@ -219,6 +214,12 @@ func evalRealInfixExpression(node *InfixExpression, left, right Object) Object {
 		} else {
 			return &Real{Value: leftVal / rightVal}
 		}
+	case "%":
+		if rightVal == 0 {
+			return newError(node.Token.Line, node.Token.Column, "ERROR: u can't divis per zero")
+		} else {
+			return &Real{Value: math.Mod(leftVal, rightVal)}
+		}
 	case "<":
 		return nativeBoolToBooleanObject(leftVal < rightVal)
 	case ">":
@@ -243,13 +244,6 @@ func evalStringInfixExpression(node *InfixExpression, left, right Object) Object
 		return newError(node.Token.Line, node.Token.Column, "unknown operator: %s %s %s", left.Type(), node.Operator, right.Type())
 	}
 	return &String{Value: leftVal + rightVal}
-}
-
-func nativeBoolToBooleanObject(input bool) *Boolean {
-	if input {
-		return TRUE
-	}
-	return FALSE
 }
 
 func evalIdentifier(node *Identifier, env *Environment) Object {
@@ -289,14 +283,6 @@ func evalPrintStatement(node *PrintStatement, env *Environment) Object {
 	return nil
 }
 
-func newError(line, col int, format string, a ...interface{}) *Error {
-	return &Error{
-		Message: fmt.Sprintf(format, a...),
-		Line:    line,
-		Col:     col,
-	}
-}
-
 type Error struct {
 	Message string
 	Line    int
@@ -306,11 +292,4 @@ type Error struct {
 func (e *Error) Type() ObjectType { return "ERROR" }
 func (e *Error) Inspect() string {
 	return fmt.Sprintf("ERROR: %s (line %d, col %d)", e.Message, e.Line, e.Col)
-}
-
-func isError(obj Object) bool {
-	if obj != nil {
-		return obj.Type() == "ERROR"
-	}
-	return false
 }
