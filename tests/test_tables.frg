@@ -3,7 +3,7 @@ FRG_Begin
     FRG_Int len , nameslen#
     ## array := {0,0,0,0,0,0}#
     len := 6#
-    array := [len]# ## initialized with zero
+    array := [len]#
 
     FRG_Int i#
     i := 0#
@@ -32,8 +32,8 @@ FRG_Begin
     nameslen := 2#
     i := 0#
     names := {
-            "abdo",
-            "maroua"
+            "foo",
+            "bar"
     }#
     Repeat
         FRG_Print names[i]#

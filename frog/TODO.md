@@ -1,7 +1,8 @@
 # TO DO:
 - [ ] add functions
+- [ ] add break and continue
 - [ ] add system modules
-- [ ] make strings iterable
+- [ ] make strings indexable
 - [X] add tables
 - [X] add FRG_Input
 - [X] handle modulo
