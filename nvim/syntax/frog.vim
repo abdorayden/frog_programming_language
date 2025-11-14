@@ -2,7 +2,7 @@ if exists("b:current_syntax")
   finish
 endif
 
-syn keyword frogKeyword FRG_Begin FRG_End If Else Begin End Repeat Until break continue
+syn keyword frogKeyword FRG_Begin FRG_End If Else Begin End Repeat Until Break Continue FRG_Input
 syn keyword frogType FRG_Int FRG_Real FRG_Strg
 syn keyword frogStatement FRG_Print
 syn keyword frogBoolean True False

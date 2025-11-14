@@ -184,6 +184,22 @@ func (bs *BlockStatement) String() string {
 	return out.String()
 }
 
+type BreakStatement struct {
+	Token Token
+}
+
+func (bs *BreakStatement) statementNode()       {}
+func (bs *BreakStatement) TokenLiteral() string { return bs.Token.Literal }
+func (bs *BreakStatement) String() string       { return bs.TokenLiteral() + " #" }
+
+type ContinueStatement struct {
+	Token Token
+}
+
+func (cs *ContinueStatement) statementNode()       {}
+func (cs *ContinueStatement) TokenLiteral() string { return cs.Token.Literal }
+func (cs *ContinueStatement) String() string       { return cs.TokenLiteral() + " #" }
+
 // ExpressionStatement is a statement that consists of a single expression.
 type ExpressionStatement struct {
 	Token      Token // the first token of the expression
@@ -485,6 +501,10 @@ func (p *Parser) parseStatement() Statement {
 		return p.parseRepeatStatement()
 	case TokenBegin:
 		return p.parseBlockStatement()
+	case TokenBreak:
+		return p.parseBreakStatement()
+	case TokenContinue:
+		return p.parseContinueStatement()
 	case TokenIdentifier:
 		expr := p.parseExpression(LOWEST)
 		if p.peekTokenIs(TokenAssign) {
@@ -706,6 +726,22 @@ func (p *Parser) parseBlockStatement() *BlockStatement {
 	}
 
 	return block
+}
+
+func (p *Parser) parseBreakStatement() *BreakStatement {
+	stmt := &BreakStatement{Token: p.currentToken}
+	if !p.expectPeek(TokenHash) {
+		return nil
+	}
+	return stmt
+}
+
+func (p *Parser) parseContinueStatement() *ContinueStatement {
+	stmt := &ContinueStatement{Token: p.currentToken}
+	if !p.expectPeek(TokenHash) {
+		return nil
+	}
+	return stmt
 }
 
 func (p *Parser) parseExpression(precedence int) Expression {

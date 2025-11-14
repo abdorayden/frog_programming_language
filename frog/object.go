@@ -8,12 +8,14 @@ import (
 type ObjectType string
 
 const (
-	INTEGER_OBJ = "INTEGER"
-	REAL_OBJ    = "REAL"
-	STRING_OBJ  = "STRING"
-	BOOLEAN_OBJ = "BOOLEAN"
-	ARRAY_OBJ   = "ARRAY"
-	NULL_OBJ    = "NULL"
+	INTEGER_OBJ  = "INTEGER"
+	REAL_OBJ     = "REAL"
+	STRING_OBJ   = "STRING"
+	BOOLEAN_OBJ  = "BOOLEAN"
+	ARRAY_OBJ    = "ARRAY"
+	NULL_OBJ     = "NULL"
+	BREAK_OBJ    = "BREAK"
+	CONTINUE_OBJ = "CONTINUE"
 )
 
 type Object interface {
@@ -73,8 +75,20 @@ type Null struct{}
 func (n *Null) Type() ObjectType { return NULL_OBJ }
 func (n *Null) Inspect() string  { return "null" }
 
+type Break struct{}
+
+func (b *Break) Type() ObjectType { return BREAK_OBJ }
+func (b *Break) Inspect() string  { return "break" }
+
+type Continue struct{}
+
+func (c *Continue) Type() ObjectType { return CONTINUE_OBJ }
+func (c *Continue) Inspect() string  { return "continue" }
+
 var (
-	NULL  = &Null{}
-	TRUE  = &Boolean{Value: true}
-	FALSE = &Boolean{Value: false}
+	NULL     = &Null{}
+	TRUE     = &Boolean{Value: true}
+	FALSE    = &Boolean{Value: false}
+	BREAK    = &Break{}
+	CONTINUE = &Continue{}
 )

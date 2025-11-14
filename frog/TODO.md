@@ -1,6 +1,6 @@
 # TO DO:
 - [ ] add functions
-- [ ] add break and continue
+- [X] add break and continue
 - [ ] add system modules
 - [X] make strings indexable
 - [X] add tables

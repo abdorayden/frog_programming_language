@@ -75,6 +75,10 @@ func Eval(node Node, env *Environment) Object {
 		} else {
 			return FALSE
 		}
+	case *BreakStatement:
+		return BREAK
+	case *ContinueStatement:
+		return CONTINUE
 	}
 	return nil
 }
@@ -85,6 +89,12 @@ func evalRepeatStatement(rs *RepeatStatement, env *Environment) Object {
 			result := Eval(statement, env)
 			if isError(result) {
 				return result
+			}
+			if result == BREAK {
+				return nil
+			}
+			if result == CONTINUE {
+				break
 			}
 		}
 		condition := Eval(rs.Condition, env)
@@ -104,9 +114,17 @@ func evalIfStatement(is *IfStatement, env *Environment) Object {
 		return condition
 	}
 	if isTruthy(condition) {
-		return Eval(is.Consequence, env)
+		result := Eval(is.Consequence, env)
+		if result != nil && (result.Type() == BREAK_OBJ || result.Type() == CONTINUE_OBJ) {
+			return result
+		}
+		return nil
 	} else if is.Alternative != nil {
-		return Eval(is.Alternative, env)
+		result := Eval(is.Alternative, env)
+		if result != nil && (result.Type() == BREAK_OBJ || result.Type() == CONTINUE_OBJ) {
+			return result
+		}
+		return nil
 	} else {
 		return nil
 	}
@@ -118,7 +136,7 @@ func evalBlockStatement(block *BlockStatement, env *Environment) Object {
 		result = Eval(statement, env)
 		if result != nil {
 			rt := result.Type()
-			if rt == "ERROR" {
+			if rt == "ERROR" || rt == BREAK_OBJ || rt == CONTINUE_OBJ {
 				return result
 			}
 		}

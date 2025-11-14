@@ -97,8 +97,8 @@ var keywords = map[string]TokenType{
 	"End":       TokenEnd,
 	"Repeat":    TokenRepeat,
 	"Until":     TokenUntil,
-	"break":     TokenBreak,
-	"continue":  TokenContinue,
+	"Break":     TokenBreak,
+	"Continue":  TokenContinue,
 	"True":      TokenTrue,
 	"False":     TokenFalse,
 }
