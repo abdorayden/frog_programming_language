@@ -1,6 +1,9 @@
 package frog
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type ObjectType string
 
@@ -9,6 +12,7 @@ const (
 	REAL_OBJ    = "REAL"
 	STRING_OBJ  = "STRING"
 	BOOLEAN_OBJ = "BOOLEAN"
+	ARRAY_OBJ   = "ARRAY"
 	NULL_OBJ    = "NULL"
 )
 
@@ -50,6 +54,19 @@ func (b *Boolean) String() string   { return b.Token.Literal }
 func (b *Boolean) Inspect() string  { return fmt.Sprintf("%t", b.Value) }
 func (b *Boolean) Type() ObjectType { return BOOLEAN_OBJ }
 func (b *Boolean) expressionNode()  {} // Mark as Expression node
+
+type Array struct {
+	Elements []Object
+}
+
+func (a *Array) Type() ObjectType { return ARRAY_OBJ }
+func (a *Array) Inspect() string {
+	var out []string
+	for _, e := range a.Elements {
+		out = append(out, e.Inspect())
+	}
+	return "[" + strings.Join(out, ", ") + "]"
+}
 
 type Null struct{}
 

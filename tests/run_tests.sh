@@ -29,7 +29,7 @@ for test_file in *.frg; do
             echo -e "${BLUE}Running test:${NC} $test_file"
             
             # Run the interpreter and capture stdout
-            output=$(./$FROG_INTERPRETER -interpret "$test_file" 2> /dev/null)
+            output=$(./$FROG_INTERPRETER "$test_file" 2> /dev/null)
             
             # Read the expected output
             expected_output=$(cat "$expected_file")
@@ -56,7 +56,7 @@ if [ -f "$ERROR_TEST" ]; then
     TOTAL_TESTS=$((TOTAL_TESTS + 1))
     echo -e "${BLUE}Running test:${NC} $ERROR_TEST (expecting error)"
     # Run the interpreter and capture only stderr
-    error_output=$(./$FROG_INTERPRETER -interpret "$ERROR_TEST" 2>/dev/null)
+    error_output=$(./$FROG_INTERPRETER "$ERROR_TEST" 2>&1 1>/dev/null)
     if [ -n "$error_output" ]; then
         echo -e "  ${GREEN}[PASS]${NC}"
         PASSED_TESTS=$((PASSED_TESTS + 1))

@@ -44,6 +44,7 @@ func (p *Program) String() string {
 
 type DeclarationStatement struct {
 	Token       Token // The type token (FRG_Int, FRG_Real, FRG_Strg)
+	IsArray     bool
 	Identifiers []*Identifier
 }
 
@@ -51,7 +52,11 @@ func (ds *DeclarationStatement) statementNode()       {}
 func (ds *DeclarationStatement) TokenLiteral() string { return ds.Token.Literal }
 func (ds *DeclarationStatement) String() string {
 	var out bytes.Buffer
-	out.WriteString(ds.TokenLiteral() + " ")
+	out.WriteString(ds.TokenLiteral())
+	if ds.IsArray {
+		out.WriteString("[]")
+	}
+	out.WriteString(" ")
 	for i, ident := range ds.Identifiers {
 		out.WriteString(ident.String())
 		if i < len(ds.Identifiers)-1 {
@@ -63,16 +68,16 @@ func (ds *DeclarationStatement) String() string {
 }
 
 type AssignmentStatement struct {
-	Token      Token
-	Identifier *Identifier
-	Value      Expression
+	Token Token
+	Left  Expression
+	Value Expression
 }
 
 func (as *AssignmentStatement) statementNode()       {}
 func (as *AssignmentStatement) TokenLiteral() string { return as.Token.Literal }
 func (as *AssignmentStatement) String() string {
 	var out bytes.Buffer
-	out.WriteString(as.Identifier.String())
+	out.WriteString(as.Left.String())
 	out.WriteString(" := ")
 	if as.Value != nil {
 		out.WriteString(as.Value.String())
@@ -271,6 +276,44 @@ func (ie *InfixExpression) String() string {
 	return out.String()
 }
 
+type ArrayLiteral struct {
+	Token    Token // the '{' token
+	Elements []Expression
+}
+
+func (al *ArrayLiteral) expressionNode()      {} // Mark as Expression node
+func (al *ArrayLiteral) TokenLiteral() string { return al.Token.Literal }
+func (al *ArrayLiteral) String() string {
+	var out bytes.Buffer
+	out.WriteString("{")
+	for i, el := range al.Elements {
+		out.WriteString(el.String())
+		if i < len(al.Elements)-1 {
+			out.WriteString(", ")
+		}
+	}
+	out.WriteString("}")
+	return out.String()
+}
+
+type IndexExpression struct {
+	Token Token // The [ token
+	Left  Expression
+	Index Expression
+}
+
+func (ie *IndexExpression) expressionNode()      {} // Mark as Expression node
+func (ie *IndexExpression) TokenLiteral() string { return ie.Token.Literal }
+func (ie *IndexExpression) String() string {
+	var out bytes.Buffer
+	out.WriteString("(")
+	out.WriteString(ie.Left.String())
+	out.WriteString("[")
+	out.WriteString(ie.Index.String())
+	out.WriteString("])")
+	return out.String()
+}
+
 // =============================================================================
 // Parser
 // =============================================================================
@@ -282,6 +325,7 @@ const (
 	LESSGREATER // >, <, >=, <=
 	SUM         // +
 	PRODUCT     // *
+	INDEX       // []
 	PREFIX      // -X
 )
 
@@ -297,6 +341,7 @@ var precedences = map[TokenType]int{
 	TokenAsterisk:     PRODUCT,
 	TokenSlash:        PRODUCT,
 	TokenModulo:       PRODUCT,
+	TokenLBracket:     INDEX,
 }
 
 type (
@@ -328,6 +373,7 @@ func NewParser(l *Lexer) *Parser {
 	p.registerPrefix(TokenTrue, p.parseBooleanLiteral)
 	p.registerPrefix(TokenFalse, p.parseBooleanLiteral)
 	p.registerPrefix(TokenMinus, p.parsePrefixExpression)
+	p.registerPrefix(TokenLBrace, p.parseArrayLiteral)
 
 	p.infixParseFns = make(map[TokenType]infixParseFn)
 	p.registerInfix(TokenPlus, p.parseInfixExpression)
@@ -341,6 +387,7 @@ func NewParser(l *Lexer) *Parser {
 	p.registerInfix(TokenGreaterThan, p.parseInfixExpression)
 	p.registerInfix(TokenLessEqual, p.parseInfixExpression)
 	p.registerInfix(TokenGreaterEqual, p.parseInfixExpression)
+	p.registerInfix(TokenLBracket, p.parseIndexExpression)
 
 	p.nextToken()
 	p.nextToken()
@@ -423,33 +470,49 @@ func (p *Parser) parseStatement() Statement {
 	case TokenBegin:
 		return p.parseBlockStatement()
 	case TokenIdentifier:
+		expr := p.parseExpression(LOWEST)
 		if p.peekTokenIs(TokenAssign) {
-			return p.parseAssignmentStatement()
-		}
-		if p.currentToken.Literal == "if" {
-			msg := fmt.Sprintf("ERROR: syntax error, did you mean 'If'? (line %d, col %d)", p.currentToken.Line, p.currentToken.Column)
-			p.errors = append(p.errors, msg)
-			return nil
-		} else if p.currentToken.Literal == "else" {
-			msg := fmt.Sprintf("ERROR: syntax error, did you mean 'Else'? (line %d, col %d)", p.currentToken.Line, p.currentToken.Column)
-			p.errors = append(p.errors, msg)
-			return nil
-		} else if p.currentToken.Literal == "repeat" {
-			msg := fmt.Sprintf("ERROR: syntax error, did you mean 'Repeat'? (line %d, col %d)", p.currentToken.Line, p.currentToken.Column)
-			p.errors = append(p.errors, msg)
-			return nil
-		} else if p.currentToken.Literal == "until" {
-			msg := fmt.Sprintf("ERROR: syntax error, did you mean 'Until'? (line %d, col %d)", p.currentToken.Line, p.currentToken.Column)
-			p.errors = append(p.errors, msg)
-			return nil
-		} else if p.currentToken.Literal == "begin" {
-			msg := fmt.Sprintf("ERROR: syntax error, did you mean 'Begin'? (line %d, col %d)", p.currentToken.Line, p.currentToken.Column)
-			p.errors = append(p.errors, msg)
-			return nil
-		} else if p.currentToken.Literal == "end" {
-			msg := fmt.Sprintf("ERROR: syntax error, did you mean 'End'? (line %d, col %d)", p.currentToken.Line, p.currentToken.Column)
-			p.errors = append(p.errors, msg)
-			return nil
+			stmt := &AssignmentStatement{Left: expr}
+			p.nextToken() // consume :=
+			stmt.Token = p.currentToken
+			p.nextToken()
+			stmt.Value = p.parseExpression(LOWEST)
+			if !p.expectPeek(TokenHash) {
+				return nil
+			}
+			return stmt
+		} else {
+			if ident, ok := expr.(*Identifier); ok {
+				if ident.Value == "if" {
+					msg := fmt.Sprintf("ERROR: syntax error, did you mean 'If'? (line %d, col %d)", ident.Token.Line, ident.Token.Column)
+					p.errors = append(p.errors, msg)
+					return nil
+				} else if ident.Value == "else" {
+					msg := fmt.Sprintf("ERROR: syntax error, did you mean 'Else'? (line %d, col %d)", ident.Token.Line, ident.Token.Column)
+					p.errors = append(p.errors, msg)
+					return nil
+				} else if ident.Value == "repeat" {
+					msg := fmt.Sprintf("ERROR: syntax error, did you mean 'Repeat'? (line %d, col %d)", ident.Token.Line, ident.Token.Column)
+					p.errors = append(p.errors, msg)
+					return nil
+				} else if ident.Value == "until" {
+					msg := fmt.Sprintf("ERROR: syntax error, did you mean 'Until'? (line %d, col %d)", ident.Token.Line, ident.Token.Column)
+					p.errors = append(p.errors, msg)
+					return nil
+				} else if ident.Value == "begin" {
+					msg := fmt.Sprintf("ERROR: syntax error, did you mean 'Begin'? (line %d, col %d)", ident.Token.Line, ident.Token.Column)
+					p.errors = append(p.errors, msg)
+					return nil
+				} else if ident.Value == "end" {
+					msg := fmt.Sprintf("ERROR: syntax error, did you mean 'End'? (line %d, col %d)", ident.Token.Line, ident.Token.Column)
+					p.errors = append(p.errors, msg)
+					return nil
+				}
+			}
+			if !p.expectPeek(TokenHash) {
+				return nil
+			}
+			return &ExpressionStatement{Expression: expr}
 		}
 	}
 	// If we are here, we have a token that we don't know how to parse as a statement.
@@ -461,6 +524,15 @@ func (p *Parser) parseStatement() Statement {
 func (p *Parser) parseDeclarationStatement() *DeclarationStatement {
 	stmt := &DeclarationStatement{Token: p.currentToken}
 	stmt.Identifiers = []*Identifier{}
+
+	// Check for array syntax []
+	if p.peekTokenIs(TokenLBracket) {
+		p.nextToken() // consume [
+		if !p.expectPeek(TokenRBracket) {
+			return nil
+		}
+		stmt.IsArray = true
+	}
 
 	if !p.expectPeek(TokenIdentifier) {
 		return nil
@@ -484,9 +556,9 @@ func (p *Parser) parseDeclarationStatement() *DeclarationStatement {
 }
 
 func (p *Parser) parseAssignmentStatement() *AssignmentStatement {
-	stmt := &AssignmentStatement{
-		Identifier: &Identifier{Token: p.currentToken, Value: p.currentToken.Literal},
-	}
+	stmt := &AssignmentStatement{}
+
+	stmt.Left = p.parseExpression(LOWEST)
 
 	p.nextToken()
 	stmt.Token = p.currentToken
@@ -737,6 +809,44 @@ func (p *Parser) currentPrecedence() int {
 		return p
 	}
 	return LOWEST
+}
+
+func (p *Parser) parseArrayLiteral() Expression {
+	array := &ArrayLiteral{Token: p.currentToken}
+	array.Elements = []Expression{}
+
+	if p.peekTokenIs(TokenRBrace) {
+		p.nextToken()
+		return array
+	}
+
+	p.nextToken()
+	array.Elements = append(array.Elements, p.parseExpression(LOWEST))
+
+	for p.peekTokenIs(TokenComma) {
+		p.nextToken()
+		p.nextToken()
+		array.Elements = append(array.Elements, p.parseExpression(LOWEST))
+	}
+
+	if !p.expectPeek(TokenRBrace) {
+		return nil
+	}
+
+	return array
+}
+
+func (p *Parser) parseIndexExpression(left Expression) Expression {
+	exp := &IndexExpression{Token: p.currentToken, Left: left}
+
+	p.nextToken()
+	exp.Index = p.parseExpression(LOWEST)
+
+	if !p.expectPeek(TokenRBracket) {
+		return nil
+	}
+
+	return exp
 }
 
 func (p *Parser) noPrefixParseFnError(t TokenType) {

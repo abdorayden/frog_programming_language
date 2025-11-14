@@ -47,6 +47,10 @@ func Eval(node Node, env *Environment) Object {
 		left := Eval(node.Left, env)
 		right := Eval(node.Right, env)
 		return evalInfixExpression(node, left, right)
+	case *ArrayLiteral:
+		return evalArrayLiteral(node, env)
+	case *IndexExpression:
+		return evalIndexExpression(node, env)
 	case *DeclarationStatement:
 		return evalDeclarationStatement(node, env)
 	case *AssignmentStatement:
@@ -260,21 +264,63 @@ func evalIdentifier(node *Identifier, env *Environment) Object {
 
 func evalDeclarationStatement(node *DeclarationStatement, env *Environment) Object {
 	for _, ident := range node.Identifiers {
-		env.Set(ident.Value, nil) // Initialize with nil
+		if node.IsArray {
+			env.Set(ident.Value, &Array{Elements: []Object{}})
+		} else {
+			env.Set(ident.Value, nil)
+		}
 	}
 	return nil
 }
 
 func evalAssignmentStatement(node *AssignmentStatement, env *Environment) Object {
-	if _, ok := env.Get(node.Identifier.Value); !ok {
-		return newError(node.Identifier.Token.Line, node.Identifier.Token.Column, "cannot assign to undeclared identifier: %s", node.Identifier.Value)
-	}
 	val := Eval(node.Value, env)
 	if isError(val) {
 		return val
 	}
-	env.Set(node.Identifier.Value, val)
-	return nil
+	return evalAssignmentToExpression(node.Left, val, env)
+}
+
+func evalAssignmentToExpression(left Expression, val Object, env *Environment) Object {
+	switch l := left.(type) {
+	case *Identifier:
+		if _, ok := env.Get(l.Value); !ok {
+			return newError(l.Token.Line, l.Token.Column, "cannot assign to undeclared identifier: %s", l.Value)
+		}
+		env.Set(l.Value, val)
+		return nil
+	case *IndexExpression:
+		return evalIndexAssignment(l, val, env)
+	default:
+		return newError(0, 0, "cannot assign to %T", left)
+	}
+}
+
+func evalIndexAssignment(node *IndexExpression, val Object, env *Environment) Object {
+	left := Eval(node.Left, env)
+	if isError(left) {
+		return left
+	}
+	index := Eval(node.Index, env)
+	if isError(index) {
+		return index
+	}
+	switch {
+	case left.Type() == ARRAY_OBJ && index.Type() == INTEGER_OBJ:
+		array := left.(*Array)
+		idx := index.(*Int).Value
+		if idx < 0 {
+			return newError(node.Token.Line, node.Token.Column, "index out of bounds: %d", idx)
+		}
+		// Extend array if necessary
+		for int64(len(array.Elements)) <= idx {
+			array.Elements = append(array.Elements, &Int{Value: 0})
+		}
+		array.Elements[idx] = val
+		return nil
+	default:
+		return newError(node.Token.Line, node.Token.Column, "cannot assign to index: %s[%s]", left.Type(), index.Type())
+	}
 }
 
 func evalPrintStatement(node *PrintStatement, env *Environment) Object {
@@ -284,6 +330,7 @@ func evalPrintStatement(node *PrintStatement, env *Environment) Object {
 			fmt.Print(val.Inspect())
 		}
 	}
+	fmt.Println()
 	return nil
 }
 
@@ -317,6 +364,45 @@ func evalInputStatement(node *InputStatement, env *Environment) Object {
 	}
 
 	return nil
+}
+
+func evalArrayLiteral(node *ArrayLiteral, env *Environment) Object {
+	elements := []Object{}
+	for _, el := range node.Elements {
+		evaluated := Eval(el, env)
+		if isError(evaluated) {
+			return evaluated
+		}
+		elements = append(elements, evaluated)
+	}
+	return &Array{Elements: elements}
+}
+
+func evalIndexExpression(node *IndexExpression, env *Environment) Object {
+	left := Eval(node.Left, env)
+	if isError(left) {
+		return left
+	}
+	index := Eval(node.Index, env)
+	if isError(index) {
+		return index
+	}
+	return evalIndexExpressionWithObjects(node, left, index)
+}
+
+func evalIndexExpressionWithObjects(node *IndexExpression, left, index Object) Object {
+	switch {
+	case left.Type() == ARRAY_OBJ && index.Type() == INTEGER_OBJ:
+		array := left.(*Array)
+		idx := index.(*Int).Value
+		max := int64(len(array.Elements) - 1)
+		if idx < 0 || idx > max {
+			return newError(node.Token.Line, node.Token.Column, "index out of bounds: %d", idx)
+		}
+		return array.Elements[idx]
+	default:
+		return newError(node.Token.Line, node.Token.Column, "index operator not supported: %s[%s]", left.Type(), index.Type())
+	}
 }
 
 type Error struct {

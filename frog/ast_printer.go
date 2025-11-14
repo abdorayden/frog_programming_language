@@ -29,7 +29,7 @@ func PrintAST(node Node, prefix string, isLast bool) {
 		}
 	case *AssignmentStatement:
 		fmt.Println("AssignmentStatement:")
-		PrintAST(n.Identifier, childPrefix, false)
+		PrintAST(n.Left, childPrefix, false)
 		PrintAST(n.Value, childPrefix, true)
 	case *PrintStatement:
 		fmt.Println("PrintStatement:")
@@ -72,6 +72,15 @@ func PrintAST(node Node, prefix string, isLast bool) {
 		fmt.Printf("InfixExpression: Operator=%s\n", n.Operator)
 		PrintAST(n.Left, childPrefix, false)
 		PrintAST(n.Right, childPrefix, true)
+	case *ArrayLiteral:
+		fmt.Println("ArrayLiteral:")
+		for i, el := range n.Elements {
+			PrintAST(el, childPrefix, i == len(n.Elements)-1)
+		}
+	case *IndexExpression:
+		fmt.Println("IndexExpression:")
+		PrintAST(n.Left, childPrefix, false)
+		PrintAST(n.Index, childPrefix, true)
 	case *Boolean:
 		fmt.Printf("Boolean: %t\n", n.Value)
 	default:

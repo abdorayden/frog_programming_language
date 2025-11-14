@@ -1,5 +1,5 @@
 # TO DO:
-- [ ] add tables
+- [X] add tables
 - [ ] add functions
 - [ ] add system modules
 - [X] add FRG_Input
