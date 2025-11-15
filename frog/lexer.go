@@ -1,3 +1,7 @@
+// Copyright (C) by abdenour souane
+// you have a right to modify it upgrade it or do whatever you want
+// but u have to keep my name on it
+
 package frog
 
 import (
@@ -7,11 +11,7 @@ import (
 	"unicode/utf8"
 )
 
-// TODO: add system modules
-//	FRG_Use "core.ifrg"
-
-// BUG: use undeclared ID not generated error
-
+// define TokenType enum
 type TokenType int
 
 const (
@@ -136,30 +136,6 @@ func NewLexer(input string) *Lexer {
 	return l
 }
 
-func (l *Lexer) readChar() {
-	if l.readPosition >= len(l.input) {
-		l.ch = 0
-	} else {
-		l.ch, _ = utf8.DecodeRuneInString(l.input[l.readPosition:])
-	}
-	l.position = l.readPosition
-	l.readPosition += utf8.RuneLen(l.ch)
-	if l.ch == '\n' {
-		l.line++
-		l.column = 0
-	} else {
-		l.column++
-	}
-}
-
-func (l *Lexer) peekChar() rune {
-	if l.readPosition >= len(l.input) {
-		return 0
-	}
-	ch, _ := utf8.DecodeRuneInString(l.input[l.readPosition:])
-	return ch
-}
-
 func (l *Lexer) NextToken() Token {
 	var tok Token
 
@@ -270,6 +246,7 @@ func (l *Lexer) NextToken() Token {
 		tok.Line = line
 		tok.Column = column
 	default:
+		// set the default as identifiers or Numbers
 		if isLetter(l.ch) {
 			ident := l.readIdentifier()
 			tokType := TokenIdentifier
@@ -288,7 +265,31 @@ func (l *Lexer) NextToken() Token {
 	return tok
 }
 
-// PRIVATE methods (helpers)
+// private methods
+func (l *Lexer) readChar() {
+	if l.readPosition >= len(l.input) {
+		l.ch = 0
+	} else {
+		l.ch, _ = utf8.DecodeRuneInString(l.input[l.readPosition:])
+	}
+	l.position = l.readPosition
+	l.readPosition += utf8.RuneLen(l.ch)
+	if l.ch == '\n' {
+		l.line++
+		l.column = 0
+	} else {
+		l.column++
+	}
+}
+
+func (l *Lexer) peekChar() rune {
+	if l.readPosition >= len(l.input) {
+		return 0
+	}
+	ch, _ := utf8.DecodeRuneInString(l.input[l.readPosition:])
+	return ch
+}
+
 func (l *Lexer) skipWhitespace() {
 	for unicode.IsSpace(l.ch) {
 		l.readChar()
@@ -344,119 +345,6 @@ func (l *Lexer) readString() string {
 	str = strings.ReplaceAll(str, "\\\"", "\"")
 	str = strings.ReplaceAll(str, "\\\\", "\\")
 	return str
-}
-
-func isLetter(ch rune) bool {
-	return unicode.IsLetter(ch) || ch == '_'
-}
-
-func isDigit(ch rune) bool {
-	return unicode.IsDigit(ch)
-}
-
-func TokenToString(tokenType TokenType) string {
-	switch tokenType {
-	case TokenEOF:
-		return "EOF"
-	case TokenIllegal:
-		return "ILLEGAL"
-	case TokenIdentifier:
-		return "IDENTIFIER"
-	case TokenNumber:
-		return "NUMBER"
-	case TokenString:
-		return "STRING"
-	case TokenAssign:
-		return "ASSIGN"
-	case TokenPlus:
-		return "PLUS"
-	case TokenMinus:
-		return "MINUS"
-	case TokenAsterisk:
-		return "ASTERISK"
-	case TokenSlash:
-		return "SLASH"
-	case TokenModulo:
-		return "MODULO"
-	case TokenEqual:
-		return "EQUAL"
-	case TokenNotEqual:
-		return "NOT_EQUAL"
-	case TokenLessThan:
-		return "LESS_THAN"
-	case TokenGreaterThan:
-		return "GREATER_THAN"
-	case TokenLessEqual:
-		return "LESS_EQUAL"
-	case TokenGreaterEqual:
-		return "GREATER_EQUAL"
-	case TokenAnd:
-		return "AND"
-	case TokenOr:
-		return "OR"
-	case TokenNot:
-		return "NOT"
-	case TokenComma:
-		return "COMMA"
-	case TokenSemicolon:
-		return "SEMICOLON"
-	case TokenColon:
-		return "COLON"
-	case TokenLParen:
-		return "LPAREN"
-	case TokenRParen:
-		return "RPAREN"
-	case TokenLBrace:
-		return "LBRACE"
-	case TokenRBrace:
-		return "RBRACE"
-	case TokenLBracket:
-		return "LBRACKET"
-	case TokenRBracket:
-		return "RBRACKET"
-	case TokenHash:
-		return "HASH"
-	case TokenFRGBegin:
-		return "FRG_BEGIN"
-	case TokenFRGEnd:
-		return "FRG_END"
-	case TokenFRGInt:
-		return "FRG_INT"
-	case TokenFRGReal:
-		return "FRG_REAL"
-	case TokenFRGStrg:
-		return "FRG_STRG"
-	case TokenFRGFn:
-		return "FRG_FN"
-	case TokenFRGPrint:
-		return "FRG_PRINT"
-	case TokenFRGInput:
-		return "FRG_INPUT"
-	case TokenIf:
-		return "IF"
-	case TokenElse:
-		return "ELSE"
-	case TokenBegin:
-		return "BEGIN"
-	case TokenEnd:
-		return "END"
-	case TokenRepeat:
-		return "REPEAT"
-	case TokenUntil:
-		return "UNTIL"
-	case TokenBreak:
-		return "BREAK"
-	case TokenContinue:
-		return "CONTINUE"
-	case TokenTrue:
-		return "TRUE"
-	case TokenFalse:
-		return "FALSE"
-	case TokenFRGUse:
-		return "FRG_USE"
-	default:
-		return "UNKNOWN"
-	}
 }
 
 func (l *Lexer) GetAllTokens() []Token {

@@ -104,10 +104,65 @@ FRG_Begin
         End
     End
 
+    ## factorial
+    FRG_Fn factorial(FRG_Int n) : FRG_Int
+    Begin
+        FRG_Int forRet#
+        forRet := 1#
+        If [ n == 0 ]
+        Begin
+            factorial := forRet#
+        End
+        Else
+        Begin
+            If [n == 1]
+            Begin
+                factorial := forRet#
+            End
+            Else
+            Begin
+                Repeat
+                    forRet := forRet * n#
+                    n := n - 1#
+                Until [n == 1]
+                factorial := forRet#
+            End
+        End
+    End
+
+    ##  BUG: operations between integers and floats
+    FRG_Fn sin(FRG_Real n) : FRG_Real
+    Begin
+        FRG_Int terms , i, coefficient , exponent , fact#
+        FRG_Real term , result #
+        terms := 1000#
+        result := 0.0#
+        coefficient := 1#
+        i := 0#
+        Repeat 
+            exponent := 2 * i + 1#
+            fact := factorial(exponent)#
+            term := pow(n , exponent)#
+            term := coefficient * term#
+            term := term / fact#
+            result := result + term#
+            If [coefficient > 0]
+            Begin
+                coefficient := -1#
+            End
+            Else
+            Begin
+                coefficient := 1#
+            End
+
+            i := i + 1#
+        Until [ i == terms ]
+        cos := result#
+    End
+
     ## sqrt
     ## resource : https://en.wikipedia.org/wiki/Square_root_algorithms,
     ##           https://github.com/MichaelDipperstein/sqrt
-
     FRG_Fn sqrt(FRG_Real tha_number) : FRG_Real
     Begin
 

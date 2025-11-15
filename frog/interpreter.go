@@ -1,3 +1,6 @@
+// Copyright (C) by abdenour souane
+// you have a right to modify it upgrade it or do whatever you want
+// but u have to keep my name on it
 package frog
 
 import (
@@ -484,14 +487,11 @@ func evalCallExpression(node *CallExpression, env *Environment) Object {
 	if len(node.Arguments) != len(function.Parameters) {
 		return newError(node.Token.Line, node.Token.Column, "wrong number of arguments: expected %d, got %d", len(function.Parameters), len(node.Arguments))
 	}
-	// Create new environment for function call
 	callEnv := NewEnvironment()
 	callEnv.store = make(map[string]Object)
-	// Copy outer environment
 	for k, v := range function.Env.store {
 		callEnv.store[k] = v
 	}
-	// Set parameters
 	for i, param := range function.Parameters {
 		val := Eval(node.Arguments[i], env)
 		if isError(val) {
@@ -499,9 +499,7 @@ func evalCallExpression(node *CallExpression, env *Environment) Object {
 		}
 		callEnv.Set(param.Name.Value, val)
 	}
-	// Execute function body
 	result := Eval(function.Body, callEnv)
-	// Handle return value - check if function name is set in the environment
 	if retVal, ok := callEnv.Get(function.Name); ok && retVal != nil {
 		return retVal
 	}

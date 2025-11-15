@@ -1,3 +1,9 @@
+// Copyright (C) by abdenour souane
+// you have a right to modify it upgrade it or do whatever you want
+// but u have to keep my name on it
+
+// all keywords functions types are structures that implements those 3 interfaces
+
 package frog
 
 import (
@@ -62,8 +68,13 @@ type Parameter struct {
 	Name *Identifier
 }
 
-func (ds *DeclarationStatement) statementNode()       {}
-func (ds *DeclarationStatement) TokenLiteral() string { return ds.Token.Literal }
+func (ds *DeclarationStatement) statementNode() {
+	// mark that Declarations implements Statement interface
+	// because DeclarationStatement are statement u know what im saying :)
+}
+func (ds *DeclarationStatement) TokenLiteral() string {
+	return ds.Token.Literal
+}
 func (ds *DeclarationStatement) String() string {
 	var out bytes.Buffer
 	out.WriteString(ds.TokenLiteral())
@@ -81,8 +92,13 @@ func (ds *DeclarationStatement) String() string {
 	return out.String()
 }
 
-func (fds *FunctionDeclarationStatement) statementNode()       {}
-func (fds *FunctionDeclarationStatement) TokenLiteral() string { return fds.Token.Literal }
+func (fds *FunctionDeclarationStatement) statementNode() {
+	// same thing FunctionDeclaration are statement
+	// read at line 72 :)
+}
+func (fds *FunctionDeclarationStatement) TokenLiteral() string {
+	return fds.Token.Literal
+}
 func (fds *FunctionDeclarationStatement) String() string {
 	var out bytes.Buffer
 	out.WriteString(fds.TokenLiteral())
@@ -110,7 +126,9 @@ type AssignmentStatement struct {
 	Value Expression
 }
 
-func (as *AssignmentStatement) statementNode()       {}
+func (as *AssignmentStatement) statementNode() {
+	// read at line 72 :)
+}
 func (as *AssignmentStatement) TokenLiteral() string { return as.Token.Literal }
 func (as *AssignmentStatement) String() string {
 	var out bytes.Buffer
@@ -128,7 +146,10 @@ type PrintStatement struct {
 	Expressions []Expression
 }
 
-func (ps *PrintStatement) statementNode()       {}
+func (ps *PrintStatement) statementNode() {
+	// read at line 72 :)
+}
+
 func (ps *PrintStatement) TokenLiteral() string { return ps.Token.Literal }
 func (ps *PrintStatement) String() string {
 	var out bytes.Buffer
@@ -148,7 +169,10 @@ type InputStatement struct {
 	Expressions []Expression
 }
 
-func (ps *InputStatement) statementNode()       {}
+func (ps *InputStatement) statementNode() {
+
+	// read at line 72 :)
+}
 func (ps *InputStatement) TokenLiteral() string { return ps.Token.Literal }
 func (ps *InputStatement) String() string {
 	var out bytes.Buffer
@@ -170,7 +194,10 @@ type IfStatement struct {
 	Alternative Statement
 }
 
-func (is *IfStatement) statementNode()       {}
+func (is *IfStatement) statementNode() {
+
+	// read at line 72 :)
+}
 func (is *IfStatement) TokenLiteral() string { return is.Token.Literal }
 func (is *IfStatement) String() string {
 	var out bytes.Buffer
@@ -191,7 +218,10 @@ type RepeatStatement struct {
 	Condition Expression
 }
 
-func (rs *RepeatStatement) statementNode()       {}
+func (rs *RepeatStatement) statementNode() {
+
+	// read at line 72 :)
+}
 func (rs *RepeatStatement) TokenLiteral() string { return rs.Token.Literal }
 func (rs *RepeatStatement) String() string {
 	var out bytes.Buffer
@@ -209,7 +239,10 @@ type BlockStatement struct {
 	Statements []Statement
 }
 
-func (bs *BlockStatement) statementNode()       {}
+func (bs *BlockStatement) statementNode() {
+
+	// read at line 72 :)
+}
 func (bs *BlockStatement) TokenLiteral() string { return bs.Token.Literal }
 func (bs *BlockStatement) String() string {
 	var out bytes.Buffer
@@ -225,7 +258,10 @@ type BreakStatement struct {
 	Token Token
 }
 
-func (bs *BreakStatement) statementNode()       {}
+func (bs *BreakStatement) statementNode() {
+	// read at line 72 :)
+
+}
 func (bs *BreakStatement) TokenLiteral() string { return bs.Token.Literal }
 func (bs *BreakStatement) String() string       { return bs.TokenLiteral() + " #" }
 
@@ -233,7 +269,10 @@ type ContinueStatement struct {
 	Token Token
 }
 
-func (cs *ContinueStatement) statementNode()       {}
+func (cs *ContinueStatement) statementNode() {
+
+	// read at line 72 :)
+}
 func (cs *ContinueStatement) TokenLiteral() string { return cs.Token.Literal }
 func (cs *ContinueStatement) String() string       { return cs.TokenLiteral() + " #" }
 
@@ -282,7 +321,10 @@ type UseStatement struct {
 	Filename *StringLiteral
 }
 
-func (us *UseStatement) statementNode()       {}
+func (us *UseStatement) statementNode() {
+
+	// read at line 72 :)
+}
 func (us *UseStatement) TokenLiteral() string { return us.Token.Literal }
 func (us *UseStatement) String() string {
 	var out bytes.Buffer
@@ -299,7 +341,10 @@ type ExpressionStatement struct {
 	Expression Expression
 }
 
-func (es *ExpressionStatement) statementNode()       {} // Mark as Statement node
+func (es *ExpressionStatement) statementNode() {
+
+	// read at line 72 :)
+}                                                    // Mark as Statement node
 func (es *ExpressionStatement) TokenLiteral() string { return es.Token.Literal }
 func (es *ExpressionStatement) String() string {
 	if es.Expression != nil {
@@ -313,17 +358,28 @@ type Identifier struct {
 	Value string
 }
 
-func (i *Identifier) expressionNode()      {} // Mark as Expression node
-func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
-func (i *Identifier) String() string       { return i.Value }
+func (i *Identifier) expressionNode() {
+	// mark as expression node
+	// Identifier struct are implements Expression interface
+	// because ID is expression u know what im saying :)
+}
+func (i *Identifier) TokenLiteral() string {
+	return i.Token.Literal
+}
+func (i *Identifier) String() string {
+	return i.Value
+}
 
-// IntegerLiteral represents an integer literal.
+// integerliteral represents an integer literal.
 type IntegerLiteral struct {
 	Token Token
 	Value int64
 }
 
-func (il *IntegerLiteral) expressionNode()      {} // Mark as Expression node
+func (il *IntegerLiteral) expressionNode() {
+	// mark as expression node
+	// read line 362 :))
+}
 func (il *IntegerLiteral) TokenLiteral() string { return il.Token.Literal }
 func (il *IntegerLiteral) String() string       { return il.Token.Literal }
 
@@ -333,7 +389,10 @@ type RealLiteral struct {
 	Value float64
 }
 
-func (rl *RealLiteral) expressionNode()      {} // Mark as Expression node
+func (rl *RealLiteral) expressionNode() {
+	// mark as expression node
+	// read line 362 :))
+}
 func (rl *RealLiteral) TokenLiteral() string { return rl.Token.Literal }
 func (rl *RealLiteral) String() string       { return rl.Token.Literal }
 
@@ -343,7 +402,10 @@ type StringLiteral struct {
 	Value string
 }
 
-func (sl *StringLiteral) expressionNode()      {} // Mark as Expression node
+func (sl *StringLiteral) expressionNode() {
+	// mark as expression node
+	// read line 362 :))
+}
 func (sl *StringLiteral) TokenLiteral() string { return sl.Token.Literal }
 func (sl *StringLiteral) String() string       { return "\"" + sl.Value + "\"" }
 
@@ -354,7 +416,10 @@ type PrefixExpression struct {
 	Right    Expression
 }
 
-func (pe *PrefixExpression) expressionNode()      {} // Mark as Expression node
+func (pe *PrefixExpression) expressionNode() {
+	// mark as expression node
+	// read line 362 :))
+}
 func (pe *PrefixExpression) TokenLiteral() string { return pe.Token.Literal }
 func (pe *PrefixExpression) String() string {
 	var out bytes.Buffer
@@ -373,7 +438,10 @@ type InfixExpression struct {
 	Right    Expression
 }
 
-func (ie *InfixExpression) expressionNode()      {} // Mark as Expression node
+func (ie *InfixExpression) expressionNode() {
+	// mark as expression node
+	// read line 362 :))
+}
 func (ie *InfixExpression) TokenLiteral() string { return ie.Token.Literal }
 func (ie *InfixExpression) String() string {
 	var out bytes.Buffer
@@ -390,7 +458,10 @@ type ArrayLiteral struct {
 	Elements []Expression
 }
 
-func (al *ArrayLiteral) expressionNode()      {} // Mark as Expression node
+func (al *ArrayLiteral) expressionNode() {
+	// mark as expression node
+	// read line 362 :))
+}
 func (al *ArrayLiteral) TokenLiteral() string { return al.Token.Literal }
 func (al *ArrayLiteral) String() string {
 	var out bytes.Buffer
@@ -410,7 +481,10 @@ type ArraySizeLiteral struct {
 	Size  Expression
 }
 
-func (asl *ArraySizeLiteral) expressionNode()      {} // Mark as Expression node
+func (asl *ArraySizeLiteral) expressionNode() {
+	// mark as expression node
+	// read line 362 :))
+}
 func (asl *ArraySizeLiteral) TokenLiteral() string { return asl.Token.Literal }
 func (asl *ArraySizeLiteral) String() string {
 	var out bytes.Buffer
@@ -432,7 +506,10 @@ type CallExpression struct {
 	Arguments []Expression
 }
 
-func (ie *IndexExpression) expressionNode()      {} // Mark as Expression node
+func (ie *IndexExpression) expressionNode() {
+	// mark as expression node
+	// read line 362 :))
+}
 func (ie *IndexExpression) TokenLiteral() string { return ie.Token.Literal }
 func (ie *IndexExpression) String() string {
 	var out bytes.Buffer
@@ -444,7 +521,10 @@ func (ie *IndexExpression) String() string {
 	return out.String()
 }
 
-func (ce *CallExpression) expressionNode()      {} // Mark as Expression node
+func (ce *CallExpression) expressionNode() {
+	// mark as expression node
+	// read line 362 :))
+}
 func (ce *CallExpression) TokenLiteral() string { return ce.Token.Literal }
 func (ce *CallExpression) String() string {
 	var out bytes.Buffer
@@ -461,9 +541,8 @@ func (ce *CallExpression) String() string {
 }
 
 // =============================================================================
-// Parser
+// parser : after implements all interfaces for each statement and expression
 // =============================================================================
-
 const (
 	_ int = iota
 	LOWEST
@@ -497,17 +576,30 @@ type (
 	infixParseFn  func(Expression) Expression
 )
 
+// parser structure contain the informations
 type Parser struct {
-	lexer  *Lexer
+	// pointer to lexer that passed from the constructor
+	// used to walk througth the tokens
+	lexer *Lexer
+
+	// array of strings for error parsing happend
 	errors []string
 
+	// currentToken and peekToken two fields of Token struct type
+	// have informations of the current token
 	currentToken Token
 	peekToken    Token
+
+	// two maps with same key (TokenType) and diffrent values prefixParseFn and infixParseFn
+	// which is function type that defined at line 574
+	// for each token will have it's own function parser , that parse the token
+	// those two maps are needed for parseExpression method
 
 	prefixParseFns map[TokenType]prefixParseFn
 	infixParseFns  map[TokenType]infixParseFn
 }
 
+// constructor
 func NewParser(l *Lexer) *Parser {
 	p := &Parser{
 		lexer:  l,
@@ -515,6 +607,7 @@ func NewParser(l *Lexer) *Parser {
 	}
 
 	p.prefixParseFns = make(map[TokenType]prefixParseFn)
+
 	p.registerPrefix(TokenIdentifier, p.parseIdentifier)
 	p.registerPrefix(TokenNumber, p.parseNumberLiteral)
 	p.registerPrefix(TokenString, p.parseStringLiteral)
@@ -525,6 +618,7 @@ func NewParser(l *Lexer) *Parser {
 	p.registerPrefix(TokenLBracket, p.parseArraySizeLiteral)
 
 	p.infixParseFns = make(map[TokenType]infixParseFn)
+
 	p.registerInfix(TokenPlus, p.parseInfixExpression)
 	p.registerInfix(TokenMinus, p.parseInfixExpression)
 	p.registerInfix(TokenSlash, p.parseInfixExpression)
@@ -545,6 +639,14 @@ func NewParser(l *Lexer) *Parser {
 	return p
 }
 
+func (p *Parser) registerPrefix(tokenType TokenType, fn prefixParseFn) {
+	p.prefixParseFns[tokenType] = fn
+}
+
+func (p *Parser) registerInfix(tokenType TokenType, fn infixParseFn) {
+	p.infixParseFns[tokenType] = fn
+}
+
 func (p *Parser) nextToken() {
 	p.currentToken = p.peekToken
 	p.peekToken = p.lexer.NextToken()
@@ -554,10 +656,6 @@ func (p *Parser) Errors() []string {
 	return p.errors
 }
 
-func (p *Parser) IsThereAnyErrors() bool {
-	return len(p.errors) != 0
-}
-
 func (p *Parser) peekError(t TokenType) {
 	msg := fmt.Sprintf(
 		"ERROR: expected next token to be %s, got %s instead (line %d, col %d)",
@@ -565,25 +663,29 @@ func (p *Parser) peekError(t TokenType) {
 	p.errors = append(p.errors, msg)
 }
 
-func (p *Parser) registerPrefix(tokenType TokenType, fn prefixParseFn) {
-	p.prefixParseFns[tokenType] = fn
+func (p *Parser) IsThereAnyErrors() bool {
+	return len(p.errors) != 0
 }
 
-func (p *Parser) registerInfix(tokenType TokenType, fn infixParseFn) {
-	p.infixParseFns[tokenType] = fn
-}
+// the Program struct that defined above contains array of Statement interface
+// this array can hold any struct implemented the interface
+// because frog file are body main start with FRG_Begin ... FRG_End between this block contains statements
+// so after we parse the programe we will get pointer Program struct with array of statements
 
 func (p *Parser) ParseProgram() *Program {
 	program := &Program{}
 	program.Statements = []Statement{}
 
+	// frog code must start with FRG_Begin
 	if !p.expectCurrent(TokenFRGBegin) {
 		p.errors = append(p.errors, "program must start with FRG_Begin")
 		return program
 	}
 
+	// escape FRG_Begin
 	p.nextToken()
 
+	// end used to detect if FRG_End token are at the end of the frog file or not
 	var end bool = false
 
 	for !p.currentTokenIs(TokenEOF) {
@@ -591,6 +693,7 @@ func (p *Parser) ParseProgram() *Program {
 			end = true
 			break
 		}
+		// call private Parser method that parse the statements
 		stmt := p.parseStatement()
 		if stmt != nil {
 			program.Statements = append(program.Statements, stmt)
@@ -598,6 +701,7 @@ func (p *Parser) ParseProgram() *Program {
 		p.nextToken()
 	}
 
+	// checked :)
 	if !end {
 		p.errors = append(p.errors, "program must end with FRG_End")
 	}
@@ -605,6 +709,7 @@ func (p *Parser) ParseProgram() *Program {
 	return program
 }
 
+// each token has it's own parsing method
 func (p *Parser) parseStatement() Statement {
 	switch p.currentToken.Type {
 	case TokenFRGInt, TokenFRGReal, TokenFRGStrg:

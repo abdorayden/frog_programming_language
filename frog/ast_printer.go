@@ -1,3 +1,7 @@
+// Copyright (C) by abdenour souane
+// you have a right to modify it upgrade it or do whatever you want
+// but u have to keep my name on it
+
 package frog
 
 import (
