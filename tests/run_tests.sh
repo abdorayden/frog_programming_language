@@ -7,6 +7,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Path to the frog interpreter
+go build ..
 FROG_INTERPRETER="../frog_programming_language"
 
 # Check if the interpreter exists and is executable

@@ -3,6 +3,7 @@ package frog
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"strconv"
 )
 
@@ -235,6 +236,62 @@ type ContinueStatement struct {
 func (cs *ContinueStatement) statementNode()       {}
 func (cs *ContinueStatement) TokenLiteral() string { return cs.Token.Literal }
 func (cs *ContinueStatement) String() string       { return cs.TokenLiteral() + " #" }
+
+func (p *Parser) parseUseStatementAndInclude() Statement {
+	useToken := p.currentToken // Store the FRG_Use token
+
+	if !p.expectPeek(TokenString) {
+		return nil
+	}
+	filename := p.currentToken.Literal
+
+	if !p.expectPeek(TokenHash) {
+		return nil
+	}
+
+	// Read the content of the included file
+	content, err := os.ReadFile(filename)
+	if err != nil {
+		p.errors = append(p.errors, fmt.Sprintf("ERROR: could not read included file %s: %v", filename, err))
+		return nil
+	}
+
+	// Create a new lexer and parser for the included file
+	includedLexer := NewLexer(string(content))
+	includedParser := NewParser(includedLexer)
+
+	// Parse the included file's program
+	includedProgram := includedParser.ParseProgram()
+
+	if includedParser.IsThereAnyErrors() {
+		for _, err := range includedParser.Errors() {
+			p.errors = append(p.errors, fmt.Sprintf("ERROR in included file %s: %s", filename, err))
+		}
+		return nil
+	}
+
+	// Return a BlockStatement containing all statements from the included file
+	// This effectively "inlines" the included file's statements into the current AST.
+	block := &BlockStatement{Token: useToken} // Use the TokenFRGUse token for the block
+	block.Statements = includedProgram.Statements
+	return block
+}
+
+type UseStatement struct {
+	Token    Token // The FRG_Use token
+	Filename *StringLiteral
+}
+
+func (us *UseStatement) statementNode()       {}
+func (us *UseStatement) TokenLiteral() string { return us.Token.Literal }
+func (us *UseStatement) String() string {
+	var out bytes.Buffer
+	out.WriteString(us.TokenLiteral())
+	out.WriteString(" ")
+	out.WriteString(us.Filename.String())
+	out.WriteString(" #")
+	return out.String()
+}
 
 // ExpressionStatement is a statement that consists of a single expression.
 type ExpressionStatement struct {
@@ -568,6 +625,8 @@ func (p *Parser) parseStatement() Statement {
 		return p.parseBreakStatement()
 	case TokenContinue:
 		return p.parseContinueStatement()
+	case TokenFRGUse:
+		return p.parseUseStatementAndInclude()
 	case TokenIdentifier:
 		expr := p.parseExpression(LOWEST)
 		if p.peekTokenIs(TokenAssign) {

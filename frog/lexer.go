@@ -69,6 +69,7 @@ const (
 	TokenContinue
 	TokenTrue
 	TokenFalse
+	TokenFRGUse
 )
 
 // map of keywords and thier tokens
@@ -91,6 +92,7 @@ var keywords = map[string]TokenType{
 	"Continue":  TokenContinue,
 	"True":      TokenTrue,
 	"False":     TokenFalse,
+	"FRG_Use":   TokenFRGUse,
 }
 
 type Token struct {
@@ -450,6 +452,8 @@ func TokenToString(tokenType TokenType) string {
 		return "TRUE"
 	case TokenFalse:
 		return "FALSE"
+	case TokenFRGUse:
+		return "FRG_USE"
 	default:
 		return "UNKNOWN"
 	}
