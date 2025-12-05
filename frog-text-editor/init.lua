@@ -10,7 +10,40 @@ local StatusBar = api.StatusBar
 local Options = api.Options
 local Scroller = api.Scroller
 
--- Vim-like Text Editor Class
+table.contains = function(t, element)
+    if type(t) ~= "table" then
+        return false
+    end
+    for _, value in pairs(t) do
+        if value == element then
+            return true
+        end
+    end
+    return false
+end
+
+
+local FROG = {
+    { word = "##",        type = "comment",  color = api.FGColors.Brights.Black },
+    { word = "False",     type = "constant", color = api.FGColors.Brights.Cyan,    version = "2.3+" },
+    { word = "True",      type = "constant", color = api.FGColors.Brights.Cyan,    version = "2.3+" },
+    { word = "&&",        type = "operator", color = api.FGColors.Brights.Magenta, version = "all" },
+    { word = "Break",     type = "control",  color = api.FGColors.Brights.Red,     version = "all" },
+    { word = "Continue",  type = "control",  color = api.FGColors.Brights.Red,     version = "all" },
+    { word = "FRG_Fn",    type = "function", color = api.FGColors.Brights.Blue,    version = "all" },
+    { word = "FRG_Print", type = "function", color = api.FGColors.Brights.Blue,    version = "all" },
+    { word = "FRG_Input", type = "function", color = api.FGColors.Brights.Blue,    version = "all" },
+    { word = "FRG_Begin", type = "function", color = api.FGColors.Brights.Blue,    version = "all" },
+    { word = "FRG_End",   type = "function", color = api.FGColors.Brights.Blue,    version = "all" },
+    { word = "Begin",     type = "function", color = api.FGColors.Brights.Blue,    version = "all" },
+    { word = "End",       type = "function", color = api.FGColors.Brights.Blue,    version = "all" },
+    { word = "Else",      type = "control",  color = api.FGColors.Brights.Red,     version = "all" },
+    { word = "If",        type = "control",  color = api.FGColors.Brights.Red,     version = "all" },
+    { word = "FRG_Use",   type = "import",   color = api.FGColors.Brights.Green,   version = "all" },
+    { word = "!",         type = "operator", color = api.FGColors.Brights.Magenta, version = "all" },
+    { word = "||",        type = "operator", color = api.FGColors.Brights.Magenta, version = "all" },
+    { word = "Repeat",    type = "control",  color = api.FGColors.Brights.Red,     version = "all" },
+}
 local VimEditor = {}
 VimEditor.__index = VimEditor
 
@@ -26,13 +59,19 @@ function VimEditor.new()
     self.modified = false
     self.view_height = 20
     self.view_width = 80
-    self.current_syntax = "LUA"
+    self.current_syntax = FROG
 
-    -- Vim modes
     self.mode = "NORMAL"
     self.syntax_mode = false
-    self.syntax_options = { "LUA", "C", "PYTHON" }
+    self.syntax_options = { "FROG" }
     self.syntax_scroller = nil
+
+    self.temp_status_message = nil
+    self.temp_status_timer = 0
+
+
+    self.command_mode = false
+    self.command_buffer = ""
 
     return self
 end
@@ -201,12 +240,56 @@ function VimEditor:setContent(content)
     self.modified = false
 end
 
-function VimEditor:setSyntax(syntax_type)
-    if syntax_type == "LUA" or syntax_type == "C" or syntax_type == "PYTHON" then
-        self.current_syntax = syntax_type
-        return true
+function VimEditor:saveFile(file_path)
+    local path_to_save = file_path or self.file_path
+
+    if not path_to_save then
+        return false, "Use ':w filename' to save as a new file"
     end
-    return false
+
+    local content = self:getContent()
+    local file = io.open(path_to_save, "w")
+    if not file then
+        return false, "Cannot open file for writing: " .. path_to_save
+    end
+
+    file:write(content)
+    file:close()
+
+
+    if file_path then
+        self.file_path = file_path
+    end
+
+    self.modified = false
+    return true, "File saved successfully: " .. path_to_save
+end
+
+function VimEditor:openFile(file_path)
+    local file = io.open(file_path, "r")
+    if not file then
+        return false, "Cannot open file: " .. file_path
+    end
+
+    local content = file:read("*a")
+    file:close()
+
+    self:setContent(content)
+    self.file_path = file_path
+    self.modified = false
+
+    return true, "File opened successfully: " .. file_path
+end
+
+function VimEditor:setSyntax(syntax_type)
+    -- if type(syntax_type) == "string" and (syntax_type == "LUA" or syntax_type == "C" or syntax_type == "PYTHON") then
+    --     self.current_syntax = syntax_type
+    --     return true
+    -- elseif type(syntax_type) == "string" and syntax_type == "FROG" then
+    self.current_syntax = FROG
+    return true
+    -- end
+    -- return false
 end
 
 function VimEditor:renderWithSyntax(vterm)
@@ -220,19 +303,19 @@ function VimEditor:renderWithSyntax(vterm)
             local line = self.lines[line_idx]
             local is_current_line = (line_idx == self.cursor_line)
 
-            -- Line number
+
             local line_num_str = string.format("%" .. line_num_width .. "d", line_idx)
             local line_num_color = is_current_line and api.FGColors.Brights.Yellow or api.FGColors.NoBrights.Cyan
             vterm:writeText(2, display_idx + 1, line_num_str, line_num_color, api.BGColors.NoBrights.Black)
             vterm:writeText(line_num_width + 3, display_idx + 1, api.BoxDrawing.LightBorder[2],
                 api.FGColors.NoBrights.White)
 
-            -- Use Code class for syntax highlighting
+
             local code_obj = Code.new(line, self.current_syntax, line_num_width + 5, display_idx + 1)
             local code_vterm = code_obj:render()
             vterm:merge(code_vterm, 0, 0)
 
-            -- Padding
+
             local line_display_len = #line - self.scroll_offset_x
             if line_display_len < self.view_width then
                 vterm:writeText(line_num_width + 5 + line_display_len, display_idx + 1,
@@ -243,7 +326,7 @@ function VimEditor:renderWithSyntax(vterm)
         end
     end
 
-    -- Draw cursor based on mode
+
     local cursor_screen_y = self.cursor_line - self.scroll_offset_y + 1
     local cursor_screen_x = line_num_width + 5 + (self.cursor_col - self.scroll_offset_x - 1)
 
@@ -278,6 +361,85 @@ function VimEditor:renderSyntaxMenu(vterm)
 end
 
 function VimEditor:handleKey(key)
+    if self.command_mode then
+        if key == api.KEY_ESCAPE then
+            self.command_mode = false
+            self.command_buffer = ""
+        elseif key == api.KEY_ENTER then
+            local command = self.command_buffer
+            self.command_mode = false
+            self.command_buffer = ""
+
+
+            if command:match("^w%s+") then
+                local filename = command:match("^w%s+(.+)")
+                if filename then
+                    local success, message = self:saveFile(filename)
+                    self.temp_status_message = message
+                    self.temp_status_timer = 30
+                else
+                    self.temp_status_message = "Usage: :w filename"
+                    self.temp_status_timer = 30
+                end
+            elseif command == "w" then
+                local success, message = self:saveFile()
+                self.temp_status_message = message
+                self.temp_status_timer = 30
+            elseif command:match("^o%s+") then
+                local filename = command:match("^o%s+(.+)")
+                if filename then
+                    local success, message = self:openFile(filename)
+                    self.temp_status_message = message
+                    self.temp_status_timer = 30
+                else
+                    self.temp_status_message = "Usage: :o filename"
+                    self.temp_status_timer = 30
+                end
+            elseif command == "syntax" or table.contains(self.syntax_options, command:upper()) then
+                self.syntax_mode = true
+                self:initSyntaxScroller()
+            else
+                self.temp_status_message = "Unknown command: " .. command
+                self.temp_status_timer = 30
+            end
+        elseif key == api.KEY_BACKSPACE then
+            if #self.command_buffer > 0 then
+                self.command_buffer = self.command_buffer:sub(1, -2)
+            end
+        elseif key >= api.KEY_A and key <= api.KEY_Z then
+            local chars = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s",
+                "t", "u", "v", "w", "x", "y", "z" }
+            self.command_buffer = self.command_buffer .. chars[key - api.KEY_A + 1]
+        elseif key >= api.KEY_SHIFT_A and key <= api.KEY_SHIFT_Z then
+            local chars = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S",
+                "T", "U", "V", "W", "X", "Y", "Z" }
+            self.command_buffer = self.command_buffer .. chars[key - api.KEY_SHIFT_A + 1]
+        elseif key >= api.KEY_0 and key <= api.KEY_9 then
+            self.command_buffer = self.command_buffer .. tostring(key - api.KEY_0)
+        elseif key == api.KEY_SPACE then
+            self.command_buffer = self.command_buffer .. " "
+        elseif key == api.KEY_DOT then
+            self.command_buffer = self.command_buffer .. "."
+        elseif key == api.KEY_MINUS then
+            self.command_buffer = self.command_buffer .. "-"
+        elseif key == api.KEY_SLASH then
+            self.command_buffer = self.command_buffer .. "/"
+        elseif key == api.KEY_OPPAERN then
+            self.command_buffer = self.command_buffer .. "("
+        elseif key == api.KEY_CLPAREN then
+            self.command_buffer = self.command_buffer .. ")"
+        elseif key == api.KEY_EQUAL then
+            self.command_buffer = self.command_buffer .. "="
+        elseif key == api.KEY_UNDERS then
+            self.command_buffer = self.command_buffer .. "_"
+        elseif key == api.KEY_HASHTAG then
+            self.command_buffer = self.command_buffer .. "#"
+        elseif key == api.KEY_COLON then
+            self.command_buffer = self.command_buffer .. ":"
+        end
+        return
+    end
+
     if self.syntax_mode then
         if key == api.KEY_J then
             self.syntax_scroller:nextLine()
@@ -360,6 +522,20 @@ function VimEditor:handleKey(key)
             self:insertChar("\"")
         elseif key == api.KEY_SINGLE_QOUTE then
             self:insertChar("'")
+        elseif key == api.KEY_OPPAERN then
+            self:insertChar("(")
+        elseif key == api.KEY_CLPAREN then
+            self:insertChar(")")
+        elseif key == api.KEY_EQUAL then
+            self:insertChar("=")
+        elseif key == api.KEY_UNDERS then
+            self:insertChar("_")
+        elseif key == api.KEY_HASHTAG then
+            self:insertChar("#")
+        elseif key == api.KEY_TAB then
+            self:insertChar("    ")
+        elseif key == api.KEY_BACK_SLASH then
+            self:insertChar("\\")
         end
     elseif self.mode == "NORMAL" then
         if key == api.KEY_I then
@@ -386,47 +562,57 @@ function VimEditor:handleKey(key)
         elseif key == api.KEY_D then
             self:deleteLine()
         elseif key == api.KEY_COLON then
-            self.syntax_mode = true
-            self:initSyntaxScroller()
+            self.command_mode = true
+            self.command_buffer = ""
         end
     end
 end
 
--- Main Application
 local window = Frame.new()
 window:initMainFrame()
-window:setFps(60)
+window:setFps(10)
 
 local editor = VimEditor.new()
 editor:getSize()
 
--- Create Status Bar
+
 local statusbar = StatusBar.new(editor.view_height + 3, editor.view_width + 6)
-statusbar:addComponent("VIM-Like RMP Text Editor with Syntax Highlighting", api.FGColors.Brights.Cyan,
-    api.BGColors.NoBrights.Black, api.TextStyle.Bold, "left")
-statusbar:addComponent("hjkl: Move | i/a: Insert | o/O: NewLine | dd: Delete | :: Syntax", api.FGColors.Brights.White,
+statusbar:addComponent("🐸 VIM-Like frog Text Editor", api.FGColors.Brights.Cyan, api.BGColors.NoBrights.Black,
+    api.TextStyle.Bold, "left")
+
+statusbar:addComponent("hjkl: Move | i/a: Insert | o/O: NewLine | d: Delete | :O Open | :: Syntax",
+    api.FGColors.Brights.White,
     api.BGColors.NoBrights.Black, nil, "right")
 
--- Initial content with Lua code
-local sample_code = [[-- VIM-like Editor with Code Syntax Highlighting
-local function fibonacci(n)
-  if n <= 1 then
-    return n
-  end
-  return fibonacci(n - 1) + fibonacci(n - 2)
-end
+local arg = { ... }
+local file_to_open = arg[1]
 
-for i = 1, 10 do
-  print(fibonacci(i))
-end
--- Press ESC for NORMAL mode, 'i' to INSERT
--- Use hjkl to navigate, dd to delete line, ':' for syntax]]
+local sample_code = [[## VIM-like Editor with Code Syntax Highlighting
+## Press ESC for NORMAL mode, 'i' to INSERT
+## Press CTRL-L to quit
+## Use hjkl to navigate, dd to delete line, ':' for syntax, CTRL-S to save]]
 
-editor:setContent(sample_code)
+if file_to_open then
+    local success, message = editor:openFile(file_to_open)
+    if not success then
+        editor:setContent(sample_code)
+        editor.temp_status_message = message
+        editor.temp_status_timer = 50
+    end
+else
+    editor:setContent(sample_code)
+end
 
 local key = api.Terminal:handleKey()
 
-while key ~= api.KEY_CTRL_Q do
+-- FPS counter variables
+local frame_count = 0
+local last_time = os.clock()
+local fps = 0
+local fps_counter = 0
+
+while key ~= api.KEY_CTRL_O do
+    -- window:clear()
     local h, w = Terminal:getSize()
 
     if h ~= editor.view_height + 5 or w ~= editor.view_width + 8 then
@@ -439,12 +625,14 @@ while key ~= api.KEY_CTRL_Q do
 
     editor:updateScroll()
 
-    -- Render frame
     local vterm = VirtualTerminal.new()
 
-    -- Title bar with mode indicator
     local mode_display = "[ " .. editor.mode .. " ]"
-    local syntax_display = "[" .. editor.current_syntax .. "]"
+    if type(editor.current_syntax) == "string" then
+        syntax_display = "[" .. editor.current_syntax .. "]"
+    else
+        syntax_display = "[" .. "FROG" .. "]"
+    end
     local title = " VIM Editor " .. syntax_display .. " "
     local title_padding = math.floor((editor.view_width - #title) / 2)
     vterm:writeText(1, 1,
@@ -453,38 +641,52 @@ while key ~= api.KEY_CTRL_Q do
         api.FGColors.Brights.Magenta, api.BGColors.NoBrights.Black)
 
     if editor.syntax_mode then
-        -- Show syntax menu
         editor:renderSyntaxMenu(vterm)
+    elseif editor.command_mode then
+        editor:renderWithSyntax(vterm)
+
+        local prompt_line = editor.view_height + 1
+        vterm:writeText(2, prompt_line, ":" .. editor.command_buffer .. "_", api.FGColors.Brights.Yellow)
     else
-        -- Editor content with syntax highlighting
         editor:renderWithSyntax(vterm)
     end
 
-    -- Bottom separator
+
     local sep_y = editor.view_height + 2
     vterm:writeText(1, sep_y, string.rep(api.BoxDrawing.LightBorder[1], editor.view_width + 6),
         api.FGColors.NoBrights.White)
 
-    -- Status info with mode color
     local mode_color = api.FGColors.Brights.White
     if editor.mode == "INSERT" then
         mode_color = api.FGColors.Brights.Green
     end
 
-    local status = string.format("Ln %d, Col %d | %s | %s",
-        editor.cursor_line,
-        editor.cursor_col,
-        editor.modified and "[+]" or "[-]",
-        mode_display)
-    vterm:writeText(2, sep_y, status, mode_color, api.BGColors.NoBrights.Black)
+    if editor.temp_status_message and editor.temp_status_timer and editor.temp_status_timer > 0 then
+        editor.temp_status_timer = editor.temp_status_timer - 1
+        vterm:writeText(2, sep_y, editor.temp_status_message, api.FGColors.Brights.Yellow, api.BGColors.NoBrights.Black)
+        local remaining_width = editor.view_width + 4 - #editor.temp_status_message
+        if remaining_width > 0 then
+            vterm:writeText(2 + #editor.temp_status_message, sep_y, string.rep(" ", remaining_width))
+        end
+    end
 
-    -- Status bar
-    vterm:merge(statusbar:render(), 0, sep_y + 1)
+    -- Update and display FPS counter
+    frame_count = frame_count + 1
+    local current_time = os.clock()
+    if current_time - last_time >= 1.0 then
+        fps = frame_count / (current_time - last_time)
+        frame_count = 0
+        last_time = current_time
+    end
 
+    -- Display FPS in the status bar
+    vterm:writeText(editor.view_width - 15, sep_y, "FPS: " .. string.format("%.1f", fps), api.FGColors.Brights.Green,
+        api.BGColors.NoBrights.Black)
+
+    vterm:merge(statusbar)
     window:add(vterm)
     window:run(key, nil, nil, nil)
 
     key = api.Terminal:handleKey()
 end
-
 window:cleanupMainFrame()

@@ -8,6 +8,7 @@ import (
 	"fmt"
 )
 
+// TODO: add returned option instead of Print the AST
 func PrintAST(node Node, prefix string, isLast bool) {
 	var connector, childPrefix string
 	if isLast {

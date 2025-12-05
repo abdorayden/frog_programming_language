@@ -5,6 +5,7 @@ package frog
 
 import (
 	"strings"
+	"unicode"
 )
 
 type NumberType int
@@ -29,4 +30,25 @@ func ExpectInteger(number string) bool {
 
 func ExpectFloat(number string) bool {
 	return CheckNumberType(number) == Float
+}
+
+func isTruthy(obj Object) bool {
+	switch obj {
+	case NULL:
+		return false
+	case TRUE:
+		return true
+	case FALSE:
+		return false
+	default:
+		return true
+	}
+}
+
+func isLetter(ch rune) bool {
+	return unicode.IsLetter(ch) || ch == '_'
+}
+
+func isDigit(ch rune) bool {
+	return unicode.IsDigit(ch)
 }

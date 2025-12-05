@@ -12,12 +12,13 @@ FRG_Begin
     ##  SunDay := enum(0)#
     ##  Monday := enum(N_START)#
 
-    FRG_Int ___local_counter , N_START#
-    ___local_counter := 0#
+    FRG_Int N_START#
     ## non start , that's mean continue inc for each call
     N_START := -9999#
-    FRG_Fn enum(FRG_Int start) : FRG_Int 
+    FRG_Fn iota(FRG_Int start) : FRG_Int 
     Begin
+        FRG_Int ___local_counter#
+        ___local_counter := 0#
         FRG_Int ret#
         If [start != N_START] 
         Begin
@@ -25,7 +26,7 @@ FRG_Begin
         End
         ret := ___local_counter#
         ___local_counter := ___local_counter + 1#
-        enum := ret#
+        iota := ret#
     End
 
     
@@ -130,34 +131,37 @@ FRG_Begin
         End
     End
 
-    ##  BUG: operations between integers and floats
-    FRG_Fn sin(FRG_Real n) : FRG_Real
+    FRG_Fn pgcd(FRG_Int a , FRG_Int b) : FRG_Int 
     Begin
-        FRG_Int terms , i, coefficient , exponent , fact#
-        FRG_Real term , result #
-        terms := 1000#
-        result := 0.0#
-        coefficient := 1#
-        i := 0#
-        Repeat 
-            exponent := 2 * i + 1#
-            fact := factorial(exponent)#
-            term := pow(n , exponent)#
-            term := coefficient * term#
-            term := term / fact#
-            result := result + term#
-            If [coefficient > 0]
+        If [b == 0]
+        Begin
+            pgcd := a#
+        End
+        Else
+        Begin
+            If [b > a]
             Begin
-                coefficient := -1#
+                FRG_Int temp#
+                temp := a#
+                a := b#
+                b := temp#
             End
-            Else
-            Begin
-                coefficient := 1#
-            End
+            FRG_Int c#
+            Repeat
+               c := a%b#
+               a := b#
+               b := c#
+            Until [b == 0]
 
-            i := i + 1#
-        Until [ i == terms ]
-        cos := result#
+            pgcd := a#
+        End
+    End
+
+    FRG_Fn ppcm(FRG_Int a , FRG_Int b) : FRG_Int
+    Begin
+        FRG_Int prod#
+        prod := a*b#
+        ppcm := prod / pgcd(a,b)#
     End
 
     ## sqrt
@@ -223,9 +227,9 @@ FRG_Begin
 
     ## dynamic arrays functions
     FRG_Int INT , FLOAT , STRINGS#
-    INT := enum(N_START)#
-    FLOAT := enum(N_START)#
-    STRINGS := enum(N_START)#
+    INT := iota(N_START)#
+    FLOAT := iota(N_START)#
+    STRINGS := iota(N_START)#
 
     FRG_Fn alloc_ints(FRG_Int size) : FRG_Int
     Begin

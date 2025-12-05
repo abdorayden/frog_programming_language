@@ -5,7 +5,6 @@ package frog
 
 import (
 	"fmt"
-	"unicode"
 )
 
 func isError(obj Object) bool {
@@ -28,27 +27,6 @@ func nativeBoolToBooleanObject(input bool) *Boolean {
 		return TRUE
 	}
 	return FALSE
-}
-
-func isTruthy(obj Object) bool {
-	switch obj {
-	case NULL:
-		return false
-	case TRUE:
-		return true
-	case FALSE:
-		return false
-	default:
-		return true
-	}
-}
-
-func isLetter(ch rune) bool {
-	return unicode.IsLetter(ch) || ch == '_'
-}
-
-func isDigit(ch rune) bool {
-	return unicode.IsDigit(ch)
 }
 
 func TokenToString(tokenType TokenType) string {

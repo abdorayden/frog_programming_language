@@ -1,0 +1,25 @@
+## VIM-like Editor with Code Syntax Highlighting
+## Press ESC for NORMAL mode, 'i' to INSERT
+## Press CTRL-L to quit
+## Use hjkl to navigate, dd to delete line, ':' for syntax, CTRL-S to save
+
+FRG_Begin
+    FRG_Print "hello" #
+    FRG_Print "\n"#            
+    If [1 == 1]
+    Begin
+        FRG_Print "equals"#
+    End
+    FRG_Int i#
+    i := 0#                        
+    Repeat
+    Begin            
+        i := i + 1#            
+        If [i == 3]            
+        Begin
+            Continue#                        
+        End                        
+        FRG_Print "Hello\n"#                      
+    End            
+    Until[i == 5]                        
+FRG_End

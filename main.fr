@@ -1,0 +1,80 @@
+FRG_Begin
+    FRG_Use "./std/std.frg"#
+
+    FRG_Int a , b , res#
+    a := 10#
+    b := 5#
+    res := sub(a,b)#
+    FRG_Print "\n"#
+    FRG_Print res#
+    FRG_Print "\n"#
+    FRG_Print mul(a,b)#
+    FRG_Print "\n"#
+    FRG_Print add(a,b)#
+    FRG_Print "\n"#
+
+    FRG_Print "pow 2 of 2\n"#
+    FRG_Print pow(2,10)#
+
+    FRG_Print "\nPI : \n"#
+    FRG_Print PI#
+
+    FRG_Print "\nE : \n"#
+    FRG_Print E#
+
+    FRG_Print "\nsqrt of 4 is : \n"#
+    FRG_Print sqrt(2.0)#
+
+    FRG_Int[] ints#
+    ints := alloc_ints(3)#
+    ints[0] := 2#
+    ints[1] := 4#
+    ints[2] := 6#
+    FRG_Print "\n"#
+    FRG_Print ints[0]#
+    FRG_Print "\n"#
+    FRG_Print ints[1]#
+    FRG_Print "\n"#
+    FRG_Print ints[2]#
+    FRG_Print "\n"#
+    ints := alloc_ints(4)#
+    ints[0] := 2#
+    ints[1] := 4#
+    ints[2] := 6#
+    ints[3] := 8#
+    FRG_Print "\n"#
+    FRG_Print ints[0]#
+    FRG_Print "\n"#
+    FRG_Print ints[1]#
+    FRG_Print "\n"#
+    FRG_Print ints[2]#
+    FRG_Print "\n"#
+    FRG_Print ints[3]#
+    FRG_Print "\n"#
+
+    FRG_Print "factorial of 3 : " #
+    FRG_Print factorial(3) #
+    FRG_Print "\n"#
+
+    FRG_Print "pgcd of 30 and 24 : "#
+    FRG_Print pgcd(30,24)#
+
+    FRG_Print "\n"#
+
+    FRG_Print "ppcm of 30 and 24 : "#
+    FRG_Print ppcm(30,24)#
+
+    ##  enums
+
+    FRG_Print iota(N_START)#
+    FRG_Print "\n"#
+    FRG_Print iota(N_START)#
+    FRG_Print "\n"#
+    FRG_Print iota(N_START)#
+    FRG_Print "\n"#
+    FRG_Print iota(N_START)#
+    FRG_Print "\n"#
+    FRG_Print iota(N_START)#
+    FRG_Print "\n"#
+
+FRG_End

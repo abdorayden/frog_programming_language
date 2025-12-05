@@ -39,6 +39,8 @@ func main() {
 	}
 
 	lexer := frog.NewLexer(string(code))
+	parser := frog.NewParser(lexer)
+	program := parser.ParseProgram()
 
 	if *lex {
 		tokens := lexer.GetAllTokens()
@@ -47,9 +49,6 @@ func main() {
 		}
 	} else if *parse {
 		fmt.Println("Parsing the file...")
-		parser := frog.NewParser(lexer)
-		program := parser.ParseProgram()
-
 		if parser.IsThereAnyErrors() {
 			fmt.Println("Parser has errors:")
 			for _, msg := range parser.Errors() {
@@ -62,9 +61,6 @@ func main() {
 		frog.PrintAST(program, "", true)
 
 	} else {
-		parser := frog.NewParser(lexer)
-		program := parser.ParseProgram()
-
 		if parser.IsThereAnyErrors() {
 			fmt.Println("Parser has errors:")
 			for _, msg := range parser.Errors() {

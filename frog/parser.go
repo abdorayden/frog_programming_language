@@ -1033,24 +1033,126 @@ func (p *Parser) parseContinueStatement() *ContinueStatement {
 	return stmt
 }
 
+// parseExpression with stack algorithm implementation (Shunting-yard like algorithm)
 func (p *Parser) parseExpression(precedence int) Expression {
+	// Stack to hold expressions and operators
+	var outputStack []Expression
+	var operatorStack []struct {
+		token      Token
+		precedence int
+		infixFn    infixParseFn
+	}
+
+	// Parse the first operand (prefix expression)
 	prefix := p.prefixParseFns[p.currentToken.Type]
 	if prefix == nil {
 		p.noPrefixParseFnError(p.currentToken.Type)
 		return nil
 	}
-	leftExp := prefix()
+	outputStack = append(outputStack, prefix())
 
+	// Continue parsing while there are tokens and precedence allows
 	for precedence < p.peekPrecedence() {
+		// Get the infix parser function for the current peek token
 		infix := p.infixParseFns[p.peekToken.Type]
 		if infix == nil {
-			return leftExp
+			break // No infix function, stop parsing
 		}
+
+		// Get precedence of the current operator
+		nextPrecedence := p.peekPrecedence()
+
+		// Process operators on the stack based on precedence
+		for len(operatorStack) > 0 &&
+			operatorStack[len(operatorStack)-1].precedence >= nextPrecedence {
+
+			// Pop the operator
+			op := operatorStack[len(operatorStack)-1]
+			operatorStack = operatorStack[:len(operatorStack)-1]
+
+			// Pop the right operand
+			if len(outputStack) == 0 {
+				p.errors = append(p.errors, "missing operand for operator")
+				return nil
+			}
+			right := outputStack[len(outputStack)-1]
+			outputStack = outputStack[:len(outputStack)-1]
+
+			// Pop the left operand
+			if len(outputStack) == 0 {
+				p.errors = append(p.errors, "missing left operand for operator")
+				return nil
+			}
+			left := outputStack[len(outputStack)-1]
+			outputStack = outputStack[:len(outputStack)-1]
+
+			// Create the infix expression and push back to output
+			infixExpr := &InfixExpression{
+				Token:    op.token,
+				Left:     left,
+				Operator: op.token.Literal,
+				Right:    right,
+			}
+			outputStack = append(outputStack, infixExpr)
+		}
+
+		// Move to the operator token
 		p.nextToken()
-		leftExp = infix(leftExp)
+
+		// Push the operator to the operator stack
+		operatorStack = append(operatorStack, struct {
+			token      Token
+			precedence int
+			infixFn    infixParseFn
+		}{
+			token:      p.currentToken,
+			precedence: nextPrecedence,
+			infixFn:    infix,
+		})
+
+		// Parse the right operand
+		p.nextToken() // Move to the operand
+		rightOperand := p.parseExpression(nextPrecedence)
+		outputStack = append(outputStack, rightOperand)
 	}
 
-	return leftExp
+	// Process remaining operators on the stack
+	for len(operatorStack) > 0 {
+		// Pop the operator
+		op := operatorStack[len(operatorStack)-1]
+		operatorStack = operatorStack[:len(operatorStack)-1]
+
+		// Pop the right operand
+		if len(outputStack) == 0 {
+			p.errors = append(p.errors, "missing operand for operator")
+			return nil
+		}
+		right := outputStack[len(outputStack)-1]
+		outputStack = outputStack[:len(outputStack)-1]
+
+		// Pop the left operand
+		if len(outputStack) == 0 {
+			p.errors = append(p.errors, "missing left operand for operator")
+			return nil
+		}
+		left := outputStack[len(outputStack)-1]
+		outputStack = outputStack[:len(outputStack)-1]
+
+		// Create the infix expression and push back to output
+		infixExpr := &InfixExpression{
+			Token:    op.token,
+			Left:     left,
+			Operator: op.token.Literal,
+			Right:    right,
+		}
+		outputStack = append(outputStack, infixExpr)
+	}
+
+	// Final result should be a single expression on the output stack
+	if len(outputStack) == 0 {
+		return nil
+	}
+	return outputStack[0]
 }
 
 func (p *Parser) parseIdentifier() Expression {
