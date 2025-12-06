@@ -28,6 +28,7 @@ type Expression interface {
 	expressionNode()
 }
 
+// implement Node interface
 type Program struct {
 	Statements []Statement
 }
@@ -51,21 +52,8 @@ func (p *Program) String() string {
 
 type DeclarationStatement struct {
 	Token       Token // The type token (FRG_Int, FRG_Real, FRG_Strg)
-	IsArray     bool
+	IsArray     bool  // FRG_Int[]
 	Identifiers []*Identifier
-}
-
-type FunctionDeclarationStatement struct {
-	Token      Token
-	Name       *Identifier
-	ReturnType Token // FRG_Int, FRG_Real, FRG_Strg
-	Parameters []*Parameter
-	Body       *BlockStatement
-}
-
-type Parameter struct {
-	Type Token // FRG_Int, FRG_Real, FRG_Strg
-	Name *Identifier
 }
 
 func (ds *DeclarationStatement) statementNode() {
@@ -90,6 +78,20 @@ func (ds *DeclarationStatement) String() string {
 	}
 	out.WriteString(" #")
 	return out.String()
+}
+
+// helper structure
+type Parameter struct {
+	Type Token // FRG_Int, FRG_Real, FRG_Strg
+	Name *Identifier
+}
+
+type FunctionDeclarationStatement struct {
+	Token      Token
+	Name       *Identifier
+	ReturnType Token // FRG_Int, FRG_Real, FRG_Strg
+	Parameters []*Parameter
+	Body       *BlockStatement
 }
 
 func (fds *FunctionDeclarationStatement) statementNode() {
@@ -122,8 +124,8 @@ func (fds *FunctionDeclarationStatement) String() string {
 
 type AssignmentStatement struct {
 	Token Token
-	Left  Expression
-	Value Expression
+	Left  Expression // ID name as expression
+	Value Expression // expression value
 }
 
 func (as *AssignmentStatement) statementNode() {
@@ -142,8 +144,8 @@ func (as *AssignmentStatement) String() string {
 }
 
 type PrintStatement struct {
-	Token       Token
-	Expressions []Expression
+	Token       Token        // FRG_Print
+	Expressions []Expression // 1+1*2 ...
 }
 
 func (ps *PrintStatement) statementNode() {
@@ -170,7 +172,6 @@ type InputStatement struct {
 }
 
 func (ps *InputStatement) statementNode() {
-
 	// read at line 72 :)
 }
 func (ps *InputStatement) TokenLiteral() string { return ps.Token.Literal }
@@ -187,15 +188,16 @@ func (ps *InputStatement) String() string {
 	return out.String()
 }
 
+// why is not array of statements because If has no body block
+// so the If/Else body will be handled by Begin/End block
 type IfStatement struct {
-	Token       Token
-	Condition   Expression
-	Consequence Statement
-	Alternative Statement
+	Token       Token      // If
+	Condition   Expression // condition 1+1 == 2
+	Consequence Statement  // If Statement
+	Alternative Statement  // Else Statement
 }
 
 func (is *IfStatement) statementNode() {
-
 	// read at line 72 :)
 }
 func (is *IfStatement) TokenLiteral() string { return is.Token.Literal }
@@ -213,13 +215,12 @@ func (is *IfStatement) String() string {
 }
 
 type RepeatStatement struct {
-	Token     Token
-	Body      []Statement
-	Condition Expression
+	Token     Token       // Repeat
+	Condition Expression  // condition expression
+	Body      []Statement // the body array of statements
 }
 
 func (rs *RepeatStatement) statementNode() {
-
 	// read at line 72 :)
 }
 func (rs *RepeatStatement) TokenLiteral() string { return rs.Token.Literal }
@@ -235,12 +236,11 @@ func (rs *RepeatStatement) String() string {
 }
 
 type BlockStatement struct {
-	Token      Token
-	Statements []Statement
+	Token      Token       // Begin/Else
+	Statements []Statement // block statements
 }
 
 func (bs *BlockStatement) statementNode() {
-
 	// read at line 72 :)
 }
 func (bs *BlockStatement) TokenLiteral() string { return bs.Token.Literal }
@@ -255,7 +255,7 @@ func (bs *BlockStatement) String() string {
 }
 
 type BreakStatement struct {
-	Token Token
+	Token Token // Break
 }
 
 func (bs *BreakStatement) statementNode() {
@@ -266,63 +266,21 @@ func (bs *BreakStatement) TokenLiteral() string { return bs.Token.Literal }
 func (bs *BreakStatement) String() string       { return bs.TokenLiteral() + " #" }
 
 type ContinueStatement struct {
-	Token Token
+	Token Token // Continue
 }
 
 func (cs *ContinueStatement) statementNode() {
-
 	// read at line 72 :)
 }
 func (cs *ContinueStatement) TokenLiteral() string { return cs.Token.Literal }
 func (cs *ContinueStatement) String() string       { return cs.TokenLiteral() + " #" }
 
-func (p *Parser) parseUseStatementAndInclude() Statement {
-	useToken := p.currentToken // Store the FRG_Use token
-
-	if !p.expectPeek(TokenString) {
-		return nil
-	}
-	filename := p.currentToken.Literal
-
-	if !p.expectPeek(TokenHash) {
-		return nil
-	}
-
-	// Read the content of the included file
-	content, err := os.ReadFile(filename)
-	if err != nil {
-		p.errors = append(p.errors, fmt.Sprintf("ERROR: could not read included file %s: %v", filename, err))
-		return nil
-	}
-
-	// Create a new lexer and parser for the included file
-	includedLexer := NewLexer(string(content))
-	includedParser := NewParser(includedLexer)
-
-	// Parse the included file's program
-	includedProgram := includedParser.ParseProgram()
-
-	if includedParser.IsThereAnyErrors() {
-		for _, err := range includedParser.Errors() {
-			p.errors = append(p.errors, fmt.Sprintf("ERROR in included file %s: %s", filename, err))
-		}
-		return nil
-	}
-
-	// Return a BlockStatement containing all statements from the included file
-	// This effectively "inlines" the included file's statements into the current AST.
-	block := &BlockStatement{Token: useToken} // Use the TokenFRGUse token for the block
-	block.Statements = includedProgram.Statements
-	return block
-}
-
 type UseStatement struct {
-	Token    Token // The FRG_Use token
-	Filename *StringLiteral
+	Token    Token          // The FRG_Use token
+	Filename *StringLiteral // frog file name (frog code) | string litteral
 }
 
 func (us *UseStatement) statementNode() {
-
 	// read at line 72 :)
 }
 func (us *UseStatement) TokenLiteral() string { return us.Token.Literal }
@@ -342,9 +300,8 @@ type ExpressionStatement struct {
 }
 
 func (es *ExpressionStatement) statementNode() {
-
 	// read at line 72 :)
-}                                                    // Mark as Statement node
+}
 func (es *ExpressionStatement) TokenLiteral() string { return es.Token.Literal }
 func (es *ExpressionStatement) String() string {
 	if es.Expression != nil {
@@ -354,8 +311,8 @@ func (es *ExpressionStatement) String() string {
 }
 
 type Identifier struct {
-	Token Token // the IDENT token
-	Value string
+	Token Token  // the IDENT token
+	Value string // <ident name>
 }
 
 func (i *Identifier) expressionNode() {
@@ -372,8 +329,8 @@ func (i *Identifier) String() string {
 
 // integerliteral represents an integer literal.
 type IntegerLiteral struct {
-	Token Token
-	Value int64
+	Token Token // Number
+	Value int64 // [0-9]+
 }
 
 func (il *IntegerLiteral) expressionNode() {
@@ -385,8 +342,8 @@ func (il *IntegerLiteral) String() string       { return il.Token.Literal }
 
 // RealLiteral represents a real number literal.
 type RealLiteral struct {
-	Token Token
-	Value float64
+	Token Token   // Real
+	Value float64 // [0-9]+\.[0-9]+
 }
 
 func (rl *RealLiteral) expressionNode() {
@@ -398,8 +355,8 @@ func (rl *RealLiteral) String() string       { return rl.Token.Literal }
 
 // StringLiteral represents a string literal.
 type StringLiteral struct {
-	Token Token
-	Value string
+	Token Token  // FRG_Strg
+	Value string // the value
 }
 
 func (sl *StringLiteral) expressionNode() {
@@ -411,9 +368,9 @@ func (sl *StringLiteral) String() string       { return "\"" + sl.Value + "\"" }
 
 // PrefixExpression represents a prefix operator expression (e.g., -5).
 type PrefixExpression struct {
-	Token    Token // The prefix token, e.g. -
-	Operator string
-	Right    Expression
+	Token    Token      // The prefix token, e.g. - (left one)
+	Operator string     // the operator
+	Right    Expression // the right expression
 }
 
 func (pe *PrefixExpression) expressionNode() {
@@ -432,10 +389,10 @@ func (pe *PrefixExpression) String() string {
 
 // InfixExpression represents an infix operator expression (e.g., 5 + 5).
 type InfixExpression struct {
-	Token    Token // The operator token, e.g. +
-	Left     Expression
-	Operator string
-	Right    Expression
+	Token    Token      // The operator token, e.g. + (the middle)
+	Left     Expression // the left expression
+	Operator string     // the operator
+	Right    Expression // the right operator
 }
 
 func (ie *InfixExpression) expressionNode() {
@@ -454,8 +411,15 @@ func (ie *InfixExpression) String() string {
 }
 
 type ArrayLiteral struct {
-	Token    Token // the '{' token
-	Elements []Expression
+	/*
+		{
+			1+1,
+			10,
+			...
+		}
+	*/
+	Token    Token        // the '{' token
+	Elements []Expression // values can be an Expressions
 }
 
 func (al *ArrayLiteral) expressionNode() {
@@ -477,8 +441,14 @@ func (al *ArrayLiteral) String() string {
 }
 
 type ArraySizeLiteral struct {
-	Token Token // the '[' token
-	Size  Expression
+	/*
+		FRG_Int[] xs #
+		xs := [20 + 5] #
+				^
+				expression
+	*/
+	Token Token      // the '[' token
+	Size  Expression // size can be Expression
 }
 
 func (asl *ArraySizeLiteral) expressionNode() {
@@ -500,12 +470,6 @@ type IndexExpression struct {
 	Index Expression
 }
 
-type CallExpression struct {
-	Token     Token // The ( token
-	Function  Expression
-	Arguments []Expression
-}
-
 func (ie *IndexExpression) expressionNode() {
 	// mark as expression node
 	// read line 362 :))
@@ -519,6 +483,12 @@ func (ie *IndexExpression) String() string {
 	out.WriteString(ie.Index.String())
 	out.WriteString("])")
 	return out.String()
+}
+
+type CallExpression struct {
+	Token     Token // The ( token
+	Function  Expression
+	Arguments []Expression
 }
 
 func (ce *CallExpression) expressionNode() {
@@ -541,10 +511,86 @@ func (ce *CallExpression) String() string {
 }
 
 // =============================================================================
-// parser : after implements all interfaces for each statement and expression
+// parser : after implements all structures for each statement and expression interfaces
 // =============================================================================
+
+// NOTE: using (The Pratt parser algorithm)
+// check reffrence : https://en.wikipedia.org/wiki/Operator-precedence_parser
+// check reffrence : https://en.wikipedia.org/wiki/LL_parser - for diffrence between LL and OPP
+
+// Example1:		Parse id + id * id
+// 	Stack           | Remaining Input  |   Action
+//  ----------------+------------------+-----------------------------
+//  $               |  id + id * id $  |   Shift id
+//  $ id            |   + id * id $    |   Shift +
+//  $ id +          |    id * id $     |   Shift id
+//  $ id + id       |     * id $       |   Now check: + ⋖ * (shift)
+//  $ id + id *     |      id $        |   Shift id
+//  $ id + id * id  |        $         |   Check: * ⋗ $ (reduce!)
+
+// Example2: a * b + c / d - e
+// Step 1:  [a * b] + c / d - e
+//
+//	 ↓
+//	E1 + c / d - e
+//
+// Step 2:  E1 + [c / d] - e
+//
+//	       ↓
+//	E1 + E2 - e
+//
+// Step 3:  [E1 + E2] - e
+//
+//	  ↓
+//	E3 - e
+//
+// Step 4:  [E3 - e]
+//
+//	  ↓
+//	E4 (final result)
+//
+// Step 4:  [E3 - e]
+//
+//	  ↓
+//	E4 (final result)
+//
+//	      E4
+//	      |
+//	     (-)
+//	     / \
+//	   E3   e
+//	   |
+//	  (+)
+//	  / \
+//	E1   E2
+//	|     |
+//
+// (*)   (/)
+// / \   / \
+// a b   c d
+//
+// start parsing from bottom to top
+
+// Precedence constants define operator precedence levels for the Pratt parser.
+// The Pratt parser uses these constants to correctly handle operator precedence
+// when parsing expressions like "a + b * c" which should be parsed as "a + (b * c)".
+//
+// How it works:
+//  1. parseExpression(precedence int) parses expressions starting with a minimum precedence level (LOWEST)
+//  2. It continues parsing infix operators (like +, -, etc.) as long as the next
+//     operator has higher precedence than the current precedence parameter
+//  3. The condition `precedence < p.peekPrecedence()` determines whether to continue
+//
+// Why LOWEST is used everywhere:
+// In statement contexts (assignments, print statements, if conditions, etc.), we use
+// parseExpression(LOWEST) because we want to parse ALL possible operations in the
+// expression, regardless of precedence level. The precedence constraint in these
+// contexts comes from statement termination (e.g., semicolon marked by TokenHash),
+// not from operator precedence relationships. The Pratt parser algorithm itself
+// handles the precedence internally through the precedence comparison.
 const (
 	_ int = iota
+	// the lowest level
 	LOWEST
 	EQUALS      // ==, !=
 	LESSGREATER // >, <, >=, <=
@@ -555,6 +601,7 @@ const (
 	PREFIX      // -X
 )
 
+// map of TokenType and OpLevels
 var precedences = map[TokenType]int{
 	TokenEqual:        EQUALS,
 	TokenNotEqual:     EQUALS,
@@ -572,8 +619,10 @@ var precedences = map[TokenType]int{
 }
 
 type (
-	prefixParseFn func() Expression
-	infixParseFn  func(Expression) Expression
+	// similare to typedef Expression(*prefixParseFn)(void); in C
+	prefixParseFn func() Expression // the left side
+	// similare to typedef Expression(*infixParseFn)(Expression); in C
+	infixParseFn func(Expression) Expression // the middle side
 )
 
 // parser structure contain the informations
@@ -595,6 +644,7 @@ type Parser struct {
 	// for each token will have it's own function parser , that parse the token
 	// those two maps are needed for parseExpression method
 
+	// map of each TokenType and it's callback parsing (prefix/infix)
 	prefixParseFns map[TokenType]prefixParseFn
 	infixParseFns  map[TokenType]infixParseFn
 }
@@ -619,10 +669,11 @@ func NewParser(l *Lexer) *Parser {
 
 	p.infixParseFns = make(map[TokenType]infixParseFn)
 
+	// NOTE: rayden was here
 	p.registerInfix(TokenPlus, p.parseInfixExpression)
 	p.registerInfix(TokenMinus, p.parseInfixExpression)
-	p.registerInfix(TokenSlash, p.parseInfixExpression)
 	p.registerInfix(TokenAsterisk, p.parseInfixExpression)
+	p.registerInfix(TokenSlash, p.parseInfixExpression)
 	p.registerInfix(TokenModulo, p.parseInfixExpression)
 	p.registerInfix(TokenEqual, p.parseInfixExpression)
 	p.registerInfix(TokenNotEqual, p.parseInfixExpression)
@@ -672,6 +723,9 @@ func (p *Parser) IsThereAnyErrors() bool {
 // because frog file are body main start with FRG_Begin ... FRG_End between this block contains statements
 // so after we parse the programe we will get pointer Program struct with array of statements
 
+// ParseProgram is the main entry point for the parser that parses an entire Frog program.
+// It expects a program to begin with FRG_Begin and end with FRG_End tokens.
+// This function implements a top-level parsing loop that continues until EOF or FRG_End is encountered.
 func (p *Parser) ParseProgram() *Program {
 	program := &Program{}
 	program.Statements = []Statement{}
@@ -690,6 +744,7 @@ func (p *Parser) ParseProgram() *Program {
 
 	for !p.currentTokenIs(TokenEOF) {
 		if p.currentTokenIs(TokenFRGEnd) {
+			// parsed successfuly and get FRG_End Token
 			end = true
 			break
 		}
@@ -709,34 +764,48 @@ func (p *Parser) ParseProgram() *Program {
 	return program
 }
 
-// each token has it's own parsing method
+// parseStatement is the main statement dispatcher that routes parsing to the appropriate function
+// based on the current token type. This function implements a recursive descent approach to
+// statement parsing where each token type has its own dedicated parsing method.
 func (p *Parser) parseStatement() Statement {
 	switch p.currentToken.Type {
 	case TokenFRGInt, TokenFRGReal, TokenFRGStrg:
-		return p.parseDeclarationStatement()
-	case TokenFRGFn:
-		return p.parseFunctionDeclarationStatement()
+		// DONE
+		return p.parseDeclarationStatement() // parsing Token Declarations
 	case TokenFRGPrint:
+		// DONE
 		return p.parsePrintStatement()
-	case TokenFRGInput:
-		return p.parseInputStatement()
 	case TokenIf:
+		// TOP to BOTTOM recursive parsing
+		// DONE
 		return p.parseIfStatement()
 	case TokenRepeat:
+		// DONE
 		return p.parseRepeatStatement()
 	case TokenBegin:
+		// DONE
 		return p.parseBlockStatement()
 	case TokenBreak:
+		// DONE
 		return p.parseBreakStatement()
 	case TokenContinue:
+		// DONE
 		return p.parseContinueStatement()
 	case TokenFRGUse:
 		return p.parseUseStatementAndInclude()
+	case TokenFRGFn:
+		return p.parseFunctionDeclarationStatement()
+	case TokenFRGInput:
+		return p.parseInputStatement()
 	case TokenIdentifier:
+		// (2*x+1 / 2)
 		expr := p.parseExpression(LOWEST)
+		// parse identifier function (parseIdentifier) implement Expression interface
+		// we used parseExpression and it will called this method
+		// and return just definition of the token nothing special
 		if p.peekTokenIs(TokenAssign) {
 			stmt := &AssignmentStatement{Left: expr}
-			p.nextToken() // consume :=
+			p.nextToken() // kill :=
 			stmt.Token = p.currentToken
 			p.nextToken()
 			stmt.Value = p.parseExpression(LOWEST)
@@ -783,25 +852,33 @@ func (p *Parser) parseStatement() Statement {
 	return nil
 }
 
+// parseDeclarationStatement parses variable declaration statements like "int x, y #".
+// This function handles both single and multiple variable declarations with optional array types.
+// The statement must end with a hash (#) token.
 func (p *Parser) parseDeclarationStatement() *DeclarationStatement {
 	stmt := &DeclarationStatement{Token: p.currentToken}
-	stmt.Identifiers = []*Identifier{}
+	// why it's array of Identifiers ??
+	// simple because we can declare multiple variables in one line
+	// FRG_Int a,b,c,d,e,f#
+	stmt.Identifiers = []*Identifier{} /// initialize to 0
 
 	if p.peekTokenIs(TokenLBracket) {
+		// check if we declare a variable or array
 		p.nextToken()
 		if !p.expectPeek(TokenRBracket) {
-			return nil
+			return nil // error FRG_Int[<something else>
 		}
-		stmt.IsArray = true
+		stmt.IsArray = true // it's an array :)
 	}
 
-	if !p.expectPeek(TokenIdentifier) {
+	if !p.expectPeek(TokenIdentifier) { // expect identifier
 		return nil
 	}
 
 	stmt.Identifiers = append(stmt.Identifiers, &Identifier{Token: p.currentToken, Value: p.currentToken.Literal})
 
 	for p.peekTokenIs(TokenComma) {
+		// start iterating all ids
 		p.nextToken()
 		if !p.expectPeek(TokenIdentifier) {
 			return nil
@@ -809,13 +886,17 @@ func (p *Parser) parseDeclarationStatement() *DeclarationStatement {
 		stmt.Identifiers = append(stmt.Identifiers, &Identifier{Token: p.currentToken, Value: p.currentToken.Literal})
 	}
 
-	if !p.expectPeek(TokenHash) {
+	if !p.expectPeek(TokenHash) { // must end with HASH(#)
 		return nil
 	}
 
 	return stmt
 }
 
+// parseFunctionDeclarationStatement parses function declarations in the form:
+// "fn functionName(paramType paramName, ...) : returnType Begin ... End".
+// This function handles parsing the function name, parameter list, return type,
+// and function body block.
 func (p *Parser) parseFunctionDeclarationStatement() *FunctionDeclarationStatement {
 	stmt := &FunctionDeclarationStatement{Token: p.currentToken}
 
@@ -919,12 +1000,15 @@ func (p *Parser) parsePrintStatement() *PrintStatement {
 	stmt := &PrintStatement{Token: p.currentToken}
 	stmt.Expressions = []Expression{}
 
-	p.nextToken()
+	p.nextToken() // skip FRG_Print
 
 	expr := p.parseExpression(LOWEST)
 	stmt.Expressions = append(stmt.Expressions, expr)
 
 	for p.peekTokenIs(TokenComma) {
+		// why comma ? LOL
+		// you can print multiple ids or litterals
+		// FRG_Print x , y , z + t , 12*10+1 #
 		p.nextToken()
 		p.nextToken()
 		expr := p.parseExpression(LOWEST)
@@ -932,37 +1016,81 @@ func (p *Parser) parsePrintStatement() *PrintStatement {
 	}
 
 	if !p.expectPeek(TokenHash) {
+		// must end with hash
 		return nil
 	}
 
 	return stmt
 }
 
+func (p *Parser) parseUseStatementAndInclude() Statement {
+	useToken := p.currentToken // Store the FRG_Use token
+
+	if !p.expectPeek(TokenString) {
+		return nil
+	}
+	filename := p.currentToken.Literal
+
+	if !p.expectPeek(TokenHash) {
+		return nil
+	}
+
+	// Read the content of the included file
+	content, err := os.ReadFile(filename)
+	if err != nil {
+		p.errors = append(p.errors, fmt.Sprintf("ERROR: could not read included file %s: %v", filename, err))
+		return nil
+	}
+
+	// Create a new lexer and parser for the included file
+	includedLexer := NewLexer(string(content))
+	includedParser := NewParser(includedLexer)
+
+	// Parse the included file's program
+	includedProgram := includedParser.ParseProgram()
+
+	if includedParser.IsThereAnyErrors() {
+		for _, err := range includedParser.Errors() {
+			p.errors = append(p.errors, fmt.Sprintf("ERROR in included file %s: %s", filename, err))
+		}
+		return nil
+	}
+
+	// Return a BlockStatement containing all statements from the included file
+	// This effectively "inlines" the included file's statements into the current AST.
+	block := &BlockStatement{Token: useToken} // Use the TokenFRGUse token for the block
+	block.Statements = includedProgram.Statements
+	return block
+}
+
+// parseIfStatement parses if statements in the form "If [condition] statement [Else statement]".
+// The condition expression is enclosed in square brackets and may optionally have an else clause.
+// This implements conditional execution with both if and if-else variants.
 func (p *Parser) parseIfStatement() *IfStatement {
 	stmt := &IfStatement{Token: p.currentToken}
 
-	if !p.expectPeek(TokenLBracket) {
-		return nil
-	}
-	p.nextToken()
-
-	stmt.Condition = p.parseExpression(LOWEST)
-
-	if !p.expectPeek(TokenRBracket) {
+	if !p.expectPeek(TokenLBracket) { // [
 		return nil
 	}
 
-	p.nextToken()
+	p.nextToken() // kill [
 
-	stmt.Consequence = p.parseStatement()
+	stmt.Condition = p.parseExpression(LOWEST) // keep parsing expr condition
 
+	if !p.expectPeek(TokenRBracket) { // must have ]
+		return nil
+	}
+
+	p.nextToken() // kill ]
+
+	// recursively
+	stmt.Consequence = p.parseStatement() // parse if statement
 	if p.peekTokenIs(TokenElse) {
 		p.nextToken() // kill else
 		p.nextToken()
-		stmt.Alternative = p.parseStatement()
+		stmt.Alternative = p.parseStatement() // parse else
 
 	}
-
 	return stmt
 }
 
@@ -970,9 +1098,10 @@ func (p *Parser) parseRepeatStatement() *RepeatStatement {
 	stmt := &RepeatStatement{Token: p.currentToken}
 	stmt.Body = []Statement{}
 
-	p.nextToken()
+	p.nextToken() // kill Repeat Token
 
 	for !p.currentTokenIs(TokenUntil) && !p.currentTokenIs(TokenEOF) {
+		// keep parsing body
 		s := p.parseStatement()
 		if s != nil {
 			stmt.Body = append(stmt.Body, s)
@@ -980,17 +1109,18 @@ func (p *Parser) parseRepeatStatement() *RepeatStatement {
 		p.nextToken()
 	}
 
+	// check if current token is Until if not web reach to the eof and that's error
 	if !p.currentTokenIs(TokenUntil) {
 		p.peekError(TokenUntil)
 		return nil
 	}
 
-	if !p.expectPeek(TokenLBracket) {
+	if !p.expectPeek(TokenLBracket) { // [
 		return nil
 	}
-	p.nextToken()
-	stmt.Condition = p.parseExpression(LOWEST)
-	if !p.expectPeek(TokenRBracket) {
+	p.nextToken()                              // kill [
+	stmt.Condition = p.parseExpression(LOWEST) // parse expression
+	if !p.expectPeek(TokenRBracket) {          // ]
 		return nil
 	}
 	return stmt
@@ -1000,9 +1130,10 @@ func (p *Parser) parseBlockStatement() *BlockStatement {
 	block := &BlockStatement{Token: p.currentToken}
 	block.Statements = []Statement{}
 
-	p.nextToken()
+	p.nextToken() // kill Begin Token
 
 	for !p.currentTokenIs(TokenEnd) && !p.currentTokenIs(TokenEOF) {
+		// keep parsing the body
 		stmt := p.parseStatement()
 		if stmt != nil {
 			block.Statements = append(block.Statements, stmt)
@@ -1010,7 +1141,7 @@ func (p *Parser) parseBlockStatement() *BlockStatement {
 		p.nextToken()
 	}
 
-	if !p.currentTokenIs(TokenEnd) {
+	if !p.currentTokenIs(TokenEnd) { // if it's not token end that means we reach to the eof and that's error
 		p.errors = append(p.errors, fmt.Sprintf("unterminated block statement, expected End, got %s", TokenToString(p.currentToken.Type)))
 	}
 
@@ -1019,7 +1150,7 @@ func (p *Parser) parseBlockStatement() *BlockStatement {
 
 func (p *Parser) parseBreakStatement() *BreakStatement {
 	stmt := &BreakStatement{Token: p.currentToken}
-	if !p.expectPeek(TokenHash) {
+	if !p.expectPeek(TokenHash) { // we need to end line with HASH(#)
 		return nil
 	}
 	return stmt
@@ -1027,138 +1158,134 @@ func (p *Parser) parseBreakStatement() *BreakStatement {
 
 func (p *Parser) parseContinueStatement() *ContinueStatement {
 	stmt := &ContinueStatement{Token: p.currentToken}
-	if !p.expectPeek(TokenHash) {
+	if !p.expectPeek(TokenHash) { // must end with HASH(#)
 		return nil
 	}
 	return stmt
 }
 
-// parseExpression with stack algorithm implementation (Shunting-yard like algorithm)
+// parseExpression with simpler precedence-based recursive descent parser
+//
+// This function implements a recursive descent parser with operator precedence.
+// It handles expressions like: 5 + 3 * 2, (x + y) * z, arr[5], func(3, 4), etc.
+//
+// Operator precedence hierarchy (higher number = higher precedence):
+// | Level | Operators      | Description          |
+// |-------|----------------|----------------------|
+// | 0     | LOWEST         | lowest precedence    |
+// | 1     | ==, !=         | equality             |
+// | 2     | >, <, >=, <=   | less/greater than    |
+// | 3     | +, -           | sum                  |
+// | 4     | *, /, %        | product              |
+// | 5     | []             | index/array access   |
+// | 6     | function()     | function/call        |
+// | 7     | -X             | prefix operators     |
+//
+// How it works:
+// 1. Parse the leftmost operand (prefix expression)
+// 2. Continue parsing infix operators and their right operands based on precedence
+//
+// Example 1: Parsing "5 + 3 * 2" with initial precedence LOWEST (0)
+// Initially: currentToken='5', peekToken='+', precedence=LOWEST(0)
+//
+// | Step | Action                                | leftExp            | Next Token | Notes                          |
+// |------|---------------------------------------|--------------------|------------|--------------------------------|
+// | 1    | Parse prefix '5'                      | 5                  | peek: '+'  | leftExp = IntegerLiteral(5)    |
+// | 2    | Check infix: +, SUM(4) > LOWEST(0)    | 5                  | '+'        | Process infix expression       |
+// | 3    | Parse right side of + with SUM(4)     | 5 + ?              | '3'        | Calls parseExpression(SUM)     |
+// | 4    | Parse prefix '3'                      | 5 + 3              | peek: '*'  | On right side of +             |
+// | 5    | Check infix: *, PROD(5) > SUM(4)      | 5 + 3              | '*'        | Process higher precedence *    |
+// | 6    | Parse right side of * with PROD(5)    | 5 + (3 * ?)        | '2'        | Calls parseExpression(PROD)    |
+// | 7    | Parse prefix '2'                      | 5 + (3 * 2)        | peek: #    | On right side of *             |
+// | 8    | No more infix ops                     | (5 + (3 * 2))      | -          | Done                           |
+//
+// Final result: (5 + (3 * 2)) - correct precedence: multiplication before addition
+//
+// Example 2: Parsing "arr[0] + 5" with initial precedence LOWEST (0)
+// Initially: currentToken='arr', peekToken='[', precedence=LOWEST(0)
+//
+// | Step | Action                                | leftExp            | Next Token | Notes                          |
+// |------|---------------------------------------|--------------------|------------|--------------------------------|
+// | 1    | Parse prefix 'arr'                    | arr                | peek: '['  | leftExp = Identifier(arr)      |
+// | 2    | Check infix: [, INDEX(5) > LOWEST(0)  | arr                | '['        | Process indexing               |
+// | 3    | Parse index [0], INDEX(5)             | arr[0]             | peek: '+'  | leftExp updated to IndexExp    |
+// | 4    | Check infix: +, SUM(3) > LOWEST(0)    | arr[0]             | '+'        | Process addition               |
+// | 5    | Parse right side of + with SUM(3)     | arr[0] + ?         | '5'        | Calls parseExpression(SUM)     |
+// | 6    | Parse prefix '5'                      | arr[0] + 5         | peek: #    | On right side of +             |
+// | 7    | No more infix ops                     | (arr[0] + 5)       | -          | Done                           |
+//
+// Final result: (arr[0] + 5) - correct precedence: indexing before addition
+//
+// Example 3: Parsing "func(10) * 2" with initial precedence LOWEST (0)
+// Initially: currentToken='func', peekToken='(', precedence=LOWEST(0)
+//
+// | Step | Action                                | leftExp              | Next Token | Notes                        |
+// |------|---------------------------------------|----------------------|------------|------------------------------|
+// | 1    | Parse prefix 'func'                   | func                 | peek: '('  | leftExp = Identifier(func)   |
+// | 2    | Check infix: (, CALL(6) > LOWEST(0)   | func                 | '('        | Process function call        |
+// | 3    | Parse function call func(10)          | func(10)             | peek: '*'  | leftExp updated to CallExp   |
+// | 4    | Check infix: *, PROD(4) > LOWEST(0)   | func(10)             | '*'        | Process multiplication       |
+// | 5    | Parse right side of * with PROD(4)    | func(10) * ?         | '2'        | Calls parseExpression(PROD)  |
+// | 6    | Parse prefix '2'                      | func(10) * 2         | peek: #    | On right side of *           |
+// | 7    | No more infix ops                     | (func(10) * 2)       | -          | Done                         |
 func (p *Parser) parseExpression(precedence int) Expression {
-	// Stack to hold expressions and operators
-	var outputStack []Expression
-	var operatorStack []struct {
-		token      Token
-		precedence int
-		infixFn    infixParseFn
-	}
-
-	// Parse the first operand (prefix expression)
+	// STEP 1: Parse prefix expression (left operand)
+	// Prefix parsers handle tokens that appear at the beginning of expressions:
+	// - Identifiers: x, myVar
+	// - Numbers: 123, 45.67
+	// - Strings: "hello"
+	// - Booleans: true, false
+	// - Prefix operators: -5, !true
+	// - Array literals: {1, 2, 3}
 	prefix := p.prefixParseFns[p.currentToken.Type]
 	if prefix == nil {
 		p.noPrefixParseFnError(p.currentToken.Type)
 		return nil
 	}
-	outputStack = append(outputStack, prefix())
 
-	// Continue parsing while there are tokens and precedence allows
-	for precedence < p.peekPrecedence() {
-		// Get the infix parser function for the current peek token
+	// Parse the leftmost operand (prefix expression)
+	// This could be a number, identifier, string, or any other prefix expression
+	leftExp := prefix()
+
+	// STEP 2: Parse infix expressions (operators between operands)
+	// Continue parsing infix operators and their right-hand expressions as long as:
+	// 1. The next token is not the end-of-statement marker (#)
+	// 2. The next operator has higher precedence than the current precedence level
+	for !p.peekTokenIs(TokenHash) && precedence < p.peekPrecedence() {
+		// Get the infix parser function for the peek token
+		// Infix parsers handle operators that appear between operands:
+		// - Arithmetic: +, -, *, /, %
+		// - Comparison: ==, !=, <, >, <=, >=
+		// - Indexing: [expression]
+		// - Function calls: (arg1, arg2, ...)
 		infix := p.infixParseFns[p.peekToken.Type]
 		if infix == nil {
-			break // No infix function, stop parsing
+			return leftExp
 		}
 
-		// Get precedence of the current operator
-		nextPrecedence := p.peekPrecedence()
-
-		// Process operators on the stack based on precedence
-		for len(operatorStack) > 0 &&
-			operatorStack[len(operatorStack)-1].precedence >= nextPrecedence {
-
-			// Pop the operator
-			op := operatorStack[len(operatorStack)-1]
-			operatorStack = operatorStack[:len(operatorStack)-1]
-
-			// Pop the right operand
-			if len(outputStack) == 0 {
-				p.errors = append(p.errors, "missing operand for operator")
-				return nil
-			}
-			right := outputStack[len(outputStack)-1]
-			outputStack = outputStack[:len(outputStack)-1]
-
-			// Pop the left operand
-			if len(outputStack) == 0 {
-				p.errors = append(p.errors, "missing left operand for operator")
-				return nil
-			}
-			left := outputStack[len(outputStack)-1]
-			outputStack = outputStack[:len(outputStack)-1]
-
-			// Create the infix expression and push back to output
-			infixExpr := &InfixExpression{
-				Token:    op.token,
-				Left:     left,
-				Operator: op.token.Literal,
-				Right:    right,
-			}
-			outputStack = append(outputStack, infixExpr)
-		}
-
-		// Move to the operator token
+		// Move from peek token to current token (consume the operator)
 		p.nextToken()
 
-		// Push the operator to the operator stack
-		operatorStack = append(operatorStack, struct {
-			token      Token
-			precedence int
-			infixFn    infixParseFn
-		}{
-			token:      p.currentToken,
-			precedence: nextPrecedence,
-			infixFn:    infix,
-		})
-
-		// Parse the right operand
-		p.nextToken() // Move to the operand
-		rightOperand := p.parseExpression(nextPrecedence)
-		outputStack = append(outputStack, rightOperand)
+		// Parse the infix expression using the current left expression as input
+		// The infix parser handles the operator and parses the right operand
+		// with appropriate precedence to handle operator precedence correctly
+		// For example, if we see 5 + 3 * 2:
+		// - When processing +, right side calls parseExpression with SUM precedence
+		// - This allows * to be processed before + due to higher precedence
+		leftExp = infix(leftExp)
 	}
 
-	// Process remaining operators on the stack
-	for len(operatorStack) > 0 {
-		// Pop the operator
-		op := operatorStack[len(operatorStack)-1]
-		operatorStack = operatorStack[:len(operatorStack)-1]
-
-		// Pop the right operand
-		if len(outputStack) == 0 {
-			p.errors = append(p.errors, "missing operand for operator")
-			return nil
-		}
-		right := outputStack[len(outputStack)-1]
-		outputStack = outputStack[:len(outputStack)-1]
-
-		// Pop the left operand
-		if len(outputStack) == 0 {
-			p.errors = append(p.errors, "missing left operand for operator")
-			return nil
-		}
-		left := outputStack[len(outputStack)-1]
-		outputStack = outputStack[:len(outputStack)-1]
-
-		// Create the infix expression and push back to output
-		infixExpr := &InfixExpression{
-			Token:    op.token,
-			Left:     left,
-			Operator: op.token.Literal,
-			Right:    right,
-		}
-		outputStack = append(outputStack, infixExpr)
-	}
-
-	// Final result should be a single expression on the output stack
-	if len(outputStack) == 0 {
-		return nil
-	}
-	return outputStack[0]
+	return leftExp
 }
 
+// parseIdentifier parses a single identifier token into an Identifier expression node.
+// This is a prefix parser that handles variable names, function names, etc.
 func (p *Parser) parseIdentifier() Expression {
 	return &Identifier{Token: p.currentToken, Value: p.currentToken.Literal}
 }
 
+// parseNumberLiteral parses numeric literals, distinguishing between integer and real (float) types
+// based on whether the token contains a decimal point. This is a prefix parser for numeric values.
 func (p *Parser) parseNumberLiteral() Expression {
 	if bytes.ContainsRune([]byte(p.currentToken.Literal), '.') {
 		lit := &RealLiteral{Token: p.currentToken}
@@ -1191,6 +1318,9 @@ func (p *Parser) parseBooleanLiteral() Expression {
 	return &Boolean{Token: p.currentToken, Value: p.currentTokenIs(TokenTrue)}
 }
 
+// parsePrefixExpression parses prefix operators (like unary minus) where the operator
+// appears before its operand. The right-hand side is parsed with PREFIX precedence level
+// to ensure proper operator precedence relationships.
 func (p *Parser) parsePrefixExpression() Expression {
 	expression := &PrefixExpression{
 		Token:    p.currentToken,
@@ -1201,6 +1331,9 @@ func (p *Parser) parsePrefixExpression() Expression {
 	return expression
 }
 
+// parseInfixExpression parses infix operators (like +, -, *, etc.) where the operator
+// appears between two operands. The right-hand side is parsed with the current operator's
+// precedence level to ensure proper precedence relationships in expressions.
 func (p *Parser) parseInfixExpression(left Expression) Expression {
 	expression := &InfixExpression{
 		Token:    p.currentToken,
@@ -1238,6 +1371,8 @@ func (p *Parser) expectPeek(t TokenType) bool {
 	return false
 }
 
+// peekPrecedence returns the precedence level of the next (peek) token.
+// If the token type has no defined precedence, it returns LOWEST.
 func (p *Parser) peekPrecedence() int {
 	if p, ok := precedences[p.peekToken.Type]; ok {
 		return p
@@ -1245,6 +1380,8 @@ func (p *Parser) peekPrecedence() int {
 	return LOWEST
 }
 
+// currentPrecedence returns the precedence level of the current token.
+// If the token type has no defined precedence, it returns LOWEST.
 func (p *Parser) currentPrecedence() int {
 	if p, ok := precedences[p.currentToken.Type]; ok {
 		return p
